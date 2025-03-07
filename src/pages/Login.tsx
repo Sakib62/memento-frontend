@@ -9,7 +9,6 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('Logging in...', 'warning');
     const loginData = {
       identifier,
       password,
@@ -28,11 +27,12 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        showToast('Login successful! Redirecting...', 'success');
+        //showToast('Login successful!', 'success');
         localStorage.setItem('token', data.data.token);
-        setTimeout(() => {
-          navigate('/');
-        }, 3000);
+        navigate('/');
+        // setTimeout(() => {
+        //   navigate('/');
+        // }, 3000);
       } else {
         showToast(data.message || 'Login failed', 'error');
       }
