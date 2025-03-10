@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaBell, FaSearch, FaUserAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +38,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className='flex items-center w-full h-16 px-6 text-white bg-green-500'>
+    <nav className='flex items-center w-full h-16 px-6 text-white bg-green-500 dark:bg-gray-800'>
       <ul className='flex items-center justify-between w-full'>
         <div className='flex items-center space-x-3'>
           <li
@@ -69,10 +70,20 @@ const Navbar = () => {
 
         <div className='flex items-center space-x-4'>
           <li>
+            <ThemeToggle />
+          </li>
+          <li>
             <FaBell className='text-xl cursor-pointer text-gray-700 hover:text-gray-900 transition-all duration-300 transform hover:scale-110 active:scale-95' />
           </li>
 
-          <li className='cursor-pointer hover:text-gray-300'>Write Blogs</li>
+          <li>
+            <button
+              onClick={() => navigate('/write')}
+              className='text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md transition-all duration-300'
+            >
+              Write Blogs
+            </button>
+          </li>
 
           <li
             className='flex items-center space-x-2 cursor-pointer'

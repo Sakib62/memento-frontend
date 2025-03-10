@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Register from '../pages/Register';
+import Write from '../pages/Write';
 
 export default function AppRouter() {
   return (
@@ -15,6 +16,7 @@ export default function AppRouter() {
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path="/write" element={<Write />} /> 
         </Route>
       </Routes>
     </BrowserRouter>
