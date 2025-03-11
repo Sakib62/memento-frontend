@@ -6,6 +6,7 @@ interface AuthContextType {
   username: string | null;
   name: string | null;
   role: string | null;
+  loading: boolean;
   setAuthData: (token: string) => void;
   clearAuthData: () => void;
 }
@@ -21,6 +22,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -46,6 +48,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         clearAuthData();
       }
     }
+    setLoading(false);
   }, []);
 
   const setAuthData = (token: string) => {
@@ -68,7 +71,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, username, name, role, setAuthData, clearAuthData }}
+      value={{ token, username, name, role, loading, setAuthData, clearAuthData }}
     >
       {children}
     </AuthContext.Provider>

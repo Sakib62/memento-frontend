@@ -1,34 +1,89 @@
+import { useContext, useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import BlogCard from '../components/BlogCard';
 import Navbar from '../components/Navbar';
+import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
+  const authContext = useContext(AuthContext);
+  if (!authContext?.token) {
+    console.log('lol');
+    return <Navigate to='/login' />;
+  }
+  const [stories, setStories] = useState<any[]>([]); // State to store stories
+  const { token } = authContext;
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      if (!token) {
+        console.error('No token available');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/api/stories', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch stories');
+        }
+
+        const data = await response.json();
+        setStories(data.data); // Assuming the response contains an array of stories
+        console.log(stories);
+        //console.log(data.data);
+      } catch (error) {
+        console.error('Error fetching stories:', error);
+      }
+    };
+
+    fetchStories();
+    setStories(blogs)
+  }, [token]);
+
+  const blogs = [
+    { title: 'Blog Title 1', description: 'Short description of the blog...' },
+    { title: 'Blog Title 2', description: 'Another blog description...' },
+    { title: 'Blog Title 3', description: 'Yet another interesting blog...' },
+  ];
+
   return (
-    <div className='flex flex-col min-h-screen bg-cyan-300'>
+    <div className='flex flex-col min-h-screen bg-gray-100'>
       <Navbar />
 
       {/* Main Layout */}
-      <div className='flex flex-1 w-full justify-center p-6 mt-5'>
+      <div className='flex flex-1 w-full justify-center p-6 mt-5 space-x-6'>
         {/* Main Content */}
-        <div className='w-full max-w-3xl bg-white p-6 rounded-lg shadow-md'>
-          <h2 className='text-2xl font-semibold mb-4'>Latest Blogs</h2>
-          {/* Dummy Blog Cards (Replace with actual data later) */}
-          <div className='space-y-4'>
-            <div className='p-4 bg-gray-200 rounded-md shadow'>
-              <h3 className='text-xl font-bold'>Blog Title 1</h3>
-              <p className='text-gray-700'>Short description of the blog...</p>
-            </div>
-            <div className='p-4 bg-gray-200 rounded-md shadow'>
-              <h3 className='text-xl font-bold'>Blog Title 2</h3>
-              <p className='text-gray-700'>Another blog description...</p>
-            </div>
-          </div>
-        </div>
+        <div className="w-full max-w-4xl">
+  <h2 className="text-2xl font-semibold mb-4">Latest Blogs</h2>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+    {stories.length > 0 ? (
+      stories.map((blog, index) => (
+        <BlogCard
+          key={index}
+          title={blog.title}
+          description={blog.description}
+        />
+      ))
+    ) : (
+      <div className="col-span-1 md:col-span-2  flex justify-center items-center h-full text-gray-500">
+        No stories available
+      </div>
+    )}
+  </div>
+</div>
 
         {/* Right Sidebar */}
-        <div className='w-1/4 p-4 bg-gray-200 ml-6 rounded-lg shadow-md'>
-          <h3 className='text-lg font-semibold'>Trending</h3>
-          <ul className='mt-2 text-gray-700'>
-            <li>🔥 Trending Blog 1</li>
-            <li>📖 Trending Blog 2</li>
+        <div className='w-1/4 bg-white p-4 rounded-lg shadow-md'>
+          <h3 className='text-lg font-semibold'>🔥 Trending</h3>
+          <ul className='mt-2 text-gray-700 space-y-2'>
+            <li className='border-b pb-2'>📖 Trending Blog 1</li>
+            <li className='border-b pb-2'>📖 Trending Blog 2</li>
           </ul>
         </div>
       </div>
