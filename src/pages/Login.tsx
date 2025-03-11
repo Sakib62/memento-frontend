@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import { showToast } from '../utils/toast';
 
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +30,9 @@ const Login = () => {
 
       if (response.ok) {
         //showToast('Login successful!', 'success');
-        localStorage.setItem('token', data.data.token);
+        console.log('hi');
+        const token = data.data.token;
+        authContext?.setAuthData(token);
         navigate('/');
         // setTimeout(() => {
         //   navigate('/');

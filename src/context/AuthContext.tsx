@@ -2,10 +2,11 @@ import { jwtDecode } from 'jwt-decode';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 interface AuthContextType {
+  token: string | null;
   username: string | null;
   name: string | null;
   role: string | null;
-  //tokenExpiration: number | null;
+  setAuthData: (token: string) => void;
   clearAuthData: () => void;
 }
 
@@ -16,10 +17,10 @@ interface AuthProviderProps {
 }
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [role, setRole] = useState<string | null>(null);
-  //const [tokenExpiration, setTokenExpiration] = useState<number | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -34,32 +35,40 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         const expiryTime = decoded.exp ? decoded.exp * 1000 : 0;
         if (Date.now() >= expiryTime) {
-          console.error('Token has expired');
           clearAuthData();
         } else {
+          setToken(token);
           setUsername(decoded.username);
           setName(decoded.name);
           setRole(decoded.role);
-          //setTokenExpiration(expiryTime);
         }
       } catch (error) {
-        console.error('Invalid token');
         clearAuthData();
       }
     }
   }, []);
 
+  const setAuthData = (token: string) => {
+    localStorage.setItem('token', token);
+    const decoded: { username: string; name: string; role: string } =
+      jwtDecode(token);
+    setToken(token);
+    setUsername(decoded.username);
+    setName(decoded.name);
+    setRole(decoded.role);
+  };
+
   const clearAuthData = () => {
+    setToken(null);
     setUsername(null);
     setName(null);
     setRole(null);
-    //setTokenExpiration(null);
     localStorage.removeItem('token');
   };
 
   return (
     <AuthContext.Provider
-      value={{ username, name, role, clearAuthData }}
+      value={{ token, username, name, role, setAuthData, clearAuthData }}
     >
       {children}
     </AuthContext.Provider>

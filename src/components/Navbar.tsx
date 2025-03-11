@@ -1,11 +1,37 @@
-import { useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { FaBell, FaSearch, FaUserAlt } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
+  const authContext = useContext(AuthContext);
+  if (!authContext?.token) {
+    return <Navigate to='/login' />;
+  }
   const [searchQuery, setSearchQuery] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const { clearAuthData } = authContext;
   const navigate = useNavigate();
+
+  const menuRef = useRef<HTMLDivElement>(null);
+  const iconRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target as Node) &&
+        iconRef.current &&
+        !iconRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSearch = async () => {
     try {
@@ -35,6 +61,17 @@ const Navbar = () => {
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+    setIsOpen(false);
+  };
+
+  const handleLogoutClick = () => {
+    clearAuthData();
+    navigate('/login');
+    setIsOpen(false);
   };
 
   return (
@@ -84,13 +121,38 @@ const Navbar = () => {
               Write Blogs
             </button>
           </li>
+          <ul className='flex space-x-4'>
+            <li
+              className='flex items-center space-x-2 cursor-pointer relative'
+              ref={iconRef}
+            >
+              <FaUserAlt
+                className='w-10 h-10 text-white border-2 border-white rounded-full p-2 bg-gray-600'
+                onClick={() => setIsOpen(!isOpen)}
+              />
 
-          <li
-            className='flex items-center space-x-2 cursor-pointer'
-            onClick={() => navigate('/profile')}
-          >
-            <FaUserAlt className='w-10 h-10 text-white border-2 border-white rounded-full p-2 bg-gray-600' />
-          </li>
+              {/* Pop-up menu */}
+              {isOpen && (
+                <div
+                  ref={menuRef}
+                  className='absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-10'
+                >
+                  <button
+                    onClick={handleProfileClick}
+                    className='w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-200'
+                  >
+                    Profile
+                  </button>
+                  <button
+                    onClick={handleLogoutClick}
+                    className='w-full text-left px-4 py-2 text-sm text-black hover:bg-gray-200'
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </li>
+          </ul>
         </div>
       </ul>
     </nav>
