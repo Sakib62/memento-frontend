@@ -10,7 +10,7 @@ const Home = () => {
     console.log('lol');
     return <Navigate to='/login' />;
   }
-  const [stories, setStories] = useState<any[]>([]); // State to store stories
+  const [stories, setStories] = useState<any[]>([]);
   const { token } = authContext;
 
   useEffect(() => {
@@ -34,51 +34,33 @@ const Home = () => {
         }
 
         const data = await response.json();
-        setStories(data.data); // Assuming the response contains an array of stories
-        console.log(stories);
-        //console.log(data.data);
+        setStories(data.data);
       } catch (error) {
         console.error('Error fetching stories:', error);
       }
     };
 
     fetchStories();
-    setStories(blogs)
   }, [token]);
-
-  const blogs = [
-    { title: 'Blog Title 1', description: 'Short description of the blog...' },
-    { title: 'Blog Title 2', description: 'Another blog description...' },
-    { title: 'Blog Title 3', description: 'Yet another interesting blog...' },
-  ];
 
   return (
     <div className='flex flex-col min-h-screen bg-gray-100'>
       <Navbar />
 
-      {/* Main Layout */}
       <div className='flex flex-1 w-full justify-center p-6 mt-5 space-x-6'>
-        {/* Main Content */}
-        <div className="w-full max-w-4xl">
-  <h2 className="text-2xl font-semibold mb-4">Latest Blogs</h2>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
-    {stories.length > 0 ? (
-      stories.map((blog, index) => (
-        <BlogCard
-          key={index}
-          title={blog.title}
-          description={blog.description}
-        />
-      ))
-    ) : (
-      <div className="col-span-1 md:col-span-2  flex justify-center items-center h-full text-gray-500">
-        No stories available
-      </div>
-    )}
-  </div>
-</div>
+        <div className='w-full max-w-4xl'>
+          <h2 className='text-2xl font-semibold mb-4'>Latest Blogs</h2>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 h-full'>
+            {stories.length > 0 ? (
+              stories.map(story => <BlogCard key={story.id} story={story} />)
+            ) : (
+              <div className='col-span-1 md:col-span-2  flex justify-center items-center h-full text-gray-500'>
+                No stories available
+              </div>
+            )}
+          </div>
+        </div>
 
-        {/* Right Sidebar */}
         <div className='w-1/4 bg-white p-4 rounded-lg shadow-md'>
           <h3 className='text-lg font-semibold'>🔥 Trending</h3>
           <ul className='mt-2 text-gray-700 space-y-2'>

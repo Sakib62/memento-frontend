@@ -1,11 +1,28 @@
-const BlogCard = ({ title, description }: { title: string; description: string }) => {
-    return (
-      <div className='bg-white p-4 rounded-lg shadow-md'>
-        <h3 className='text-xl font-bold'>{title}</h3>
-        <p className='text-gray-600'>{description}</p>
-      </div>
-    );
+import { useNavigate } from 'react-router-dom';
+
+interface Story {
+  id: number;
+  title: string;
+  description: string;
+}
+
+const BlogCard = ({ story }: { story: Story }) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/blog/${story.id}`, { state: { story } });
   };
-  
-  export default BlogCard;
-  
+
+  return (
+    <div
+      onClick={handleClick}
+      className='bg-white p-4 rounded-xl shadow-md dark:bg-gray-800 cursor-pointer hover:shadow-lg'
+    >
+      <h3 className='text-xl font-bold dark:text-gray-300'>{story.title}</h3>
+      <p className='text-gray-600 dark:text-gray-300 mt-2'>
+        {story.description}
+      </p>
+    </div>
+  );
+};
+
+export default BlogCard;

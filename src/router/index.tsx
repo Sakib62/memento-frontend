@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Register from '../pages/Register';
 import Write from '../pages/Write';
+import BlogDetail from '../pages/BlogDetail';
 
 export default function AppRouter() {
   return (
@@ -12,6 +13,8 @@ export default function AppRouter() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+
+        <Route path='/blog/:id' element={<BlogDetail />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />

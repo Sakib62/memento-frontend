@@ -6,9 +6,9 @@ import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
-    return <Navigate to='/login' />;
-  }
+  // if (!authContext?.token) {
+  //   return <Navigate to='/login' />;
+  // }
   const [searchQuery, setSearchQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const { clearAuthData } = authContext;
