@@ -1,4 +1,6 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import BlogCard from '../components/BlogCard';
 import Navbar from '../components/Navbar';
 import ProfileCard from '../components/ProfileCard';
 import { AuthContext } from '../context/AuthContext';
@@ -6,14 +8,49 @@ import { AuthContext } from '../context/AuthContext';
 const Profile = () => {
   const authContext = useContext(AuthContext);
 
-  // If context is undefined, return an error or a fallback UI
-  if (!authContext) {
-    return <div>Loading...</div>; // or a fallback message
+  if (!authContext?.token) {
+    console.log('lol');
+    return <Navigate to='/login' />;
   }
 
-  const { username, name, role } = authContext;
+  const { username, name } = authContext;
 
   const [activeTab, setActiveTab] = useState('stories');
+  const [stories, setStories] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (activeTab === 'stories') {
+      const fetchStories = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/stories/author/${username}`,
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authContext.token}`,
+              },
+            }
+          );
+          if (!response.ok) {
+            throw new Error('Failed to fetch stories');
+          }
+          const data = await response.json();
+          setStories(data.data);
+        } catch (err: any) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchStories();
+    }
+  }, [activeTab, username]);
 
   const user = {
     name: name,
@@ -26,7 +63,7 @@ const Profile = () => {
   return (
     <div className='flex flex-col items-center  bg-gray-100 min-h-screen'>
       <Navbar />
-      <div className='flex flex-1 w-full bg-cyan-200'>
+      <div className='flex flex-1 w-full bg-cyan-100'>
         <ProfileCard user={user} />
 
         <main className='flex-1 p-6'>
@@ -43,7 +80,23 @@ const Profile = () => {
           </div>
 
           <div>
-            {activeTab === 'stories' && <p>List of user stories...</p>}
+            {activeTab === 'stories' && (
+              <div>
+                {loading ? (
+                  <p>Loading stories...</p>
+                ) : error ? (
+                  <p className='text-red-500'>{error}</p>
+                ) : stories.length > 0 ? (
+                  stories.map((story: any) => (
+                    <div key={story.id} className='mb-4'>
+                      <BlogCard story={story} />
+                    </div>
+                  ))
+                ) : (
+                  <p>No stories available.</p>
+                )}
+              </div>
+            )}
             {activeTab === 'drafts' && <p>List of user drafts...</p>}
             {activeTab === 'liked' && <p>List of liked stories...</p>}
             {activeTab === 'bookmarked' && <p>List of bookmarked stories...</p>}

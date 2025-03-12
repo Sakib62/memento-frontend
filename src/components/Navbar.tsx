@@ -2,17 +2,24 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { FaBell, FaSearch, FaUserAlt } from 'react-icons/fa';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import SearchPopup from './SearchPopup';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const authContext = useContext(AuthContext);
-  // if (!authContext?.token) {
-  //   return <Navigate to='/login' />;
-  // }
-  const [searchQuery, setSearchQuery] = useState('');
+  if (!authContext?.token) {
+    return <Navigate to='/login' />;
+  }
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { clearAuthData } = authContext;
   const navigate = useNavigate();
+
+  const toggleSearchPopup = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
 
   const menuRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLLIElement>(null);
@@ -32,36 +39,6 @@ const Navbar = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  const handleSearch = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
-
-      const response = await fetch(
-        `http://localhost:3000/api/search?pattern=${encodeURIComponent(searchQuery)}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-
-      console.log(data);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
 
   const handleProfileClick = () => {
     navigate('/profile');
@@ -87,22 +64,16 @@ const Navbar = () => {
         </div>
 
         <div className='flex justify-center items-center w-[40%] max-w-[400px] relative'>
-          <FaSearch
-            className='text-xl cursor-pointer absolute left-3 text-gray-700 hover:text-gray-900 transition-all duration-300 transform hover:scale-110 active:scale-95'
-            onClick={handleSearch}
-          />
-          <input
-            type='text'
-            placeholder='Search'
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                handleSearch();
-              }
-            }}
-            className='pl-10 px-4 py-2 w-full rounded-md border border-gray-300 text-black outline-none'
-          />
+
+          <div
+            onClick={toggleSearchPopup}
+            className='flex items-center border-2 dark:border-gray-500 border-gray-400 rounded-md p-2 w-full cursor-pointer bg-gray-50 dark:bg-gray-700'
+          >
+            <FaSearch className='text-xl text-gray-700 dark:text-gray-300' />
+            <span className='ml-2 text-gray-500 dark:text-gray-300'>
+              Search...
+            </span>
+          </div>
         </div>
 
         <div className='flex items-center space-x-4'>
@@ -131,7 +102,6 @@ const Navbar = () => {
                 onClick={() => setIsOpen(!isOpen)}
               />
 
-              {/* Pop-up menu */}
               {isOpen && (
                 <div
                   ref={menuRef}
@@ -155,6 +125,13 @@ const Navbar = () => {
           </ul>
         </div>
       </ul>
+      {isSearchOpen && (
+        <SearchPopup
+          closePopup={toggleSearchPopup}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      )}
     </nav>
   );
 };

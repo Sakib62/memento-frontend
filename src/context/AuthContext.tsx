@@ -71,7 +71,15 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ token, username, name, role, loading, setAuthData, clearAuthData }}
+      value={{
+        token,
+        username,
+        name,
+        role,
+        loading,
+        setAuthData,
+        clearAuthData,
+      }}
     >
       {children}
     </AuthContext.Provider>

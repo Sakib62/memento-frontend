@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   FaBookmark,
   FaComment,
@@ -12,14 +13,19 @@ const BlogDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const story = location.state?.story;
+  const { parsedDescription, ...story } = location.state || {};
+
+  useEffect(() => {
+    if (!story) {
+      navigate('/');
+    }
+  }, [story, navigate]);
 
   if (!story) {
-    navigate('/');
     return null;
   }
 
-  const { authorUsername, title, description } = story;
+  const { authorUsername, title } = story;
 
   return (
     <div>
@@ -56,8 +62,10 @@ const BlogDetails = () => {
         </div>
 
         <h1 className='text-3xl font-bold mb-4'>{title}</h1>
-        <p className='text-lg leading-relaxed text-gray-700'>{description}
-        </p>
+        <p
+          className='text-lg leading-relaxed text-gray-700'
+          dangerouslySetInnerHTML={{ __html: parsedDescription }}
+        />
       </div>
     </div>
   );

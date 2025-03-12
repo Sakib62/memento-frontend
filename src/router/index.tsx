@@ -14,12 +14,11 @@ export default function AppRouter() {
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
 
-        <Route path='/blog/:id' element={<BlogDetail />} />
-
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
           <Route path='/profile' element={<Profile />} />
-          <Route path="/write" element={<Write />} /> 
+          <Route path='/write' element={<Write />} />
+          <Route path='/blog/:id' element={<BlogDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
