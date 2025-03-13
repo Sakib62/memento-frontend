@@ -43,9 +43,7 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
           }
         );
         const data = await response.json();
-
         setSearchResults(data.data);
-        console.log(data.data);
       } catch (error) {
         console.error('Error fetching search results:', error);
       }
@@ -56,11 +54,11 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
 
   return (
     <div
-      className='fixed inset-0 bg-black bg-opacity-50 flex justify-center  z-50'
+      className='fixed inset-0 z-50 flex justify-center bg-black bg-opacity-50'
       onClick={closePopup}
     >
       <div
-        className='dark:bg-gray-800 bg-white dark:text-white text-gray-800 rounded-lg p-6 w-[50%] max-h-[60%] overflow-y-auto'
+        className='dark:bg-gray-800 bg-gray-100 dark:text-white text-gray-800 rounded-lg p-6 w-[50%] max-h-[60%] overflow-y-auto'
         onClick={e => e.stopPropagation()}
       >
 
@@ -70,12 +68,12 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
           placeholder='Search Users, Titles, Descriptions'
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          className='w-full px-4 py-2 rounded-md border border-gray-300 mb-4 text-black focus:outline-none'
+          className='w-full px-4 py-2 mb-5 text-black border border-gray-300 rounded-md focus:outline-none dark:border-gray-600 '
         />
 
         <div className='space-y-4'>
           <div>
-            <h3 className='font-bold mb-1 text-gray-400'>Users</h3>
+            <h3 className='mb-1 font-bold text-gray-400'>Users</h3>
             {searchResults.users && searchResults.users.length > 0 ? (
               searchResults.users.map((user: any, index: number) => (
                 <div key={index}>
@@ -87,10 +85,10 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
             )}
           </div>
 
-          <hr className='my-4' />
+          <hr className='my-4 border-slate-400' />
 
           <div>
-            <h3 className='font-bold mb-1 text-gray-400'>Story by Titles</h3>
+            <h3 className='mb-1 font-bold text-gray-400'>Story by Titles</h3>
             {searchResults.storyTitles &&
             searchResults.storyTitles.length > 0 ? (
               searchResults.storyTitles.map((story: any, index: number) => (
@@ -103,10 +101,10 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
             )}
           </div>
 
-          <hr className='my-4' />
+          <hr className='my-4 border-slate-400' />
 
           <div>
-            <h3 className='font-bold mb-1 text-gray-400'>
+            <h3 className='mb-1 font-bold text-gray-400'>
               Story by Descriptions
             </h3>
             {searchResults.storyDescriptions &&

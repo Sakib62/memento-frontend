@@ -61,17 +61,17 @@ const Profile = () => {
   };
 
   return (
-    <div className='flex flex-col items-center  bg-gray-100 min-h-screen'>
+    <div className='flex flex-col items-center min-h-screen bg-gray-100'>
       <Navbar />
-      <div className='flex flex-1 w-full bg-cyan-100'>
+      <div className='flex flex-1 w-full'>
         <ProfileCard user={user} />
 
-        <main className='flex-1 p-6'>
-          <div className='flex space-x-6 border-b pb-2 mb-4'>
+        <main className='flex-1 p-6 overflow-y-auto' style={{ maxHeight: 'calc(100vh - 80px)' }}>
+          <div className='flex pb-2 mb-4 space-x-6 border-b'>
             {['stories', 'drafts', 'liked', 'bookmarked'].map(tab => (
               <button
                 key={tab}
-                className={`pb-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
+                className={`text-lg font-semibold pb-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -87,11 +87,13 @@ const Profile = () => {
                 ) : error ? (
                   <p className='text-red-500'>{error}</p>
                 ) : stories.length > 0 ? (
+                  // <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
                   stories.map((story: any) => (
                     <div key={story.id} className='mb-4'>
                       <BlogCard story={story} />
                     </div>
                   ))
+                  // </div>
                 ) : (
                   <p>No stories available.</p>
                 )}

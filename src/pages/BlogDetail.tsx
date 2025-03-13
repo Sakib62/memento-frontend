@@ -1,7 +1,9 @@
+import MarkdownIt from 'markdown-it';
 import { useEffect } from 'react';
 import {
   FaBookmark,
   FaComment,
+  FaEllipsisH,
   FaHeart,
   FaShare,
   FaUserCircle,
@@ -13,7 +15,10 @@ const BlogDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { parsedDescription, ...story } = location.state || {};
+  const story = location.state || {};
+  const mdParser = new MarkdownIt();
+
+  const parsedDescription = mdParser.render(story.description);
 
   useEffect(() => {
     if (!story) {
@@ -31,10 +36,10 @@ const BlogDetails = () => {
     <div>
       <Navbar />
 
-      <div className='max-w-3xl mx-auto p-4'>
-        <div className='w-full h-48 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl mb-6'></div>
+      <div className='max-w-3xl p-4 mx-auto'>
+        <div className='w-full h-48 mb-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl'></div>
 
-        <div className='flex items-center gap-4 mb-4 p-4 pl-0 bg-white  rounded-lg'>
+        <div className='flex items-center gap-4 p-4 pl-0 mb-4 bg-white rounded-lg'>
           <FaUserCircle className='text-4xl text-gray-500' />
           <div>
             <p className='text-lg font-semibold'>{authorUsername}</p>
@@ -42,26 +47,32 @@ const BlogDetails = () => {
           </div>
         </div>
 
-        <div className='flex justify-between items-center text-gray-600 mb-6 px-2'>
+        <div className='flex items-center justify-between px-2 mb-6 text-gray-600'>
           <div className='flex gap-4'>
             <button className='flex items-center gap-1 hover:text-red-500'>
-              <FaHeart /> Like
+              <FaHeart size='23' /> 11
             </button>
             <button className='flex items-center gap-1 hover:text-blue-500'>
-              <FaComment /> Comment
+              <FaComment size='23' /> 12
             </button>
           </div>
-          <div className='flex gap-4'>
+          <div className='flex gap-8'>
             <button className='flex items-center gap-1 hover:text-green-500'>
-              <FaShare /> Share
+              <FaShare size='23' />
             </button>
             <button className='flex items-center gap-1 hover:text-yellow-500'>
-              <FaBookmark /> Save
+              <FaBookmark size='23' />
+            </button>
+            <button className='relative flex items-center gap-1 group hover:scale-105'>
+              <FaEllipsisH size='23' />
+              <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
+                More
+              </span>
             </button>
           </div>
         </div>
 
-        <h1 className='text-3xl font-bold mb-4'>{title}</h1>
+        <h1 className='mb-4 text-3xl font-bold'>{title}</h1>
         <p
           className='text-lg leading-relaxed text-gray-700'
           dangerouslySetInnerHTML={{ __html: parsedDescription }}
