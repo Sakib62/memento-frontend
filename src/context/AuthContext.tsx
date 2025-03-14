@@ -5,7 +5,7 @@ interface AuthContextType {
   token: string | null;
   username: string | null;
   name: string | null;
-  role: string | null;
+  role: number | null;
   loading: boolean;
   setAuthData: (token: string) => void;
   clearAuthData: () => void;
@@ -21,7 +21,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
-  const [role, setRole] = useState<string | null>(null);
+  const [role, setRole] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const decoded: {
           username: string;
           name: string;
-          role: string;
+          role: number;
           exp?: number;
         } = jwtDecode(token);
 
@@ -53,7 +53,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const setAuthData = (token: string) => {
     localStorage.setItem('token', token);
-    const decoded: { username: string; name: string; role: string } =
+    const decoded: { username: string; name: string; role: number } =
       jwtDecode(token);
     setToken(token);
     setUsername(decoded.username);

@@ -66,7 +66,10 @@ const Profile = () => {
       <div className='flex flex-1 w-full'>
         <ProfileCard user={user} />
 
-        <main className='flex-1 p-6 overflow-y-auto' style={{ maxHeight: 'calc(100vh - 80px)' }}>
+        <main
+          className='flex-1 p-6 overflow-y-auto'
+          style={{ maxHeight: 'calc(100vh - 80px)' }}
+        >
           <div className='flex pb-2 mb-4 space-x-6 border-b'>
             {['stories', 'drafts', 'liked', 'bookmarked'].map(tab => (
               <button
@@ -93,8 +96,8 @@ const Profile = () => {
                       <BlogCard story={story} />
                     </div>
                   ))
-                  // </div>
                 ) : (
+                  // </div>
                   <p>No stories available.</p>
                 )}
               </div>
