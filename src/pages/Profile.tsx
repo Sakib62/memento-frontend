@@ -55,9 +55,7 @@ const Profile = () => {
   const user = {
     name: name,
     username: username,
-    followers: 1000000000000,
     bio: 'A passionate programmer and tech enthusiast.',
-    following: ['sanzida', 'sumonta', 'sajib'],
   };
 
   return (
@@ -66,10 +64,9 @@ const Profile = () => {
         <Navbar />
       </div>
       <div className='flex flex-1 w-full overflow-y-auto'>
-        <main className='flex-1 p-6'>
-          {/* style={{ maxHeight: 'calc(100vh - 80px)' }} */}
+        <main className='w-2/3 p-6'>
           <div className='flex pb-2 mb-4 space-x-6 border-b-4 border-gray-400 dark:border-gray-200'>
-            {['stories', 'liked', 'bookmarked'].map(tab => (
+            {['stories', 'liked', 'commented'].map(tab => (
               <button
                 key={tab}
                 className={`text-lg font-semibold pb-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'dark:text-white'}`}
@@ -88,25 +85,24 @@ const Profile = () => {
                 ) : error ? (
                   <p className='text-red-500'>{error}</p>
                 ) : stories.length > 0 ? (
-                  // <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
                   stories.map((story: any) => (
                     <div key={story.id} className='mb-4'>
                       <BlogCard story={story} />
                     </div>
                   ))
                 ) : (
-                  // </div>
                   <p>No stories available.</p>
                 )}
               </div>
             )}
-            {activeTab === 'drafts' && <p>List of user drafts...</p>}
-            {activeTab === 'liked' && <p>List of liked stories...</p>}
-            {activeTab === 'bookmarked' && <p>List of bookmarked stories...</p>}
+            {activeTab === 'liked' && <div>List of liked stories...</div>}
+            {activeTab === 'commented' && <p>List of commented stories...</p>}
           </div>
         </main>
 
-        <ProfileCard user={user} />
+        <div className='flex w-1/3 min-h-0 p-16'>
+          <ProfileCard user={user} />
+        </div>
       </div>
     </div>
   );
