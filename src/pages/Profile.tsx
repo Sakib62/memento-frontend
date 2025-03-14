@@ -61,20 +61,18 @@ const Profile = () => {
   };
 
   return (
-    <div className='flex flex-col items-center min-h-screen bg-gray-100'>
-      <Navbar />
-      <div className='flex flex-1 w-full'>
-        <ProfileCard user={user} />
-
-        <main
-          className='flex-1 p-6 overflow-y-auto'
-          style={{ maxHeight: 'calc(100vh - 80px)' }}
-        >
-          <div className='flex pb-2 mb-4 space-x-6 border-b'>
-            {['stories', 'drafts', 'liked', 'bookmarked'].map(tab => (
+    <div className='flex flex-col items-center min-h-screen bg-gray-300 dark:bg-gray-600'>
+      <div className='sticky top-0 left-0 z-50 w-full'>
+        <Navbar />
+      </div>
+      <div className='flex flex-1 w-full overflow-y-auto'>
+        <main className='flex-1 p-6'>
+          {/* style={{ maxHeight: 'calc(100vh - 80px)' }} */}
+          <div className='flex pb-2 mb-4 space-x-6 border-b-4 border-gray-400 dark:border-gray-200'>
+            {['stories', 'liked', 'bookmarked'].map(tab => (
               <button
                 key={tab}
-                className={`text-lg font-semibold pb-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-600'}`}
+                className={`text-lg font-semibold pb-2 ${activeTab === tab ? 'border-b-2 border-blue-500 text-blue-600' : 'dark:text-white'}`}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -107,6 +105,8 @@ const Profile = () => {
             {activeTab === 'bookmarked' && <p>List of bookmarked stories...</p>}
           </div>
         </main>
+
+        <ProfileCard user={user} />
       </div>
     </div>
   );

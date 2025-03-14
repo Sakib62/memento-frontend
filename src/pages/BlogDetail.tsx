@@ -52,14 +52,17 @@ const BlogDetails = () => {
 
   const confirmDelete = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/api/stories/${story.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-  
+      const response = await fetch(
+        `http://localhost:3000/api/stories/${story.id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       if (!response.ok) {
         throw new Error('Failed to delete the story');
       }
@@ -73,7 +76,9 @@ const BlogDetails = () => {
 
   return (
     <div className='min-h-screen bg-gray-100 dark:bg-gray-600'>
-      <Navbar />
+      <div className='sticky top-0 left-0 z-50 w-full'>
+        <Navbar />
+      </div>
 
       <div className='max-w-3xl p-4 mx-auto'>
         {/* Banner */}
@@ -132,7 +137,9 @@ const BlogDetails = () => {
             {(authorUsername == username || role == 1) && (
               <>
                 <button
-                  onClick={() => navigate(`/blog/${story.id}/edit`, {state: story})}
+                  onClick={() =>
+                    navigate(`/blog/${story.id}/edit`, { state: story })
+                  }
                   className='relative flex items-center gap-1 group hover:scale-105'
                 >
                   <MdOutlineModeEdit size='23' />
@@ -161,7 +168,9 @@ const BlogDetails = () => {
                     size='24'
                     className='absolute text-gray-600 cursor-pointer dark:text-gray-300 top-2 right-2 hover:scale-110'
                   />
-                  <h2 className='mb-4 text-2xl font-bold dark:text-gray-100'>Delete Story</h2>
+                  <h2 className='mb-4 text-2xl font-bold dark:text-gray-100'>
+                    Delete Story
+                  </h2>
                   <p className='mb-4 text-lg dark:text-gray-200'>
                     Are you sure you want to delete the story?
                   </p>

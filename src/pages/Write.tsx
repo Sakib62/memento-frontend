@@ -104,7 +104,9 @@ const Write = () => {
 
   return (
     <div className='flex flex-col min-h-screen'>
-      <Navbar />
+      <div className='sticky top-0 left-0 z-50 w-full'>
+        <Navbar />
+      </div>
 
       <div className='flex flex-col items-center justify-start flex-grow px-4 pt-10 bg-gray-300 dark:bg-gray-600'>
         <h1 className='mb-12 text-3xl font-bold text-gray-800 dark:text-gray-200'>
