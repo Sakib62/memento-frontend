@@ -74,6 +74,27 @@ const StoryDetails = () => {
     }
   };
 
+  const dummyComments = [
+    {
+      author: 'JohnDoe',
+      createdAt: 'March 15, 2025',
+      text: 'This is a great story! I really enjoyed reading it.',
+      authorImage: 'https://via.placeholder.com/40', // Example user image
+    },
+    {
+      author: 'JaneSmith',
+      createdAt: 'March 14, 2025',
+      text: 'I agree, this story was very insightful. Thanks for sharing!',
+      authorImage: 'https://via.placeholder.com/40', // Example user image
+    },
+    {
+      author: 'AlexJ',
+      createdAt: 'March 13, 2025',
+      text: 'Amazing work, would love to read more from you!',
+      authorImage: 'https://via.placeholder.com/40', // Example user image
+    },
+  ];
+
   return (
     <div className='min-h-screen bg-gray-100 dark:bg-gray-600'>
       <div className='sticky top-0 left-0 z-50 w-full'>
@@ -201,6 +222,76 @@ const StoryDetails = () => {
           className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'
           dangerouslySetInnerHTML={{ __html: parsedDescription }}
         />
+
+        <div className='mt-8'>
+          {/* Comments Header */}
+          <h2 className='mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100'>
+            Comments ({story.comments?.length || 0})
+          </h2>
+
+          {/* Comment Input Form */}
+          <div className='mt-6'>
+            <textarea
+              className='w-full p-3 border border-gray-300 rounded-lg dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200'
+              placeholder='Write a comment...'
+            ></textarea>
+            <div className='flex justify-end gap-4 mt-4'>
+              <button className='px-6 py-2 text-gray-700 bg-gray-200 rounded-md dark:text-gray-200 dark:bg-gray-600 hover:bg-gray-300'>
+                Cancel
+              </button>
+              <button className='px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700'>
+                Save
+              </button>
+            </div>
+          </div>
+
+          {/* Comments List */}
+          <div className='space-y-4'>
+            {dummyComments.map((comment, index) => (
+              <div
+                key={index}
+                className='p-4 border-b border-gray-300 dark:border-gray-600'
+              >
+                {/* First row: Profile Image + Name, Date, Edit/Delete Buttons */}
+                <div className='flex items-start justify-between'>
+                  {/* Profile Image and Name + Date */}
+                  <div className='flex items-start'>
+                    <img
+                      src={comment.authorImage}
+                      alt={comment.author}
+                      className='w-12 h-12 mr-4 rounded-full'
+                    />
+                    <div className='flex flex-col'>
+                      <p className='text-sm font-semibold text-gray-600 dark:text-gray-300'>
+                        {comment.author}
+                      </p>
+                      <p className='text-xs text-gray-500 dark:text-gray-400'>
+                        {comment.createdAt}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Edit/Delete Buttons */}
+                  {role === 1 && (
+                    <div className='flex gap-4'>
+                      <button className='px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600'>
+                        Edit
+                      </button>
+                      <button className='px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600'>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Second row: Comment Text */}
+                <p className='mt-2 text-gray-700 dark:text-gray-300'>
+                  {comment.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
