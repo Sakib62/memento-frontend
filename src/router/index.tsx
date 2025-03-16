@@ -1,13 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PrivateRoute from '../components/PrivateRoute';
+import EditStory from '../pages/EditStory';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Register from '../pages/Register';
+import StoryDetails from '../pages/StoryDetails';
 import Write from '../pages/Write';
-import BlogDetail from '../pages/BlogDetail';
-import EditStory from '../pages/EditStory';
-import Test from '../pages/Test';
 
 export default function AppRouter() {
   return (
@@ -15,16 +14,13 @@ export default function AppRouter() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
-        
-
 
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<Home />} />
-          <Route path='/profile' element={<Profile />} />
           <Route path='/write' element={<Write />} />
-          <Route path='/blog/:id' element={<BlogDetail />} />
-          <Route path='/blog/:id/edit' element={<EditStory />} />
-          <Route path='/test' element={<Test />} />
+          <Route path='/story/:id' element={<StoryDetails />} />
+          <Route path='/story/:id/edit' element={<EditStory />} />
+          <Route path='/profile/:username' element={<Profile />} />
         </Route>
       </Routes>
     </BrowserRouter>

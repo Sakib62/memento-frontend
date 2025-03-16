@@ -1,8 +1,8 @@
 import { Check, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import BlogEditor from '../components/BlogEditor';
 import Navbar from '../components/Navbar';
+import StoryEditor from '../components/StoryEditor';
 import { AuthContext } from '../context/AuthContext';
 
 const EditPage = () => {
@@ -95,10 +95,10 @@ const EditPage = () => {
         setShowPopup(true);
         setResponseStatus('success');
         setTimeout(() => {
-          navigate(`/blog/${story.id}`, { state: updatedStory });
+          navigate(`/story/${story.id}`, { state: updatedStory });
         }, 2000);
       } else {
-        setPopupMessage('Failed to update your blog.\nPlease try again.');
+        setPopupMessage('Failed to update your story.\nPlease try again.');
         setResponseStatus('error');
         setShowPopup(true);
       }
@@ -136,7 +136,7 @@ const EditPage = () => {
               className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
             />
             <div className='rounded-lg shadow-md'>
-              <BlogEditor
+              <StoryEditor
                 onContentChange={handleContentChange}
                 initialContent={story.description}
               />

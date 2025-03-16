@@ -3,6 +3,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 interface AuthContextType {
   token: string | null;
+  id: number | null;
   username: string | null;
   name: string | null;
   role: number | null;
@@ -19,6 +20,7 @@ interface AuthProviderProps {
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [id, setId] = useState<number | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [role, setRole] = useState<number | null>(null);
@@ -29,6 +31,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (token) {
       try {
         const decoded: {
+          id: number;
           username: string;
           name: string;
           role: number;
@@ -40,9 +43,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           clearAuthData();
         } else {
           setToken(token);
+          setId(decoded.id);
           setUsername(decoded.username);
           setName(decoded.name);
           setRole(decoded.role);
+          console.log(decoded.id);
         }
       } catch (error) {
         clearAuthData();
@@ -53,16 +58,23 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const setAuthData = (token: string) => {
     localStorage.setItem('token', token);
-    const decoded: { username: string; name: string; role: number } =
-      jwtDecode(token);
+    const decoded: {
+      id: number;
+      username: string;
+      name: string;
+      role: number;
+    } = jwtDecode(token);
     setToken(token);
+    setId(decoded.id);
     setUsername(decoded.username);
     setName(decoded.name);
     setRole(decoded.role);
+    console.log(id);
   };
 
   const clearAuthData = () => {
     setToken(null);
+    setId(null);
     setUsername(null);
     setName(null);
     setRole(null);
@@ -73,6 +85,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     <AuthContext.Provider
       value={{
         token,
+        id,
         username,
         name,
         role,

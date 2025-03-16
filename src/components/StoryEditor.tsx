@@ -4,7 +4,7 @@ import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css'; // Import the styles
 
 
-const BlogEditor = ({ onContentChange, initialContent = '' }) => {
+const StoryEditor = ({ onContentChange, initialContent = '' }) => {
   const [content, setContent] = useState(initialContent);
   const mdParser = new MarkdownIt();
 
@@ -25,4 +25,4 @@ const BlogEditor = ({ onContentChange, initialContent = '' }) => {
   );
 };
 
-export default BlogEditor;
+export default StoryEditor;

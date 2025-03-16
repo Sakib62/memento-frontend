@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import { Navigate } from 'react-router-dom';
-import BlogCard from '../components/BlogCard';
+import StoryCard from '../components/StoryCard';
 import Navbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext';
 
@@ -66,11 +66,11 @@ const Home = () => {
       <div className='flex justify-center w-full p-6 mt-5 space-x-6'>
         <div className='flex flex-col w-full max-w-4xl overflow-y-auto'>
           {/* <h2 className='mb-4 text-2xl font-semibold dark:text-white'>
-            Latest Blogs
+            Latest Stories
           </h2> */}
           <div className='grid h-full grid-cols-1 gap-4 md:grid-cols-2'>
             {stories.length > 0 ? (
-              stories.map(story => <BlogCard key={story.id} story={story} />)
+              stories.map(story => <StoryCard key={story.id} story={story} />)
             ) : (
               <div className='flex items-center justify-center h-full col-span-1 text-gray-500 md:col-span-2'>
                 No stories available
@@ -115,8 +115,8 @@ const Home = () => {
           <div>
             <h3 className='text-lg font-semibold dark:text-white'>Trending</h3>
             <ul className='mt-4 space-y-2 text-gray-700'>
-              <li className='pb-1 dark:text-white'>Trending Blog 1</li>
-              <li className='pb-1 dark:text-white'>Trending Blog 2</li>
+              <li className='pb-1 dark:text-white'>Trending Story 1</li>
+              <li className='pb-1 dark:text-white'>Trending Story 2</li>
             </ul>
           </div>
 
@@ -134,9 +134,9 @@ const Home = () => {
           <div>
             <h3 className='text-lg font-semibold dark:text-white'>Latest</h3>
             <ul className='mt-4 space-y-2 text-gray-700'>
-              <li className='pb-1 dark:text-white'>Latest Blog 1</li>
-              <li className='pb-1 dark:text-white'>Latest Blog 2</li>
-              <li className='pb-1 dark:text-white'>Latest Blog 3</li>
+              <li className='pb-1 dark:text-white'>Latest Story 1</li>
+              <li className='pb-1 dark:text-white'>Latest Story 2</li>
+              <li className='pb-1 dark:text-white'>Latest Story 3</li>
             </ul>
           </div>
         </div>

@@ -12,14 +12,14 @@ interface Story {
   comments: number;
 }
 
-const BlogCard = ({ story }: { story: Story }) => {
+const StoryCard = ({ story }: { story: Story }) => {
   const navigate = useNavigate();
   const mdParser = new MarkdownIt();
 
   const parsedDescription = mdParser.render(story.description);
 
   const handleClick = () => {
-    navigate(`/blog/${story.id}`, { state: story });
+    navigate(`/story/${story.id}`, { state: story });
   };
 
   return (
@@ -72,4 +72,4 @@ const BlogCard = ({ story }: { story: Story }) => {
   );
 };
 
-export default BlogCard;
+export default StoryCard;

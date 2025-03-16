@@ -42,8 +42,10 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const { username } = authContext;
+
   const handleProfileClick = () => {
-    navigate('/profile');
+    navigate(`/profile/${username}`);
     setIsOpen(false);
   };
 
@@ -66,7 +68,6 @@ const Navbar = () => {
         </div>
 
         <div className='flex justify-center items-center w-[40%] max-w-[400px] relative'>
-
           <div
             onClick={toggleSearchPopup}
             className='flex items-center w-full p-2 bg-gray-100 border-2 border-gray-300 rounded-md cursor-pointer dark:border-gray-600 dark:bg-gray-700'

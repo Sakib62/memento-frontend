@@ -1,8 +1,8 @@
 import { Check, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import BlogEditor from '../components/BlogEditor';
 import Navbar from '../components/Navbar';
+import StoryEditor from '../components/StoryEditor';
 import { AuthContext } from '../context/AuthContext';
 
 const Write = () => {
@@ -83,14 +83,14 @@ const Write = () => {
       const story = data.data;
 
       if (response.ok) {
-        setPopupMessage('Your blog has been published!');
+        setPopupMessage('Your story has been published!');
         setShowPopup(true);
         setResponseStatus('success');
         setTimeout(() => {
-          navigate(`/blog/${story.id}`, { state: story });
+          navigate(`/story/${story.id}`, { state: story });
         }, 2000);
       } else {
-        setPopupMessage('Failed to publish your blog.\nPlease try again.');
+        setPopupMessage('Failed to publish your story.\nPlease try again.');
         setResponseStatus('error');
         setShowPopup(true);
       }
@@ -125,7 +125,7 @@ const Write = () => {
               className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
             />
             <div className='rounded-lg shadow-md'>
-              <BlogEditor onContentChange={handleContentChange} />
+              <StoryEditor onContentChange={handleContentChange} />
             </div>
           </div>
 

@@ -14,7 +14,7 @@ import Navbar from '../components/Navbar';
 import { AuthContext } from '../context/AuthContext';
 import { showToast } from '../utils/toast';
 
-const BlogDetails = () => {
+const StoryDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
@@ -138,7 +138,7 @@ const BlogDetails = () => {
               <>
                 <button
                   onClick={() =>
-                    navigate(`/blog/${story.id}/edit`, { state: story })
+                    navigate(`/story/${story.id}/edit`, { state: story })
                   }
                   className='relative flex items-center gap-1 group hover:scale-105'
                 >
@@ -206,4 +206,4 @@ const BlogDetails = () => {
   );
 };
 
-export default BlogDetails;
+export default StoryDetails;
