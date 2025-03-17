@@ -21,7 +21,7 @@ const EditPage = () => {
   const [markdownContent, setMarkdownContent] = useState(
     story?.description || ''
   );
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(story?.tags || []);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [responseStatus, setResponseStatus] = useState('');
@@ -69,7 +69,7 @@ const EditPage = () => {
     const updatedData = {
       title: title,
       description: markdownContent,
-      //   tags: tags,
+      tags: tags,
     };
 
     try {
@@ -111,7 +111,9 @@ const EditPage = () => {
   };
 
   const isSaveDisabled =
-    title == story.title && markdownContent == story.description;
+    title === story.title &&
+    markdownContent === story.description &&
+    JSON.stringify(tags) === JSON.stringify(story.tags);
 
   return (
     <div className='flex flex-col min-h-screen'>

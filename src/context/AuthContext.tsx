@@ -3,7 +3,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 interface AuthContextType {
   token: string | null;
-  id: number | null;
+  id: string | null;
   username: string | null;
   name: string | null;
   role: number | null;
@@ -20,7 +20,7 @@ interface AuthProviderProps {
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [id, setId] = useState<number | null>(null);
+  const [id, setId] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [role, setRole] = useState<number | null>(null);
@@ -31,7 +31,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (token) {
       try {
         const decoded: {
-          id: number;
+          id: string;
           username: string;
           name: string;
           role: number;
@@ -47,7 +47,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUsername(decoded.username);
           setName(decoded.name);
           setRole(decoded.role);
-          console.log(decoded.id);
         }
       } catch (error) {
         clearAuthData();
@@ -59,7 +58,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const setAuthData = (token: string) => {
     localStorage.setItem('token', token);
     const decoded: {
-      id: number;
+      id: string;
       username: string;
       name: string;
       role: number;
@@ -69,7 +68,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUsername(decoded.username);
     setName(decoded.name);
     setRole(decoded.role);
-    console.log(id);
   };
 
   const clearAuthData = () => {
