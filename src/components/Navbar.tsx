@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { FaBell, FaSearch, FaUserAlt } from 'react-icons/fa';
+import { FaSearch, FaUserAlt } from 'react-icons/fa';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import SearchPopup from './SearchPopup';
@@ -56,7 +56,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className='flex items-center w-full h-16 px-6 text-gray-900 bg-blue-500 dark:bg-zinc-800 dark:text-gray-100'>
+    <nav className='fixed top-0 left-0 right-0 z-10 flex items-center w-full h-16 px-6 text-gray-900 bg-blue-500 shadow-md dark:bg-neutral-800 dark:text-gray-100'>
       <ul className='flex items-center justify-between w-full'>
         <div className='flex items-center space-x-3'>
           <li
@@ -83,13 +83,10 @@ const Navbar = () => {
           <li>
             <ThemeToggle />
           </li>
-          <li>
-            <FaBell className='text-xl text-gray-600 transition-all duration-300 transform cursor-pointer hover:text-gray-800 hover:scale-110 active:scale-95 dark:text-gray-300 dark:hover:text-gray-200' />
-          </li>
 
           <li>
             <button
-              onClick={() => navigate('/write')}
+              onClick={() => navigate('/story/create')}
               className='flex items-center gap-1 px-4 py-2 text-white transition-all duration-300 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600'
             >
               <SquarePen className='w-5 h-5 mr-2' />
