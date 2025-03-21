@@ -128,6 +128,16 @@ const Register = () => {
             Register
           </button>
         </form>
+
+        <p className='mt-4 text-sm text-center text-gray-600'>
+          Already have an account?{' '}
+          <button
+            onClick={() => navigate('/login')}
+            className='font-bold text-blue-600 hover:underline'
+          >
+            Login
+          </button>
+        </p>
       </div>
     </div>
   );

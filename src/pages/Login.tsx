@@ -29,14 +29,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        //showToast('Login successful!', 'success');
-        console.log('hi');
         const token = data.data.token;
         authContext?.setAuthData(token);
         navigate('/');
-        // setTimeout(() => {
-        //   navigate('/');
-        // }, 3000);
       } else {
         showToast(data.message || 'Login failed', 'error');
       }
@@ -63,7 +58,7 @@ const Login = () => {
               id='identifier'
               value={identifier}
               onChange={e => setIdentifier(e.target.value)}
-              className='w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+              className='w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none'
               placeholder='Enter your username or email'
               required
             />
@@ -81,7 +76,7 @@ const Login = () => {
               id='password'
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className='w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500'
+              className='w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none'
               placeholder='Enter your password'
               required
             />
@@ -94,6 +89,16 @@ const Login = () => {
             Login
           </button>
         </form>
+
+        <p className='mt-4 text-sm text-center text-gray-600'>
+          Don't have an account?{' '}
+          <button
+            onClick={() => navigate('/register')}
+            className='font-bold text-blue-600 hover:underline'
+          >
+            Register
+          </button>
+        </p>
       </div>
     </div>
   );
