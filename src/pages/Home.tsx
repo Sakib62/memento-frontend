@@ -1,34 +1,30 @@
 import { useContext, useEffect, useState } from 'react';
-import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 import { Navigate } from 'react-router-dom';
 import StoryCard from '../components/StoryCard';
-import Navbar from '../components/Navbar';
+import { useTranslation } from "react-i18next";
 import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
   const authContext = useContext(AuthContext);
   if (!authContext?.token) {
-    console.log('lol');
     return <Navigate to='/login' />;
   }
-  const [stories, setStories] = useState<any[]>([]);
+
+  const { t } = useTranslation();
+
   const { token } = authContext;
 
-  const totalPages = 10;
-  const limit = 10;
+  const [stories, setStories] = useState<any[]>([]);
+  const [topLikedStories, setTopLikedStories] = useState<any[]>([]);
+
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const limit = 6;
 
-  const fetchStories = async (page: number) => {
-    if (!token) {
-      console.error('No token available');
-      return;
-    }
-
-    const offset = (page - 1) * limit;
-
+  const fetchLatestStories = async (page: number) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stories?limit=${limit}&offset=${offset}`,
+        `http://localhost:3000/api/stories?limit=${limit + 1}&page=${page}`,
         {
           method: 'GET',
           headers: {
@@ -43,104 +39,93 @@ const Home = () => {
       }
 
       const data = await response.json();
-      setStories(data.data);
+      setHasNextPage(data.data.length > limit);
+      setStories(data.data.slice(0, limit));
     } catch (error) {
       console.error('Error fetching stories:', error);
     }
   };
 
-  useEffect(() => {
-    fetchStories(currentPage);
-  }, [token, currentPage]);
+  const fetchTopLikedStories = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/stories/liked/top`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+      if (!response.ok) {
+        throw new Error('Failed to fetch top liked stories');
+      }
+
+      const data = await response.json();
+      setTopLikedStories(data.data);
+    } catch (error) {
+      console.error('Error fetching top liked stories:', error);
+    }
   };
 
+  useEffect(() => {
+    fetchLatestStories(currentPage);
+  }, [token, currentPage]);
+
+  useEffect(() => {
+    fetchTopLikedStories();
+  }, [token]);
+
+  const handleNext = () => setCurrentPage(prev => prev + 1);
+  const handlePrev = () => setCurrentPage(prev => (prev > 1 ? prev - 1 : 1));
+
   return (
-    <div className='flex flex-col min-h-screen bg-gray-300 dark:bg-gray-600'>
-      <div className='sticky top-0 left-0 z-50 w-full'>
-        <Navbar />
-      </div>
-
-      <div className='flex justify-center w-full p-6 mt-5 space-x-6'>
-        <div className='flex flex-col w-full max-w-4xl overflow-y-auto'>
-          {/* <h2 className='mb-4 text-2xl font-semibold dark:text-white'>
-            Latest Stories
-          </h2> */}
-          <div className='grid h-full grid-cols-1 gap-4 md:grid-cols-2'>
-            {stories.length > 0 ? (
-              stories.map(story => <StoryCard key={story.id} story={story} />)
-            ) : (
-              <div className='flex items-center justify-center h-full col-span-1 text-gray-500 md:col-span-2'>
-                No stories available
-              </div>
-            )}
-          </div>
-
-          {/* Pagination Controls */}
-          <div className='flex items-center justify-center pb-5 mt-10 space-x-4'>
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className='px-4 py-2 text-white bg-blue-600 rounded-lg dark:bg-gray-800 disabled:bg-gray-400 dark:disabled:bg-gray-500'
-            >
-              <FaArrowLeftLong />
-            </button>
-            {/* Page numbers */}
-            <div className='flex space-x-2'>
-              {[...Array(totalPages).keys()].map(page => (
-                <button
-                  key={page + 1}
-                  onClick={() => handlePageChange(page + 1)}
-                  className={`px-4 py-2 text-white rounded-lg ${currentPage === page + 1 ? 'bg-blue-600 dark:bg-gray-800' : 'bg-blue-400 dark:bg-gray-500'}`}
-                >
-                  {page + 1}
-                </button>
-              ))}
-            </div>
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className='px-4 py-2 text-white bg-blue-600 rounded-lg dark:bg-gray-800 disabled:bg-gray-400 dark:disabled:bg-gray-500'
-            >
-              <FaArrowRightLong />
-            </button>
-          </div>
+    <div className='min-h-screen px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 dark:bg-stone-600'>
+      <div className='mx-auto max-w-7xl'>
+        <div className='mb-12 text-center'>
+          <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>
+          {t("home.title")}
+          </h1>
+        </div>
+        <div className='grid grid-cols-1 gap-8 mb-12 sm:grid-cols-2 lg:grid-cols-2'>
+          {stories.map(story => (
+            <StoryCard key={story.id} story={story} />
+          ))}
         </div>
 
-        <div className='w-1/5 p-4 space-y-8 overflow-y-auto rounded-lg'>
-        
-          {/* Trending Section */}
-          <div>
-            <h3 className='text-lg font-semibold dark:text-white'>Trending</h3>
-            <ul className='mt-4 space-y-2 text-gray-700'>
-              <li className='pb-1 dark:text-white'>Trending Story 1</li>
-              <li className='pb-1 dark:text-white'>Trending Story 2</li>
-            </ul>
-          </div>
-
-          {/* Topics Section */}
-          <div>
-            <h3 className='text-lg font-semibold dark:text-white'>Tags</h3>
-            <ul className='mt-4 space-y-2 text-gray-700'>
-              <li className='pb-1 dark:text-white'>Technology</li>
-              <li className='pb-1 dark:text-white'>Science</li>
-              <li className='pb-1 dark:text-white'>Business</li>
-            </ul>
-          </div>
-
-          {/* Latest Section */}
-          <div>
-            <h3 className='text-lg font-semibold dark:text-white'>Latest</h3>
-            <ul className='mt-4 space-y-2 text-gray-700'>
-              <li className='pb-1 dark:text-white'>Latest Story 1</li>
-              <li className='pb-1 dark:text-white'>Latest Story 2</li>
-              <li className='pb-1 dark:text-white'>Latest Story 3</li>
-            </ul>
-          </div>
+        <div className='flex justify-center space-x-4'>
+          {currentPage > 1 && (
+            <button
+              onClick={handlePrev}
+              className='px-4 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600'
+            >
+              {t("home.prev")}
+            </button>
+          )}
+          {hasNextPage && (
+            <button
+              onClick={handleNext}
+              className='px-4 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600'
+            >
+              {t("home.next")}
+            </button>
+          )}
         </div>
 
+        <div className='my-16 border-t border-gray-300'></div>
+
+        <div className='mb-12 text-center'>
+          <h2 className='text-3xl font-semibold text-gray-800 dark:text-white'>
+          {t("home.top-liked")}
+          </h2>
+        </div>
+        <div className='grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2'>
+          {topLikedStories.map(story => (
+            <StoryCard key={story.id} story={story} />
+          ))}
+        </div>
       </div>
     </div>
   );

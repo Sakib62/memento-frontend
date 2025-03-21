@@ -1,8 +1,10 @@
-import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const Footer: React.FC = () => {
+const Footer = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className='w-full p-6 bg-stone-300 dark:bg-gray-800'>
       <div className='container flex flex-col items-center justify-between gap-4 mx-auto sm:flex-row'>
@@ -12,19 +14,19 @@ const Footer: React.FC = () => {
               to='/'
               className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
             >
-              Home
+              {t('footer.home')}
             </Link>
             <Link
               to='/about'
               className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
             >
-              About
+              {t('footer.about')}
             </Link>
             <Link
               to='/new-story'
               className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
             >
-              Write a Story
+              {t('footer.write-a-story')}
             </Link>
           </nav>
         </div>
@@ -49,7 +51,7 @@ const Footer: React.FC = () => {
         </div>
 
         <p className='text-sm text-gray-500 dark:text-gray-400'>
-          © {new Date().getFullYear()} Memento. All rights reserved.
+          © {new Date().getFullYear()} Memento. {t('footer.copyright')}
         </p>
       </div>
     </footer>

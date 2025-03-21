@@ -1,0 +1,18 @@
+{
+  "home": {
+    "title": "Latest Stories",
+    "next": "Next",
+    "prev": "Previous",
+    "top-liked": "Top Liked Stories"
+  },
+  "navbar": {
+    "search": "Search...",
+    "write": "Write"
+  },
+  "footer": {
+    "home": "Home",
+    "about": "About",
+    "write-a-story": "Write a Story",
+    "copyright": "All rights reserved."
+  }
+}
