@@ -1,9 +1,11 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import MarkdownRenderer from './MarkdownRenderer';
 
 const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
   const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
 
   if (!authContext?.token) {
     return <Navigate to='/login' />;
@@ -14,7 +16,9 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
     storyTitles: [],
     storyDescriptions: [],
   });
+
   const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     if (inputRef.current) {
@@ -58,10 +62,9 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
       onClick={closePopup}
     >
       <div
-        className='dark:bg-gray-800 bg-gray-100 dark:text-white text-gray-800 rounded-lg p-6 w-[50%] max-h-[60%] overflow-y-auto'
+        className='dark:bg-stone-700 bg-gray-100 dark:text-white text-gray-800 rounded-lg p-6 w-[50%] max-h-[60%] overflow-y-auto'
         onClick={e => e.stopPropagation()}
       >
-
         <input
           ref={inputRef}
           type='text'
@@ -73,51 +76,94 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
 
         <div className='space-y-4'>
           <div>
-            <h3 className='mb-1 font-bold text-gray-400'>Users</h3>
+            <h3 className='mb-1 font-bold text-gray-500 dark:text-white'>
+              Users
+            </h3>
             {searchResults.users && searchResults.users.length > 0 ? (
               searchResults.users.map((user: any, index: number) => (
-                <div key={index}>
-                  <p>{user.username}</p>
+                <div
+                  key={index}
+                  className='p-3 mb-2 font-medium text-blue-600 transition duration-200 bg-white rounded-lg shadow-md cursor-pointer dark:bg-stone-800 hover:shadow-lg'
+                  onClick={() => {
+                    setSearchQuery('');
+                    closePopup();
+                    navigate(`/profile/${user.username}`, { replace: true });
+                  }}
+                >
+                  <p className='text-md line-clamp-1'>{user.name}</p>
+                  <p className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
+                    {user.username}
+                  </p>
                 </div>
               ))
             ) : (
-              <p>No users found</p>
+              <p className='mt-2 text-sm text-gray-500 dark:text-gray-300'>
+                No users found
+              </p>
             )}
           </div>
 
           <hr className='my-4 border-slate-400' />
 
           <div>
-            <h3 className='mb-1 font-bold text-gray-400'>Story by Titles</h3>
+            <h3 className='mb-1 font-bold text-gray-500 dark:text-white'>
+              Story by Titles
+            </h3>
             {searchResults.storyTitles &&
             searchResults.storyTitles.length > 0 ? (
               searchResults.storyTitles.map((story: any, index: number) => (
-                <div key={index}>
-                  <p>{story.title}</p>
+                <div
+                  key={index}
+                  className='p-3 mb-2 font-medium text-blue-600 transition duration-200 bg-white rounded-lg shadow-md cursor-pointer dark:bg-stone-800 hover:shadow-lg'
+                  onClick={() => {
+                    setSearchQuery('');
+                    closePopup();
+                    navigate(`/story/${story.id}`, { state: story });
+                  }}
+                >
+                  <p className='text-md line-clamp-1'>{story.title}</p>
+                  <p className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
+                    <MarkdownRenderer content={story.description} />
+                  </p>
                 </div>
               ))
             ) : (
-              <p>No titles found</p>
+              <p className='mt-2 text-sm text-gray-500 dark:text-gray-300'>
+                No titles found
+              </p>
             )}
           </div>
 
           <hr className='my-4 border-slate-400' />
 
           <div>
-            <h3 className='mb-1 font-bold text-gray-400'>
+            <h3 className='mb-1 font-bold text-gray-500 dark:text-white'>
               Story by Descriptions
             </h3>
             {searchResults.storyDescriptions &&
             searchResults.storyDescriptions.length > 0 ? (
               searchResults.storyDescriptions.map(
                 (story: any, index: number) => (
-                  <div key={index}>
-                    <p>{story.description}</p>
+                  <div
+                    key={index}
+                    className='p-3 mb-2 font-medium text-blue-600 transition duration-200 bg-white rounded-lg shadow-md cursor-pointer dark:bg-stone-800 hover:shadow-lg'
+                    onClick={() => {
+                      setSearchQuery('');
+                      closePopup();
+                      navigate(`/story/${story.id}`, { state: story });
+                    }}
+                  >
+                    <p className='text-md line-clamp-1'>{story.title}</p>
+                    <p className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
+                      <MarkdownRenderer content={story.description} />
+                    </p>
                   </div>
                 )
               )
             ) : (
-              <p>No descriptions found</p>
+              <p className='mt-2 text-sm text-gray-500 dark:text-gray-300 '>
+                No descriptions found
+              </p>
             )}
           </div>
         </div>

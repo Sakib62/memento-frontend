@@ -6,7 +6,6 @@ const Footer: React.FC = () => {
   return (
     <footer className='w-full p-6 bg-stone-300 dark:bg-gray-800'>
       <div className='container flex flex-col items-center justify-between gap-4 mx-auto sm:flex-row'>
-
         <div className='flex flex-col items-center sm:items-start'>
           <nav className='flex gap-4'>
             <Link
@@ -22,7 +21,7 @@ const Footer: React.FC = () => {
               About
             </Link>
             <Link
-              to='/story/create'
+              to='/new-story'
               className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
             >
               Write a Story
@@ -37,7 +36,7 @@ const Footer: React.FC = () => {
             rel='noopener noreferrer'
             className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
           >
-            <FaGithub size={20}/>
+            <FaGithub size={20} />
           </a>
           <a
             href='https://www.linkedin.com/in/sakib-ul-islam/'
@@ -45,10 +44,9 @@ const Footer: React.FC = () => {
             rel='noopener noreferrer'
             className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
           >
-            <FaLinkedin size={20}/>
+            <FaLinkedin size={20} />
           </a>
         </div>
-
 
         <p className='text-sm text-gray-500 dark:text-gray-400'>
           © {new Date().getFullYear()} Memento. All rights reserved.

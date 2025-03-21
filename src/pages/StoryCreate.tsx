@@ -1,11 +1,10 @@
-import { Check, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Swal from 'sweetalert2';
 import StoryEditor from '../components/StoryEditor';
 import { AuthContext } from '../context/AuthContext';
 
-const Write = () => {
+const StoryCreate = () => {
   const authContext = useContext(AuthContext);
   if (!authContext?.token) {
     return <Navigate to='/login' />;
@@ -16,9 +15,6 @@ const Write = () => {
   const [title, setTitle] = useState('');
   const [markdownContent, setMarkdownContent] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState('');
-  const [responseStatus, setResponseStatus] = useState('');
 
   const maxTagLength = 20;
   const maxTags = 10;
@@ -59,7 +55,7 @@ const Write = () => {
     setTags(tags.filter(t => t !== tag));
   };
 
-  const handleSubmit = async () => {
+  const handleCreateStory = async () => {
     const storyData = {
       title: title,
       description: markdownContent,
@@ -79,42 +75,43 @@ const Write = () => {
       });
 
       const data = await response.json();
-      console.log(data.data);
       const story = data.data;
 
       if (response.ok) {
-        setPopupMessage('Your story has been published!');
-        setShowPopup(true);
-        setResponseStatus('success');
-        setTimeout(() => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Story has been published!',
+          icon: 'success',
+          confirmButtonText: 'Okay',
+        }).then(() => {
           navigate(`/story/${story.id}`, { state: story });
-        }, 2000);
+        });
       } else {
-        setPopupMessage('Failed to publish your story.\nPlease try again.');
-        setResponseStatus('error');
-        setShowPopup(true);
+        Swal.fire({
+          title: 'Failed!',
+          text: 'Please try again.',
+          icon: 'error',
+          confirmButtonText: 'Okay',
+        });
       }
     } catch (error) {
-      console.error('Error:', error);
-      setPopupMessage('Something went wrong. Please try again.');
-      setResponseStatus('error');
-      setShowPopup(true);
+      Swal.fire({
+        title: 'Something went wrong!',
+        text: 'Please try again.',
+        icon: 'error',
+        confirmButtonText: 'Okay',
+      });
     }
   };
 
   return (
     <div className='flex flex-col min-h-screen'>
-      <div className='sticky top-0 left-0 z-50 w-full'>
-        <Navbar />
-      </div>
-
-      <div className='flex flex-col items-center justify-start flex-grow px-4 pt-10 bg-gray-300 dark:bg-gray-600'>
+      <div className='flex flex-col items-center justify-start flex-grow px-4 pt-10 bg-gray-300 dark:bg-stone-600'>
         <h1 className='mb-12 text-3xl font-bold text-gray-800 dark:text-gray-200'>
           Create New Story
         </h1>
 
-        {/* Parent flex container for title/description and tags */}
-        <div className='flex w-full gap-8 max-w-7xl'>
+        <div className='flex flex-col w-full gap-8 max-w-7xl md:flex-row'>
           <div className='flex-1 w-full max-w-4xl'>
             <input
               required
@@ -129,8 +126,7 @@ const Write = () => {
             </div>
           </div>
 
-          {/* Tags section */}
-          <div className='flex-shrink-0 w-1/4 p-5 bg-gray-100 rounded-lg shadow-md'>
+          <div className='flex-shrink-0 w-full p-5 bg-gray-100 rounded-lg shadow-md md:w-1/4'>
             <h3 className='mb-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-500'>
               Add Tags
             </h3>
@@ -180,49 +176,14 @@ const Write = () => {
         </div>
 
         <button
-          onClick={handleSubmit}
+          onClick={handleCreateStory}
           className='px-4 py-2 mt-6 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900'
         >
           Publish
         </button>
       </div>
-
-      {/* Popup Modal */}
-      {showPopup && (
-        <div className='fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-75'>
-          <div className='flex flex-col items-center justify-center p-8 bg-white rounded-lg shadow-lg w-96 h-76'>
-            <div className='flex items-center justify-center mb-4'>
-              <div
-                className={`flex items-center justify-center w-16 h-16 rounded-full glow-animate ${
-                  responseStatus === 'success' ? 'bg-green-500' : 'bg-red-500'
-                }`}
-              >
-                {responseStatus === 'success' ? (
-                  <Check color='#ffffff' size={40} />
-                ) : (
-                  <X color='#ffffff' size={40} />
-                )}
-              </div>
-            </div>
-            <p
-              className='text-xl font-semibold text-center'
-              style={{ whiteSpace: 'pre-line' }}
-            >
-              {popupMessage}
-            </p>
-            {responseStatus != 'success' && (
-              <button
-                onClick={() => setShowPopup(false)}
-                className='px-6 py-2 mt-6 font-semibold text-white bg-blue-500 rounded-full shadow-md dark:bg-gray-800 hover:bg-blue-600'
-              >
-                Close
-              </button>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Write;
+export default StoryCreate;

@@ -1,27 +1,38 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Layout from '../components/Layout';
 import PrivateRoute from '../components/PrivateRoute';
-import EditStory from '../pages/EditStory';
+import PublicRoute from '../components/PublicRoute';
+import About from '../pages/About';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
 import Profile from '../pages/Profile';
 import Register from '../pages/Register';
-import StoryDetails from '../pages/StoryDetails';
-import Write from '../pages/Write';
+import StoryCreate from '../pages/StoryCreate';
+import StoryEdit from '../pages/StoryEdit';
+import StoryView from '../pages/StoryView';
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+        <Route element={<PublicRoute />}>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+        </Route>
 
         <Route element={<PrivateRoute />}>
-          <Route path='/' element={<Home />} />
-          <Route path='/write' element={<Write />} />
-          <Route path='/story/:id' element={<StoryDetails />} />
-          <Route path='/story/:id/edit' element={<EditStory />} />
-          <Route path='/profile/:username' element={<Profile />} />
+          <Route element={<Layout />}>
+            <Route path='/' element={<Home />} />
+            <Route path='/new-story' element={<StoryCreate />} />
+            <Route path='/story/:id' element={<StoryView />} />
+            <Route path='/story/:id/edit' element={<StoryEdit />} />
+            <Route path='/profile/:username' element={<Profile />} />
+            <Route path='/about' element={<About />} />
+          </Route>
         </Route>
+
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
