@@ -52,8 +52,8 @@ const StoryEdit = () => {
           const data = await response.json();
           const fetchedStory = data.data;
 
-          console.log(fetchedStory.authorUsername)
-          console.log(username)
+          console.log(fetchedStory.authorUsername);
+          console.log(username);
 
           if (fetchedStory.authorUsername !== username && role != 1) {
             Swal.fire({
@@ -86,7 +86,7 @@ const StoryEdit = () => {
     };
 
     // if (!initialStory) {
-      fetchStory();
+    fetchStory();
     // }
   }, [storyId, token, navigate, initialStory]);
 
