@@ -88,9 +88,9 @@ const StoryCard = ({ story }: { story: Story }) => {
           <h3 className='h-12 text-4xl font-semibold text-gray-800 dark:text-gray-200 line-clamp-2'>
             {story.title}
           </h3>
-          <p className='mt-3 text-gray-700 text-md dark:text-gray-300 line-clamp-3'>
+          <div className='mt-3 text-gray-700 text-md dark:text-gray-300 line-clamp-3'>
             <MarkdownRenderer content={story.description} />
-          </p>
+          </div>
         </div>
 
         {/* Meta Info & Actions */}

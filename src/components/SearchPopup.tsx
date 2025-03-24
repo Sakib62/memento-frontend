@@ -122,9 +122,9 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
                   }}
                 >
                   <p className='text-md line-clamp-1'>{story.title}</p>
-                  <p className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
+                  <div className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
                     <MarkdownRenderer content={story.description} />
-                  </p>
+                  </div>
                 </div>
               ))
             ) : (
@@ -154,9 +154,9 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
                     }}
                   >
                     <p className='text-md line-clamp-1'>{story.title}</p>
-                    <p className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
+                    <div className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
                       <MarkdownRenderer content={story.description} />
-                    </p>
+                    </div>
                   </div>
                 )
               )

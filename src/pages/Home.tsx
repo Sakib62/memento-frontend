@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import StoryCard from '../components/StoryCard';
-import { useTranslation } from 'react-i18next';
 import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
@@ -22,9 +22,10 @@ const Home = () => {
   const limit = 6;
 
   const fetchLatestStories = async (page: number) => {
+    const offset = (page - 1) * limit;
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stories?limit=${limit + 1}&page=${page}`,
+        `http://localhost:3000/api/stories?limit=${limit + 1}&offset=${offset}`,
         {
           method: 'GET',
           headers: {
@@ -81,9 +82,17 @@ const Home = () => {
   const handleNext = () => setCurrentPage(prev => prev + 1);
   const handlePrev = () => setCurrentPage(prev => (prev > 1 ? prev - 1 : 1));
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
+
   return (
     <div className='min-h-screen px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 dark:bg-stone-600'>
-      <div className='mx-auto max-w-7xl'>
+      <div
+        onClick={() => {
+          if (isDropdownOpen) setIsDropdownOpen(false);
+        }}
+        className='mx-auto max-w-7xl'
+      >
         <div className='mb-12 text-center'>
           <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>
             {t('home.title')}
@@ -95,23 +104,61 @@ const Home = () => {
           ))}
         </div>
 
-        <div className='flex justify-center space-x-4'>
-          {currentPage > 1 && (
+        <div className='flex items-center justify-center space-x-4'>
+          {/* Previous Button */}
+          <button
+            onClick={handlePrev}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 text-white rounded-lg shadow-md ${
+              currentPage === 1
+                ? 'bg-gray-300 cursor-not-allowed'
+                : 'bg-blue-500 hover:bg-blue-600'
+            }`}
+          >
+            {t('home.prev')}
+          </button>
+
+          {/* Page Selector (Opens on Click) */}
+          <div className='relative'>
             <button
-              onClick={handlePrev}
-              className='px-4 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600'
+              onClick={toggleDropdown}
+              className='px-4 py-2 text-lg font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md focus:outline-none'
             >
-              {t('home.prev')}
+              Page {currentPage}
             </button>
-          )}
-          {hasNextPage && (
-            <button
-              onClick={handleNext}
-              className='px-4 py-2 text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600'
-            >
-              {t('home.next')}
-            </button>
-          )}
+
+            {isDropdownOpen && (
+              <div className='absolute left-0 z-10 mt-0 overflow-y-auto -translate-y-1/2 bg-white border rounded-lg shadow-lg top-1/2 max-h-28' >
+                {[...Array(15 + (hasNextPage ? 1 : 0)).keys()].map(
+                  (_, index) => (
+                    <div
+                      key={index + 1}
+                      onClick={() => {
+                        setCurrentPage(index + 1);
+                        setIsDropdownOpen(false); // Close on selection
+                      }}
+                      className='px-4 py-2 text-gray-800 cursor-pointer hover:bg-gray-200'
+                    >
+                     Page {index + 1}
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Next Button */}
+          <button
+            onClick={handleNext}
+            disabled={!hasNextPage}
+            className={`px-4 py-2 text-white rounded-lg shadow-md ${
+              !hasNextPage
+                ? 'bg-gray-300 cursor-not-allowed'
+                : 'bg-blue-500 hover:bg-blue-600'
+            }`}
+          >
+            {t('home.next')}
+          </button>
         </div>
 
         <div className='my-16 border-t border-gray-300'></div>

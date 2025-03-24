@@ -266,9 +266,9 @@ const StoryView = () => {
         <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100'>
           {story.title}
         </h1>
-        <p className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
+        <div className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
           <MarkdownRenderer content={story?.description} />
-        </p>
+        </div>
 
         {story.tags.length > 0 && (
           <div className='mt-6'>

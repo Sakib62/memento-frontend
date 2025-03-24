@@ -158,7 +158,7 @@ const Profile = () => {
         );
       }
     } else {
-      console.log('Account deletion canceled');
+      // console.log('Account deletion canceled');
     }
   };
 

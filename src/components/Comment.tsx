@@ -38,6 +38,8 @@ const Comment: React.FC<CommentProps> = ({
 
   useEffect(() => {
     const fetchComments = async () => {
+      if (!story.id) return;
+
       try {
         const response = await fetch(
           `http://localhost:3000/api/stories/${story.id}/comments`,
@@ -144,11 +146,8 @@ const Comment: React.FC<CommentProps> = ({
 
     if (result.isConfirmed) {
       const previousComments = [...comments];
-      setComments(prev => {
-        const updatedComments = prev.filter(c => c.id !== commentId);
-        onCommentCountChange(updatedComments.length);
-        return updatedComments;
-      });
+      setComments(prev => prev.filter(c => c.id !== commentId));
+      onCommentCountChange(comments.length);
 
       try {
         const response = await fetch(
@@ -190,11 +189,7 @@ const Comment: React.FC<CommentProps> = ({
       authorUsername: username as string,
     };
 
-    setComments(prev => {
-      const updatedComments = [tempComment, ...prev];
-      onCommentCountChange(updatedComments.length);
-      return updatedComments;
-    });
+    setComments(prev => [tempComment, ...prev]);
     setComment('');
 
     try {
@@ -218,13 +213,11 @@ const Comment: React.FC<CommentProps> = ({
       setComments(prev =>
         prev.map(c => (c.id === tempComment.id ? { ...c, ...data.data } : c))
       );
+      onCommentCountChange(data.data.length);
     } catch (error) {
       console.error('Error posting comment:', error);
-      setComments(prev => {
-        const updatedComments = prev.filter(c => c.id !== tempComment.id);
-        onCommentCountChange(updatedComments.length);
-        return updatedComments;
-      });
+      setComments(prev => prev.filter(c => c.id !== tempComment.id));
+      onCommentCountChange(comments.length - 1);
     } finally {
       setLoading(false);
     }
