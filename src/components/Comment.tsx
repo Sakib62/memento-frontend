@@ -36,13 +36,15 @@ const Comment: React.FC<CommentProps> = ({
 
   const [comments, setComments] = useState<CommentDTO[]>([]);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchComments = async () => {
       if (!story.id) return;
 
       try {
         const response = await fetch(
-          `http://localhost:3000/api/stories/${story.id}/comments`,
+          `${apiUrl}/api/stories/${story.id}/comments`,
           {
             method: 'GET',
             headers: {
@@ -89,17 +91,14 @@ const Comment: React.FC<CommentProps> = ({
 
     try {
       setLoading(true);
-      const response = await fetch(
-        `http://localhost:3000/api/comments/${commentId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ comment: editedCommentText }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/comments/${commentId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ comment: editedCommentText }),
+      });
 
       if (!response.ok) throw new Error('Failed to update comment');
 
@@ -150,13 +149,10 @@ const Comment: React.FC<CommentProps> = ({
       onCommentCountChange(comments.length);
 
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/comments/${commentId}`,
-          {
-            method: 'DELETE',
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/comments/${commentId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
         if (!response.ok) throw new Error('Failed to delete comment');
 
         Swal.fire('Deleted!', 'Your comment has been deleted.', 'success');
@@ -194,7 +190,7 @@ const Comment: React.FC<CommentProps> = ({
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stories/${story.id}/comments`,
+        `${apiUrl}/api/stories/${story.id}/comments`,
         {
           method: 'POST',
           headers: {

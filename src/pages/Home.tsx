@@ -21,11 +21,13 @@ const Home = () => {
   const [hasNextPage, setHasNextPage] = useState(true);
   const limit = 6;
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const fetchLatestStories = async (page: number) => {
     const offset = (page - 1) * limit;
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stories?limit=${limit + 1}&offset=${offset}`,
+        `${apiUrl}/api/stories?limit=${limit + 1}&offset=${offset}`,
         {
           method: 'GET',
           headers: {
@@ -49,16 +51,13 @@ const Home = () => {
 
   const fetchTopLikedStories = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/stories/liked/top`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/stories/liked/top`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to fetch top liked stories');
@@ -128,8 +127,8 @@ const Home = () => {
             </button>
 
             {isDropdownOpen && (
-              <div className='absolute left-0 z-10 mt-0 overflow-y-auto -translate-y-1/2 bg-white border rounded-lg shadow-lg top-1/2 max-h-28' >
-                {[...Array(15 + (hasNextPage ? 1 : 0)).keys()].map(
+              <div className='absolute left-0 z-10 mt-0 overflow-y-auto -translate-y-1/2 bg-white border rounded-lg shadow-lg top-1/2 max-h-28'>
+                {[...Array(currentPage + (hasNextPage ? 1 : 0)).keys()].map(
                   (_, index) => (
                     <div
                       key={index + 1}
@@ -139,7 +138,7 @@ const Home = () => {
                       }}
                       className='px-4 py-2 text-gray-800 cursor-pointer hover:bg-gray-200'
                     >
-                     Page {index + 1}
+                      Page {index + 1}
                     </div>
                   )
                 )}

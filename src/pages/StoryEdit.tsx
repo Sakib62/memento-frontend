@@ -35,18 +35,17 @@ const StoryEdit = () => {
   const maxTagLength = 20;
   const maxTags = 10;
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchStory = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/stories/${storyId}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -131,17 +130,14 @@ const StoryEdit = () => {
     };
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/stories/${story.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedData),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/stories/${story.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
 
       const data = await response.json();
       const updatedStory = data.data;

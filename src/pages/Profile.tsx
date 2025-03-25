@@ -25,19 +25,18 @@ const Profile = () => {
 
   const [userInfo, setUserInfo] = useState<UserInfo>({} as UserInfo);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const fetchUserInfo = async (username: string) => {
     if (!username) return;
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/users/username/${username}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/users/username/${username}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch user information');
       }
@@ -65,9 +64,9 @@ const Profile = () => {
   const fetchStoriesByTab = async () => {
     try {
       const tabEndpoints: Record<string, string> = {
-        created: `http://localhost:3000/api/stories/author/${paramUsername}`,
-        liked: `http://localhost:3000/api/users/${userInfo.id}/stories/liked`,
-        commented: `http://localhost:3000/api/users/${userInfo.id}/stories/commented`,
+        created: `${apiUrl}/api/stories/author/${paramUsername}`,
+        liked: `${apiUrl}/api/users/${userInfo.id}/stories/liked`,
+        commented: `${apiUrl}/api/users/${userInfo.id}/stories/commented`,
       };
 
       const endpoint = tabEndpoints[selectedTab];
@@ -135,15 +134,12 @@ const Profile = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/users/${userId}`,
-          {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/users/${userId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to delete user');
         }
@@ -184,20 +180,17 @@ const Profile = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/users/${userInfo.id}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authContext.token}`,
-          },
-          body: JSON.stringify({
-            name: updatedName,
-            email: updatedEmail,
-          }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/users/${userInfo.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authContext.token}`,
+        },
+        body: JSON.stringify({
+          name: updatedName,
+          email: updatedEmail,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error('Failed to update profile');
@@ -256,7 +249,7 @@ const Profile = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/api/auth/${userInfo.id}/reset-Password`,
+          `${apiUrl}/api/auth/${userInfo.id}/reset-Password`,
           {
             method: 'PUT',
             headers: {

@@ -1,19 +1,13 @@
-import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const PublicRoute = () => {
-  const authContext = useContext(AuthContext);
+  const { token, loading } = useAuth();
 
-  if (authContext?.loading) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  // if (!authContext?.token) {
-  //   return <Navigate to='/login' />;
-  // }
-
-  const { token } = authContext;
   return token ? <Navigate to='/' /> : <Outlet />;
 };
 

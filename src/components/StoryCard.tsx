@@ -28,13 +28,15 @@ const StoryCard = ({ story }: { story: Story }) => {
   };
 
   const [likeCount, setLikeCount] = useState<number>(0);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [, setIsLiked] = useState<boolean>(false);
   const [commentCount, setCommentCount] = useState<number>(0);
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchLikeData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stories/${story.id}/likeStatus`,
+        `${apiUrl}/api/stories/${story.id}/likeStatus`,
         {
           method: 'GET',
           headers: {
@@ -54,7 +56,7 @@ const StoryCard = ({ story }: { story: Story }) => {
   const fetchCommentCount = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stories/${story.id}/commentCount`,
+        `${apiUrl}/api/stories/${story.id}/commentCount`,
         {
           method: 'GET',
           headers: {

@@ -9,6 +9,8 @@ const Login = () => {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const loginData = {
@@ -17,7 +19,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const response = await fetch(`${apiUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

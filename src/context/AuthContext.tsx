@@ -1,5 +1,6 @@
+// src/context/AuthContext.tsx
 import { jwtDecode } from 'jwt-decode';
-import React, { createContext, ReactNode, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useEffect, useState, useContext } from 'react';
 
 interface AuthContextType {
   token: string | null;
@@ -12,7 +13,7 @@ interface AuthContextType {
   clearAuthData: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -27,8 +28,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
       try {
         const decoded: {
           id: string;
@@ -36,13 +37,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           name: string;
           role: number;
           exp?: number;
-        } = jwtDecode(token);
+        } = jwtDecode(storedToken);
 
         const expiryTime = decoded.exp ? decoded.exp * 1000 : 0;
         if (Date.now() >= expiryTime) {
           clearAuthData();
         } else {
-          setToken(token);
+          setToken(storedToken);
           setId(decoded.id);
           setUsername(decoded.username);
           setName(decoded.name);
@@ -55,15 +56,15 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const setAuthData = (token: string) => {
-    localStorage.setItem('token', token);
+  const setAuthData = (newToken: string) => {
+    localStorage.setItem('token', newToken);
     const decoded: {
       id: string;
       username: string;
       name: string;
       role: number;
-    } = jwtDecode(token);
-    setToken(token);
+    } = jwtDecode(newToken);
+    setToken(newToken);
     setId(decoded.id);
     setUsername(decoded.username);
     setName(decoded.name);
@@ -81,20 +82,20 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{
-        token,
-        id,
-        username,
-        name,
-        role,
-        loading,
-        setAuthData,
-        clearAuthData,
-      }}
+      value={{ token, id, username, name, role, loading, setAuthData, clearAuthData }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export { AuthContext, AuthProvider };
+// Custom hook to access the Auth context
+const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
+
+export { AuthProvider, AuthContext, useAuth };

@@ -29,6 +29,8 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
     };
   }, []);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (!searchQuery) {
@@ -37,7 +39,7 @@ const SearchPopup = ({ closePopup, searchQuery, setSearchQuery }: any) => {
       }
       try {
         const response = await fetch(
-          `http://localhost:3000/api/search?pattern=${searchQuery}`,
+          `${apiUrl}/api/search?pattern=${searchQuery}`,
           {
             method: 'GET',
             headers: {

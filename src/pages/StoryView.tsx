@@ -43,18 +43,17 @@ const StoryView = () => {
   });
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const fetchStory = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/stories/${storyId}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           navigate('/not-found');
           return;
@@ -84,13 +83,10 @@ const StoryView = () => {
 
     if (result.isConfirmed) {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/stories/${storyId}`,
-          {
-            method: 'DELETE',
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (!response.ok) throw new Error('Failed to delete story');
 
@@ -124,7 +120,7 @@ const StoryView = () => {
     const fetchLikeData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/stories/${storyId}/likeStatus`,
+          `${apiUrl}/api/stories/${storyId}/likeStatus`,
           {
             method: 'GET',
             headers: {
@@ -151,16 +147,13 @@ const StoryView = () => {
     setIsLiked(prevStatus => !prevStatus);
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/stories/${story.id}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/stories/${story.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to toggle like');

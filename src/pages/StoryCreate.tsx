@@ -55,6 +55,8 @@ const StoryCreate = () => {
     setTags(tags.filter(t => t !== tag));
   };
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleCreateStory = async () => {
     const storyData = {
       title: title,
@@ -65,7 +67,7 @@ const StoryCreate = () => {
     };
 
     try {
-      const response = await fetch('http://localhost:3000/api/stories/', {
+      const response = await fetch(`${apiUrl}/api/stories/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
