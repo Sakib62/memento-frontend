@@ -1,0 +1,18 @@
+{
+  "home": {
+    "title": "Siste historier",
+    "next": "Neste",
+    "prev": "Foregående",
+    "top-liked": "Mest likte historier"
+  },
+  "navbar": {
+    "search": "Søke...",
+    "write": "Skrive"
+  },
+  "footer": {
+    "home": "Hjem",
+    "about": "Om",
+    "write-a-story": "Skriv en historie",
+    "copyright": "Alle rettigheter forbeholdt."
+  }
+}
