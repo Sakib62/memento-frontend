@@ -1,18 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
+import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { useStoryStats } from '../hooks/useStoryStats';
+import { Story } from '../types/story';
 import MarkdownRenderer from './MarkdownRenderer';
-
-interface Story {
-  id: string;
-  title: string;
-  description: string;
-  authorUsername: string;
-  authorName: string;
-  bannerUrl?: string | null;
-  createdAt: Date;
-}
 
 const StoryCard = ({ story }: { story: Story }) => {
   const authContext = useContext(AuthContext);
@@ -27,75 +20,29 @@ const StoryCard = ({ story }: { story: Story }) => {
     navigate(`/story/${story.id}`, { state: story });
   };
 
-  const [likeCount, setLikeCount] = useState<number>(0);
-  const [, setIsLiked] = useState<boolean>(false);
-  const [commentCount, setCommentCount] = useState<number>(0);
+  const { likeCount, isLiked, commentCount, loading, error } = useStoryStats(
+    story.id,
+    token
+  );
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-
-  const fetchLikeData = async () => {
-    try {
-      const response = await fetch(
-        `${apiUrl}/api/stories/${story.id}/likeStatus`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      setLikeCount(data.data.likeCount);
-      setIsLiked(data.data.likedByUser);
-    } catch (error) {
-      console.error('Error fetching like data:', error);
-    }
-  };
-
-  const fetchCommentCount = async () => {
-    try {
-      const response = await fetch(
-        `${apiUrl}/api/stories/${story.id}/commentCount`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      setCommentCount(data.data);
-    } catch (error) {
-      console.error('Error fetching comment count:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchLikeData();
-    fetchCommentCount();
-  }, [story.id]);
+  // if (loading) return <p>Loading stats...</p>;
+  // if (error) return <p>{error}</p>;
 
   return (
     <div
       onClick={handleClick}
-      className='flex items-stretch gap-6 p-6 transition-all duration-300 ease-in-out bg-gray-200 shadow-md cursor-pointer rounded-xl hover:shadow-lg dark:bg-stone-800'
+      className='flex items-stretch gap-4 p-4 transition-all duration-300 ease-in-out shadow-md cursor-pointer bg-amber-100 rounded-xl hover:shadow-xl dark:bg-stone-800'
     >
-      {/* Left Section: Text Content (Full width if no banner) */}
-      <div
-        className={`flex flex-col justify-between ${story.bannerUrl ? 'flex-1' : 'w-full'}`}
-      >
+      <div className={`flex flex-col justify-between w-full`}>
         <div>
-          <h3 className='h-12 text-4xl font-semibold text-gray-800 dark:text-gray-200 line-clamp-2'>
+          <h3 className='h-8 text-2xl font-semibold text-gray-800 dark:text-gray-200 line-clamp-1'>
             {story.title}
           </h3>
-          <div className='mt-3 text-gray-700 text-md dark:text-gray-300 line-clamp-3'>
+          <div className='mt-3 text-gray-700 text-md dark:text-gray-300 line-clamp-2 min-h-[48px]'>
             <MarkdownRenderer content={story.description} />
           </div>
         </div>
 
-        {/* Meta Info & Actions */}
         <div className='flex items-center justify-between mt-6 text-gray-600 dark:text-gray-700'>
           <p className='dark:text-gray-400'>{story.authorName}</p>
           <div className='flex items-center gap-4'>
@@ -107,10 +54,7 @@ const StoryCard = ({ story }: { story: Story }) => {
               })}
             </span>
             <span className='flex items-center gap-1'>
-              <FaRegHeart
-                className={` dark:text-gray-400`}
-                // ${isLiked ? 'text-red-500' : 'text-gray-600'}
-              />{' '}
+              <FaRegHeart className={` dark:text-gray-400`} />{' '}
               <span className='text-gray-600 dark:text-gray-400'>
                 {likeCount ? likeCount : ''}
               </span>
@@ -122,24 +66,8 @@ const StoryCard = ({ story }: { story: Story }) => {
               </span>
             </span>
           </div>
-
-          {/* <div className='flex items-center gap-2'>
-            <FaBookmark className='text-gray-600 dark:text-white' />
-            <FaEllipsisV className='text-gray-600 dark:text-white' />
-          </div> */}
         </div>
       </div>
-
-      {/* Right Section: Banner (Only if banner exists) */}
-      {story.bannerUrl && (
-        <div className='flex-shrink-0 w-48 h-48 overflow-hidden rounded-lg'>
-          <img
-            src={story.bannerUrl}
-            alt={story.title}
-            className='object-cover w-full h-full'
-          />
-        </div>
-      )}
     </div>
   );
 };
