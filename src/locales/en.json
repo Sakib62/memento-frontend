@@ -1,18 +1,58 @@
 {
   "home": {
     "title": "Latest Stories",
-    "next": "Next",
     "prev": "Previous",
+    "next": "Next",
+    "page": "Page",
     "top-liked": "Top Liked Stories"
   },
   "navbar": {
     "search": "Search...",
-    "write": "Write"
+    "write": "Write",
+    "profile": "Profile",
+    "logout": "Logout"
   },
   "footer": {
     "home": "Home",
     "about": "About",
     "write-a-story": "Write a Story",
     "copyright": "All rights reserved."
+  },
+  "search": {
+    "placeholder": "Search Users, Titles, Descriptions",
+    "users": "Users",
+    "story-by-title": "Story by Titles",
+    "story-by-desc": "Story by Descriptions",
+    "no-user": "No users found",
+    "no-title": "No titles found",
+    "no-desc": "No descriptions found"
+  },
+  "profile": {
+    "userNotFoundTitle": "User Not Found",
+    "userNotFoundText": "The user you are looking for cannot be found.",
+    "goToHome": "Go to Homepage",
+    "loadingError": "An error occurred while loading the profile."
+  },
+  "profile-sidebar": {
+    "joined": "Joined",
+    "role": "Role",
+    "admin": "Admin",
+    "user": "User"
+  },
+  "profile-tabs": {
+    "created": "Created",
+    "liked": "Liked",
+    "commented": "Commented",
+    "settings": "Settings",
+    "dashboard": "Dashboard",
+    "stats": "Statistics"
+  },
+  "settings": {
+    "heading": "Account Settings",
+    "update": "Update Profile",
+    "save-changes": "Save Changes",
+    "reset": "Reset Password",
+    "delete": "Delete Account",
+    "delete-msg": "This action cannot be undone. Please confirm to delete your account."
   }
 }

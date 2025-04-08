@@ -1,18 +1,44 @@
 {
   "home": {
     "title": "Siste historier",
-    "next": "Neste",
     "prev": "Foregående",
+    "next": "Neste",
+    "page": "Side",
     "top-liked": "Mest likte historier"
   },
   "navbar": {
     "search": "Søke...",
-    "write": "Skrive"
+    "write": "Skrive",
+    "profile": "Profil",
+    "logout": "Logg ut"
   },
   "footer": {
     "home": "Hjem",
     "about": "Om",
     "write-a-story": "Skriv en historie",
     "copyright": "Alle rettigheter forbeholdt."
+  },
+  "search": {
+    "placeholder": "Søk etter brukere, titler, beskrivelser",
+    "users": "Brukere",
+    "story-by-title": "Historie etter titler",
+    "story-by-desc": "Historie etter beskrivelser",
+    "no-user": "Ingen brukere funnet",
+    "no-title": "Ingen titler funnet",
+    "no-desc": "Ingen beskrivelser funnet"
+  },
+  "profile-sidebar": {
+    "joined": "Ble med",
+    "role": "Rolle",
+    "admin": "Admin",
+    "user": "Bruker"
+  },
+  "profile-tabs": {
+    "created": "Opprettet",
+    "liked": "Likte",
+    "commented": "Kommenterte",
+    "settings": "Innstillinger",
+    "dashboard": "Dashbord",
+    "stats": "Statistikk"
   }
 }
