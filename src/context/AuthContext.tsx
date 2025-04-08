@@ -1,6 +1,11 @@
-// src/context/AuthContext.tsx
 import { jwtDecode } from 'jwt-decode';
-import React, { createContext, ReactNode, useEffect, useState, useContext } from 'react';
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 interface AuthContextType {
   token: string | null;
@@ -78,11 +83,22 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setName(null);
     setRole(null);
     localStorage.removeItem('token');
+    localStorage.removeItem('theme');
+    localStorage.removeItem('i18nextLng');
   };
 
   return (
     <AuthContext.Provider
-      value={{ token, id, username, name, role, loading, setAuthData, clearAuthData }}
+      value={{
+        token,
+        id,
+        username,
+        name,
+        role,
+        loading,
+        setAuthData,
+        clearAuthData,
+      }}
     >
       {children}
     </AuthContext.Provider>
@@ -98,4 +114,4 @@ const useAuth = (): AuthContextType => {
   return context;
 };
 
-export { AuthProvider, AuthContext, useAuth };
+export { AuthContext, AuthProvider, useAuth };

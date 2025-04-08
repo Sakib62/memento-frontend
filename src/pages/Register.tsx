@@ -1,6 +1,17 @@
 import { useState } from 'react';
+import { FiUserPlus } from 'react-icons/fi';
+import { MdEmail, MdPerson } from 'react-icons/md';
+import { RiLockPasswordFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import { showToast } from '../utils/toast';
+import Swal from 'sweetalert2';
+import { z } from 'zod';
+import registerImage from '../assets/register-img.png';
+import AuthLayout from '../components/auth/AuthLayout';
+import FooterLink from '../components/auth/FooterLink';
+import FormInput from '../components/auth/FormInput';
+import SubmitButton from '../components/auth/SubmitButton';
+import { RegisterData, registerSchema } from '../schemas/authSchema';
+import { registerUser } from '../services/authService';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -8,140 +19,102 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const userData = {
-      name,
-      username,
-      email,
-      password,
-    };
+    setLoading(true);
+    const registerData: RegisterData = { name, username, email, password };
 
     try {
-      const response = await fetch(`${apiUrl}/api/auth/register`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-        credentials: 'include',
+      registerSchema.parse(registerData);
+      await registerUser(registerData);
+      Swal.fire({
+        title: 'Success!',
+        text: 'Registration successful! Redirecting to login...',
+        icon: 'success',
+        timer: 3000,
+        showConfirmButton: false,
+      }).then(() => {
+        navigate('/login');
       });
-
-      const data = await response.json();
-      if (response.ok) {
-        showToast(
-          'Registration successful! Redirecting to login...',
-          'success'
-        );
-        setTimeout(() => navigate('/login'), 3000);
-      } else {
-        showToast(data.message || 'Registration failed', 'warning');
-      }
     } catch (error) {
-      showToast('Network error. Please try again.', 'error');
+      if (error instanceof z.ZodError) {
+        Swal.fire({
+          title: 'Validation Error',
+          text: error.errors.map(e => e.message).join(', '),
+          icon: 'error',
+        });
+      } else {
+        Swal.fire({
+          title: 'Registration Failed',
+          text:
+            error instanceof Error ? error.message : 'Something went wrong.',
+          icon: 'warning',
+          confirmButtonText: 'Try Again',
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-300 via-purple-300 to-blue-300'>
-      <div className='w-full max-w-sm p-6 bg-white rounded-lg shadow-lg shadow-blue-400/50'>
-        <h2 className='mb-4 text-2xl font-semibold text-center'>Register</h2>
+    <AuthLayout
+      imageSrc={registerImage}
+      imageAlt='Register'
+      maxWidth='md:max-w-5xl'
+    >
+      <form onSubmit={handleSubmit} className='space-y-6'>
+        <FormInput
+          label='Username'
+          type='text'
+          id='username'
+          value={username}
+          onChange={e => setUsername(e.target.value)}
+          placeholder='Enter your username'
+          icon={MdPerson}
+        />
 
-        <form
-          onSubmit={handleSubmit}
-          className='flex flex-col w-full max-w-sm gap-4'
-        >
-          <label
-            htmlFor='name'
-            className='block text-sm font-medium text-gray-700'
-          >
-            Name
-          </label>
-          <input
-            type='text'
-            placeholder='Name'
-            id='name'
-            name='name'
-            value={name}
-            onChange={e => setName(e.target.value)}
-            className='p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            required
-          />
+        <FormInput
+          label='Full Name'
+          type='text'
+          id='name'
+          value={name}
+          onChange={e => setName(e.target.value)}
+          placeholder='Enter your full name'
+          icon={MdPerson}
+        />
 
-          <label
-            htmlFor='username'
-            className='block text-sm font-medium text-gray-700'
-          >
-            Username
-          </label>
-          <input
-            type='text'
-            placeholder='Username'
-            id='username'
-            name='username'
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            className='p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            required
-          />
+        <FormInput
+          label='Email'
+          type='email'
+          id='email'
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder='Enter your email'
+          icon={MdEmail}
+        />
 
-          <label
-            htmlFor='email'
-            className='block text-sm font-medium text-gray-700'
-          >
-            Email
-          </label>
-          <input
-            type='email'
-            placeholder='Email'
-            id='email'
-            name='email'
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            className='p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            required
-          />
+        <FormInput
+          label='Password'
+          type='password'
+          id='password'
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder='Enter your password'
+          icon={RiLockPasswordFill}
+        />
 
-          <label
-            htmlFor='password'
-            className='block text-sm font-medium text-gray-700'
-          >
-            Password
-          </label>
-          <input
-            type='password'
-            placeholder='Password'
-            id='password'
-            name='password'
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className='p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-            required
-          />
+        <SubmitButton text='Register' icon={FiUserPlus} gap='gap-2' loading={loading}/>
+      </form>
 
-          <button
-            type='submit'
-            className='py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600'
-          >
-            Register
-          </button>
-        </form>
-
-        <p className='mt-4 text-sm text-center text-gray-600'>
-          Already have an account?{' '}
-          <button
-            onClick={() => navigate('/login')}
-            className='font-bold text-blue-600 hover:underline'
-          >
-            Login
-          </button>
-        </p>
-      </div>
-    </div>
+      <FooterLink
+        text='Already have an account?'
+        linkText='Login'
+        linkTo='/login'
+      />
+    </AuthLayout>
   );
 };
 

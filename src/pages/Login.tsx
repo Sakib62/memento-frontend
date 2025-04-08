@@ -1,108 +1,101 @@
 import React, { useContext, useState } from 'react';
+import { CiLogin } from 'react-icons/ci';
+import { MdEmail } from 'react-icons/md';
+import { RiLockPasswordFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { z } from 'zod';
+import loginImage from '../assets/login-img.png';
+import AuthLayout from '../components/auth/AuthLayout';
+import FooterLink from '../components/auth/FooterLink';
+import FormInput from '../components/auth/FormInput';
+import SubmitButton from '../components/auth/SubmitButton';
 import { AuthContext } from '../context/AuthContext';
-import { showToast } from '../utils/toast';
+import { LoginData, loginSchema } from '../schemas/authSchema';
+import { loginUser } from '../services/authService';
 
 const Login = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
-
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const loginData = {
-      identifier,
-      password,
-    };
-
+    setLoading(true);
+    const loginData: LoginData = { identifier, password };
     try {
-      const response = await fetch(`${apiUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-        credentials: 'include',
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        const token = data.data.token;
-        authContext?.setAuthData(token);
+      loginSchema.parse(loginData);
+      const data = await loginUser(loginData);
+      const token = data.data.token;
+      authContext?.setAuthData(token);
+      Swal.fire({
+        title: 'Success!',
+        text: 'Login successful',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      }).then(() => {
         navigate('/');
-      } else {
-        showToast(data.message || 'Login failed', 'error');
-      }
+      });
     } catch (error) {
-      showToast('Network error. Please try again later.', 'error');
+      if (error instanceof z.ZodError) {
+        Swal.fire({
+          title: 'Validation Error',
+          text: error.errors.map(e => e.message).join(', '),
+          icon: 'error',
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text:
+            error instanceof Error ? error.message : 'Please try again later.',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-300 via-purple-300 to-blue-300'>
-      <div className='w-full max-w-sm p-6 bg-white rounded-lg shadow-lg shadow-blue-300/50'>
-        <h2 className='mb-6 text-2xl font-semibold text-center'>Login</h2>
+    <AuthLayout imageSrc={loginImage} imageAlt='Login'>
+      <form onSubmit={handleSubmit} className='space-y-6'>
+        <FormInput
+          label='Email or Username'
+          type='text'
+          id='identifier'
+          value={identifier}
+          onChange={e => setIdentifier(e.target.value)}
+          placeholder='Email or Username'
+          icon={MdEmail}
+        />
 
-        <form onSubmit={handleSubmit}>
-          <div className='mb-4'>
-            <label
-              htmlFor='identifier'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Username or Email
-            </label>
-            <input
-              type='text'
-              id='identifier'
-              value={identifier}
-              onChange={e => setIdentifier(e.target.value)}
-              className='w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none'
-              placeholder='Enter your username or email'
-              required
-            />
-          </div>
+        <FormInput
+          label='Password'
+          type='password'
+          id='password'
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder='Enter your password'
+          icon={RiLockPasswordFill}
+        />
 
-          <div className='mb-6'>
-            <label
-              htmlFor='password'
-              className='block text-sm font-medium text-gray-700'
-            >
-              Password
-            </label>
-            <input
-              type='password'
-              id='password'
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className='w-full p-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none'
-              placeholder='Enter your password'
-              required
-            />
-          </div>
+        <SubmitButton
+          text='Login'
+          icon={CiLogin}
+          gap='gap-1'
+          loading={loading}
+        />
+      </form>
 
-          <button
-            type='submit'
-            className='w-full py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'
-          >
-            Login
-          </button>
-        </form>
-
-        <p className='mt-4 text-sm text-center text-gray-600'>
-          Don't have an account?{' '}
-          <button
-            onClick={() => navigate('/register')}
-            className='font-bold text-blue-600 hover:underline'
-          >
-            Register
-          </button>
-        </p>
-      </div>
-    </div>
+      <FooterLink
+        text='Don’t have an account?'
+        linkText='Register'
+        linkTo='/register'
+      />
+    </AuthLayout>
   );
 };
 
