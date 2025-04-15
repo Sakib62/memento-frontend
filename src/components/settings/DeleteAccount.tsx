@@ -1,6 +1,6 @@
 import React from 'react';
 import Swal from 'sweetalert2';
-import { Heading, SubmitButton } from './shared';
+import { Heading, SubmitButton } from './Shared';
 
 interface DeleteAccountProps {
   onDelete: () => void;
@@ -11,7 +11,6 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({
   onDelete,
   isLoading = false,
 }) => {
-
   const handleDeleteClick = () => {
     Swal.fire({
       title: 'Are you sure?',

@@ -26,7 +26,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   <div>
     <label htmlFor={id} className='block text-sm font-medium text-gray-600'>
       {label}
-      {required && <span className="ml-1 text-base text-red-600">*</span>}
+      {required && <span className='ml-1 text-base text-red-600'>*</span>}
     </label>
     <input
       type={type}

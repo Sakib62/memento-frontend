@@ -106,7 +106,12 @@ const Register = () => {
           icon={RiLockPasswordFill}
         />
 
-        <SubmitButton text='Register' icon={FiUserPlus} gap='gap-2' loading={loading}/>
+        <SubmitButton
+          text='Register'
+          icon={FiUserPlus}
+          gap='gap-2'
+          loading={loading}
+        />
       </form>
 
       <FooterLink

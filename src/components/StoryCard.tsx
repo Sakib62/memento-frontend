@@ -1,18 +1,16 @@
-import { useContext } from 'react';
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useStoryStats } from '../hooks/useStoryStats';
 import { Story } from '../types/story';
 import MarkdownRenderer from './MarkdownRenderer';
 
 const StoryCard = ({ story }: { story: Story }) => {
-  const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
+  const { token } = useAuth();
+  if (!token) {
     return <Navigate to='/login' />;
   }
-  const { token } = authContext;
 
   const navigate = useNavigate();
 

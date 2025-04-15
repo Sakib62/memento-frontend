@@ -1,16 +1,16 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import StoryEditor from '../components/StoryEditor';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const StoryCreate = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
+  const { username, token } = useAuth();
+  if (!token) {
     return <Navigate to='/login' />;
   }
+
   const navigate = useNavigate();
-  const { token, username, name } = authContext;
 
   const [title, setTitle] = useState('');
   const [markdownContent, setMarkdownContent] = useState('');
@@ -25,7 +25,6 @@ const StoryCreate = () => {
 
   const handleTagInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const input = event.currentTarget.value;
-
     if (
       input.length >= maxTagLength &&
       event.key !== 'Backspace' &&
@@ -35,12 +34,10 @@ const StoryCreate = () => {
       event.preventDefault();
       return;
     }
-
     if (input.length == 0 && event.key === ' ') {
       event.preventDefault();
       return;
     }
-
     if (input !== '' && (event.key === 'Enter' || event.key === ' ')) {
       if (tags.length < maxTags && !tags.includes(input)) {
         setTags(prevTags => [...prevTags, input]);
@@ -58,6 +55,15 @@ const StoryCreate = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleCreateStory = async () => {
+    if (!title.trim() || !markdownContent.trim()) {
+      Swal.fire({
+        title: 'Missing Information',
+        text: 'Title and description are required. Please make some changes.',
+        icon: 'warning',
+        confirmButtonText: 'Okay',
+      });
+      return;
+    }
     const storyData = {
       title: title,
       description: markdownContent,

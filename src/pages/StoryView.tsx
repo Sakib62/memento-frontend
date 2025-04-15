@@ -1,36 +1,26 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import MarkdownIt from 'markdown-it';
+import { useEffect, useRef, useState } from 'react';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
+import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
+import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import ButtonWithTooltip from '../components/ButtonWithToolTip';
 import Comment from '../components/Comment';
-import MarkdownRenderer from '../components/MarkdownRenderer';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
+import { Story } from '../types/story';
 
 const StoryView = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
+  const mdParser = new MarkdownIt();
+
+  const { username, role, token, clearAuthData } = useAuth();
+  if (!token) {
     return <Navigate to='/login' />;
   }
 
-  const { username, role, token } = authContext;
-
   const navigate = useNavigate();
-
-  // const location = useLocation();
-  // const initialStory = location.state || null;
   const { id: storyId } = useParams();
-
-  interface Story {
-    id: string;
-    title: string;
-    description: string;
-    authorUsername: string;
-    authorName: string;
-    createdAt: Date;
-    tags: string[];
-  }
 
   const [story, setStory] = useState<Story>({
     id: '',
@@ -54,6 +44,12 @@ const StoryView = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (response.status === 401) {
+          clearAuthData();
+          return;
+        }
+
         if (!response.ok) {
           navigate('/not-found');
           return;
@@ -180,7 +176,26 @@ const StoryView = () => {
   return (
     <div className='bg-gray-100 dark:bg-stone-600'>
       <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-3xl p-8 pt-4 mx-auto bg-white dark:bg-neutral-500'>
-        <div className='flex items-center gap-4 p-2 pt-4 pl-0 mb-4 rounded-lg '>
+        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white dark:bg-neutral-500'>
+          {story.title}
+        </h1>
+
+        {story.tags.length > 0 && (
+          <div className='mb-4'>
+            <div className='flex flex-wrap gap-2'>
+              {story.tags.map((tag: string, index: number) => (
+                <span
+                  key={index}
+                  className='px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600'
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className='flex items-center gap-4 p-2 pt-2 pl-0 mb-4 rounded-lg '>
           <div>
             <p
               onClick={() => navigate(`/profile/${story.authorUsername}`)}
@@ -256,27 +271,16 @@ const StoryView = () => {
           )}
         </div>
 
-        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100'>
-          {story.title}
-        </h1>
-        <div className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-          <MarkdownRenderer content={story?.description} />
+        <div className='markdown-body'>
+          {/* <MarkdownRenderer content={story?.description} /> */}
+          <ReactMarkdownEditorLite
+            className='react-markdown-editor-lite editor-content dark:bg-neutral-500 dark:text-white'
+            value={story?.description}
+            style={{ minHeight: '200px', height: 'auto' }}
+            renderHTML={text => mdParser.render(text)}
+            view={{ menu: false, md: false, html: true }}
+          />
         </div>
-
-        {story.tags.length > 0 && (
-          <div className='mt-6'>
-            <div className='flex flex-wrap gap-2 mt-2'>
-              {story.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className='px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600'
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
 
         <Comment
           story={story}

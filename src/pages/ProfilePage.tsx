@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -8,13 +8,13 @@ import ProfileTabs from '../components/profile/ProfileTabs';
 import SkeletonProfileSidebar from '../components/Skeleton/SkeletonProfileSidebar';
 import SkeletonProfileStories from '../components/Skeleton/SkeletonProfileStories';
 import SkeletonProfileTabs from '../components/Skeleton/SkeletonProfileTabs';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useStories } from '../hooks/useStories';
 import { fetchUser } from '../services/api';
 import { User } from '../types/user';
 
 const ProfilePage = () => {
-  const { token } = useContext(AuthContext) || {};
+  const { token, clearAuthData } = useAuth();
   if (!token) return <Navigate to='/login' />;
 
   const navigate = useNavigate();
@@ -48,7 +48,7 @@ const ProfilePage = () => {
       setProfileUser(null);
       setActiveTab('created');
       try {
-        const userData = await fetchUser(username ?? '', token);
+        const userData = await fetchUser(username ?? '', token, clearAuthData);
         setProfileUser(userData);
         setActiveTab('created');
       } catch (err) {

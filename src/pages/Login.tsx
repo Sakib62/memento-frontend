@@ -10,7 +10,7 @@ import AuthLayout from '../components/auth/AuthLayout';
 import FooterLink from '../components/auth/FooterLink';
 import FormInput from '../components/auth/FormInput';
 import SubmitButton from '../components/auth/SubmitButton';
-import { AuthContext } from '../context/AuthContext';
+import AuthContext from '../context/AuthContext';
 import { LoginData, loginSchema } from '../schemas/authSchema';
 import { loginUser } from '../services/authService';
 

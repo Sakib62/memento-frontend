@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Navigate,
   useLocation,
@@ -7,18 +7,15 @@ import {
 } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import StoryEditor from '../components/StoryEditor';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const StoryEdit = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
+  const { username, role, token, clearAuthData } = useAuth();
+  if (!token) {
     return <Navigate to='/login' />;
   }
 
-  const { username, role, token } = authContext;
-
   const navigate = useNavigate();
-
   const location = useLocation();
   const initialStory = location.state || null;
   const { id: storyId } = useParams();
@@ -30,8 +27,8 @@ const StoryEdit = () => {
   const [markdownContent, setMarkdownContent] = useState(
     initialStory?.description || ''
   );
-  const [tags, setTags] = useState<string[]>(initialStory?.tags || []);
 
+  const [tags, setTags] = useState<string[]>(initialStory?.tags || []);
   const maxTagLength = 20;
   const maxTags = 10;
 
@@ -46,6 +43,11 @@ const StoryEdit = () => {
             Authorization: `Bearer ${token}`,
           },
         });
+
+        if (response.status === 401) {
+          clearAuthData();
+          return;
+        }
 
         if (response.ok) {
           const data = await response.json();

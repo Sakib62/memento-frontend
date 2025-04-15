@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { useDeleteAccount } from '../../hooks/useDeleteAccount';
 import { useResetPassword } from '../../hooks/useResetPassword';
 import { useUpdateProfile } from '../../hooks/useUpdateProfile';
@@ -20,16 +20,17 @@ const ProfileSettings = ({ user, onUserUpdate }: ProfileSettingsProps) => {
   const { deleteAccount, isLoading: isDeleteLoading } = useDeleteAccount();
   const { updateProfile, isLoading: isUpdateLoading } = useUpdateProfile();
 
-  const handleSaveChanges = async (name: string, email: string) => {
-    console.log('Updated profile values:', { name, email });
+  const handleSaveChanges = async (updates: {
+    name?: string;
+    email?: string;
+  }) => {
     try {
       await updateProfile({
         userId: user.id,
         token,
-        updatedName: name,
-        updatedEmail: email,
+        updatedData: updates,
       });
-      onUserUpdate({ name, email });
+      onUserUpdate(updates);
     } catch (err) {
       console.error('Update profile error:', err);
     }
@@ -70,7 +71,9 @@ const ProfileSettings = ({ user, onUserUpdate }: ProfileSettingsProps) => {
 
   return (
     <div className='pb-4 rounded-lg'>
-      <h2 className='mb-6 text-xl font-bold text-left text-gray-800'>Account Settings</h2>
+      <h2 className='mb-6 text-xl font-bold text-left text-gray-800'>
+        Account Settings
+      </h2>
 
       <UpdateProfile
         initialName={user.name}

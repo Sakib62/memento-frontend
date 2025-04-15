@@ -5,8 +5,9 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export async function fetchUser(
   username: string | undefined,
-  token: string | null
-): Promise<User> {
+  token: string | null,
+  clearAuthData: () => void
+): Promise<User | null> {
   const response = await fetch(`${apiUrl}/api/users/username/${username}`, {
     method: 'GET',
     headers: {
@@ -14,6 +15,12 @@ export async function fetchUser(
       Authorization: `Bearer ${token}`,
     },
   });
+
+  if (response.status === 401) {
+    clearAuthData();
+    return null;
+  }
+
   if (!response.ok) throw new Error('Failed to fetch user');
   const data = await response.json();
   return data.data as User;

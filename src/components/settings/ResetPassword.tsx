@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { z } from 'zod';
-import { FormInput, Heading, SubmitButton } from './shared';
+import { FormInput, Heading, SubmitButton } from './Shared';
 
 interface ResetPasswordProps {
   onSubmit: (currentPassword: string, newPassword: string) => void;

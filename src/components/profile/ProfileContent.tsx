@@ -1,8 +1,7 @@
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { Stories } from '../../types/story';
 import { User } from '../../types/user';
 import AdminDashboard from '../AdminDashboard';
-import AdminStats from '../AdminStats';
 import ProfileSettings from './ProfileSettings';
 import ProfileStories from './ProfileStories';
 

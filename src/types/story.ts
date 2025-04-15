@@ -5,6 +5,7 @@ export interface Story {
   authorUsername: string;
   authorName: string;
   createdAt: Date;
+  tags: string[];
 }
 
 export interface Stories {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { fetchUsers } from '../services/api';
 import { User } from '../types/user';
 import SkeletonAdminDashboard from './Skeleton/SkeletonAdminDashboard';
@@ -30,7 +30,6 @@ const AdminDashboard = () => {
     return (
       <div className='pb-4 rounded-lg'>
         <h2 className='mb-2 text-lg font-bold'>User List</h2>
-        {/* Show 4 skeleton cards during loading */}
         {[...Array(4)].map((_, index) => (
           <SkeletonAdminDashboard key={index} />
         ))}

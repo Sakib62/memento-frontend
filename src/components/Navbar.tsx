@@ -1,16 +1,16 @@
 import { SquarePen } from 'lucide-react';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaSearch, FaUserAlt } from 'react-icons/fa';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import LanguageSwitcher from './LanguageSwitcher';
 import SearchPopup from './SearchPopup';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
+  const { token, username, clearAuthData } = useAuth();
+  if (!token) {
     return <Navigate to='/login' />;
   }
 
@@ -19,7 +19,6 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { clearAuthData } = authContext;
   const navigate = useNavigate();
 
   const toggleSearchPopup = () => {
@@ -45,17 +44,14 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const { username } = authContext;
-
   const handleProfileClick = () => {
     navigate(`/profile/${username}`);
     setIsOpen(false);
   };
 
   const handleLogoutClick = () => {
-    clearAuthData();
-    navigate('/login');
     setIsOpen(false);
+    clearAuthData();
   };
 
   return (

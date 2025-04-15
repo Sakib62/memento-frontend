@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
-import { FormInput, Heading, SubmitButton } from './shared';
+import { FormInput, Heading, SubmitButton } from './Shared';
 
 interface UpdateProfileProps {
   initialName: string;
   initialEmail: string;
-  onSubmit: (name: string, email: string) => void;
+  onSubmit: (updates: { name?: string; email?: string }) => void;
   isLoading?: boolean;
 }
 
@@ -20,10 +20,16 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      name.trim() === initialName.trim() &&
-      email.trim() === initialEmail.trim()
-    ) {
+
+    const updates: { name?: string; email?: string } = {};
+    if (name.trim() !== initialName.trim()) {
+      updates.name = name.trim();
+    }
+    if (email.trim() !== initialEmail.trim()) {
+      updates.email = email.trim();
+    }
+
+    if (Object.keys(updates).length === 0) {
       Swal.fire({
         icon: 'info',
         title: 'Nothing to Update',
@@ -33,7 +39,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
       });
       return;
     }
-    onSubmit(name, email);
+    onSubmit(updates);
   };
 
   return (
