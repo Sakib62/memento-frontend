@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { User } from '../types/user';
 
 interface UpdateProfileParams {
   userId: string;
   token: string | null;
-  updatedName: string;
-  updatedEmail: string;
+  updatedData: Partial<User>;
 }
 
 interface UpdateProfileResult {
@@ -21,8 +21,7 @@ export const useUpdateProfile = (): UpdateProfileResult => {
   const updateProfile = async ({
     userId,
     token,
-    updatedName,
-    updatedEmail,
+    updatedData,
   }: UpdateProfileParams) => {
     setIsLoading(true);
     setError(null);
@@ -35,10 +34,7 @@ export const useUpdateProfile = (): UpdateProfileResult => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name: updatedName,
-          email: updatedEmail,
-        }),
+        body: JSON.stringify(updatedData),
       });
 
       if (!response.ok) {

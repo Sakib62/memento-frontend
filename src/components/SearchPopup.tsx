@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { useSearchResults } from '../hooks/useSearchResults';
 import { Story } from '../types/story';
 import { User } from '../types/user';
 import MarkdownRenderer from './MarkdownRenderer';
 import SearchResultSection from './SearchResultSection';
-import { useTranslation } from 'react-i18next';
 
 const SearchPopup = ({
   closePopup,
@@ -17,12 +17,12 @@ const SearchPopup = ({
   searchQuery: string;
   setSearchQuery: (query: string) => void;
 }) => {
-  const authContext = useContext(AuthContext);
-  const navigate = useNavigate();
-
-  if (!authContext?.token) {
+  const { token } = useAuth();
+  if (!token) {
     return <Navigate to='/login' />;
   }
+
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const inputRef = useRef<HTMLInputElement>(null);

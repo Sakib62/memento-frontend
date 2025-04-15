@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Story } from '../types/story';
+import { useAuth } from './useAuth';
 
 interface StoriesResult {
   stories: Story[];
@@ -19,6 +20,8 @@ export const usePagedStories = (
   const [error, setError] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
+  const { clearAuthData } = useAuth();
+
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchStories = async (page: number) => {
@@ -36,6 +39,10 @@ export const usePagedStories = (
           },
         }
       );
+
+      if (response.status === 401) {
+        clearAuthData();
+      }
 
       if (!response.ok) {
         throw new Error('Failed to fetch latest stories');
