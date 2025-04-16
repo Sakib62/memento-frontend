@@ -1,3 +1,4 @@
+import { Role } from '../../constants/role';
 import { useAuth } from '../../hooks/useAuth';
 import { Stories } from '../../types/story';
 import { User } from '../../types/user';
@@ -19,7 +20,7 @@ interface Props {
 
 const ProfileContent = ({ type, stories, user, onUserUpdate }: Props) => {
   const { role, username } = useAuth();
-  const isAdmin = role === 1;
+  const isAdmin = role === Role.Admin;
   const isOwnProfile = user.username === username;
 
   return (

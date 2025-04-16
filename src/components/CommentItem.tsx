@@ -1,6 +1,7 @@
 import { MdDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import ButtonWithTooltip from './ButtonWithToolTip';
+import { Role } from '../constants/role';
 
 interface CommentDTO {
   id: string;
@@ -65,7 +66,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </div>
         </div>
 
-        {(role === 1 || comment.userId === userId) && (
+        {(role === Role.Admin || comment.userId === userId) && (
           <div className='flex gap-2'>
             <ButtonWithTooltip
               icon={<MdOutlineEdit size={16} />}

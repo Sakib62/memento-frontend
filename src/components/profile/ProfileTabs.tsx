@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Role } from '../../constants/role';
 import { useAuth } from '../../hooks/useAuth';
 
 interface ProfileTabsProps {
@@ -24,7 +25,7 @@ const ProfileTabs = ({ activeTab, setActiveTab, profileUsername }: any) => {
     { key: 'commented', label: t('profile-tabs.commented') },
   ];
   const { role, username } = useAuth();
-  const isAdmin = role === 1;
+  const isAdmin = role === Role.Admin;
   const isOwnProfile = profileUsername === username;
 
   if (isOwnProfile && isAdmin) {

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { User } from '../../types/user';
+import { Role } from '../../constants/role';
 
 const InfoSection: React.FC<{ label: string; value: string }> = ({
   label,
@@ -43,7 +44,7 @@ const ProfileSidebar = ({ user }: { user: User }) => {
           <InfoSection
             label={t('profile-sidebar.role')}
             value={
-              user.role === 1
+              user.role === Role.Admin
                 ? t('profile-sidebar.admin')
                 : t('profile-sidebar.user')
             }

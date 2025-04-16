@@ -15,7 +15,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+    const storedToken = localStorage.getItem('memento_token');
     if (storedToken) {
       try {
         const decoded: {
@@ -44,7 +44,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const setAuthData = (newToken: string) => {
-    localStorage.setItem('token', newToken);
+    localStorage.setItem('memento_token', newToken);
     const decoded: {
       id: string;
       username: string;
@@ -64,9 +64,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUsername(null);
     setName(null);
     setRole(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('theme');
-    localStorage.removeItem('i18nextLng');
+
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('memento_')) {
+        localStorage.removeItem(key);
+      }
+    });
   };
 
   return (
