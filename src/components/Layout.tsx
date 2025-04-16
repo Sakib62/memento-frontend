@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Footer from './Footer';
-import Navbar from './Navbar';
+import Navbar from './navbar/Navbar';
 
 const Layout = () => {
   const location = useLocation();

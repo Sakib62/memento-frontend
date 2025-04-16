@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { useSearchResults } from '../hooks/useSearchResults';
-import { Story } from '../types/story';
-import { User } from '../types/user';
-import MarkdownRenderer from './MarkdownRenderer';
+import { useAuth } from '../../hooks/useAuth';
+import { useSearchResults } from '../../hooks/useSearchResults';
+import { Story } from '../../types/story';
+import { User } from '../../types/user';
+import MarkdownRenderer from '../MarkdownRenderer';
 import SearchResultSection from './SearchResultSection';
 
 const SearchPopup = ({

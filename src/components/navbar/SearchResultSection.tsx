@@ -1,6 +1,6 @@
 import { JSX } from 'react';
-import { Story } from '../types/story';
-import { User } from '../types/user';
+import { Story } from '../../types/story';
+import { User } from '../../types/user';
 
 const SearchResultSection = <T extends User | Story>({
   title,

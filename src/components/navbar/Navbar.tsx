@@ -1,57 +1,27 @@
 import { SquarePen } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaSearch, FaUserAlt } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 import LanguageSwitcher from './LanguageSwitcher';
+import ProfileMenu from './ProfileMenu';
 import SearchPopup from './SearchPopup';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
-  const { token, username, clearAuthData } = useAuth();
+  const { token } = useAuth();
   if (!token) {
     return <Navigate to='/login' />;
   }
 
   const { t } = useTranslation();
-
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const toggleSearchPopup = () => {
     setIsSearchOpen(!isSearchOpen);
-  };
-
-  const menuRef = useRef<HTMLDivElement>(null);
-  const iconRef = useRef<HTMLLIElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target as Node) &&
-        iconRef.current &&
-        !iconRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleProfileClick = () => {
-    navigate(`/profile/${username}`);
-    setIsOpen(false);
-  };
-
-  const handleLogoutClick = () => {
-    setIsOpen(false);
-    clearAuthData();
   };
 
   return (
@@ -79,12 +49,8 @@ const Navbar = () => {
         </div>
 
         <div className='flex items-center space-x-2 md:space-x-4'>
-          <li>
-            <ThemeToggle />
-          </li>
-
+          <ThemeToggle />
           <LanguageSwitcher />
-
           <li>
             <button
               onClick={() => navigate('/new-story')}
@@ -94,39 +60,10 @@ const Navbar = () => {
               <span>{t('navbar.write')}</span>
             </button>
           </li>
-          <ul className='flex space-x-4'>
-            <li
-              className='relative flex items-center space-x-2 cursor-pointer '
-              ref={iconRef}
-            >
-              <FaUserAlt
-                className='w-10 h-10 p-2 text-white bg-gray-500 border-2 border-white rounded-full dark:bg-gray-600'
-                onClick={() => setIsOpen(!isOpen)}
-              />
-
-              {isOpen && (
-                <div
-                  ref={menuRef}
-                  className='absolute right-0 z-10 w-24 py-1 transition-all duration-200 ease-in-out transform scale-95 bg-gray-100 rounded-lg shadow-lg top-12 dark:bg-gray-800 hover:scale-100'
-                >
-                  <button
-                    onClick={handleProfileClick}
-                    className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  >
-                    {t('navbar.profile')}
-                  </button>
-                  <button
-                    onClick={handleLogoutClick}
-                    className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  >
-                    {t('navbar.logout')}
-                  </button>
-                </div>
-              )}
-            </li>
-          </ul>
+          <ProfileMenu />
         </div>
       </ul>
+
       {isSearchOpen && (
         <SearchPopup
           closePopup={toggleSearchPopup}

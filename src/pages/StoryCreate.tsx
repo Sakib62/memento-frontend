@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Navigate, useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import StoryEditor from '../components/StoryEditor';
 import { useAuth } from '../hooks/useAuth';
 
@@ -44,7 +44,7 @@ const StoryCreate = () => {
 
         event.currentTarget.value = '';
       }
-      event.preventDefault(); // Prevent space/enter from being added
+      event.preventDefault();
     }
   };
 
@@ -56,12 +56,7 @@ const StoryCreate = () => {
 
   const handleCreateStory = async () => {
     if (!title.trim() || !markdownContent.trim()) {
-      Swal.fire({
-        title: 'Missing Information',
-        text: 'Title and description are required. Please make some changes.',
-        icon: 'warning',
-        confirmButtonText: 'Okay',
-      });
+      toast.error('Title and description are required');
       return;
     }
     const storyData = {
@@ -86,29 +81,13 @@ const StoryCreate = () => {
       const story = data.data;
 
       if (response.ok) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Story has been published!',
-          icon: 'success',
-          confirmButtonText: 'Okay',
-        }).then(() => {
-          navigate(`/story/${story.id}`, { state: story });
-        });
+        toast.success('Story has been published!', { position: 'top-center' });
+        navigate(`/story/${story.id}`, { state: story });
       } else {
-        Swal.fire({
-          title: 'Failed!',
-          text: 'Please try again.',
-          icon: 'error',
-          confirmButtonText: 'Okay',
-        });
+        toast.error('Please try again.');
       }
     } catch (error) {
-      Swal.fire({
-        title: 'Something went wrong!',
-        text: 'Please try again.',
-        icon: 'error',
-        confirmButtonText: 'Okay',
-      });
+      toast.error('Something went wrong!');
     }
   };
 

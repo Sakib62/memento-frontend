@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { FiUserPlus } from 'react-icons/fi';
 import { MdEmail, MdPerson } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { z } from 'zod';
 import registerImage from '../assets/register-img.png';
 import AuthLayout from '../components/auth/AuthLayout';
@@ -14,11 +14,12 @@ import { RegisterData, registerSchema } from '../schemas/authSchema';
 import { registerUser } from '../services/authService';
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,30 +30,22 @@ const Register = () => {
     try {
       registerSchema.parse(registerData);
       await registerUser(registerData);
-      Swal.fire({
-        title: 'Success!',
-        text: 'Registration successful! Redirecting to login...',
-        icon: 'success',
-        timer: 3000,
-        showConfirmButton: false,
-      }).then(() => {
-        navigate('/login');
+      toast.success('Registration successful! Redirecting to login...', {
+        position: 'top-center',
       });
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        Swal.fire({
-          title: 'Validation Error',
-          text: error.errors.map(e => e.message).join(', '),
-          icon: 'error',
-        });
+        toast.error(error.errors.map(e => `• ${e.message}`).join('\n'));
       } else {
-        Swal.fire({
-          title: 'Registration Failed',
-          text:
-            error instanceof Error ? error.message : 'Something went wrong.',
-          icon: 'warning',
-          confirmButtonText: 'Try Again',
-        });
+        toast.error(
+          error instanceof Error ? error.message : 'Something went wrong.',
+          {
+            position: 'top-center',
+          }
+        );
       }
     } finally {
       setLoading(false);

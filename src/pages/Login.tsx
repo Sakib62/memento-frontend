@@ -1,16 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { CiLogin } from 'react-icons/ci';
 import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { z } from 'zod';
 import loginImage from '../assets/login-img.png';
 import AuthLayout from '../components/auth/AuthLayout';
 import FooterLink from '../components/auth/FooterLink';
 import FormInput from '../components/auth/FormInput';
 import SubmitButton from '../components/auth/SubmitButton';
-import AuthContext from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { LoginData, loginSchema } from '../schemas/authSchema';
 import { loginUser } from '../services/authService';
 
@@ -18,41 +18,35 @@ const Login = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const { setAuthData } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const loginData: LoginData = { identifier, password };
+    
     try {
       loginSchema.parse(loginData);
       const data = await loginUser(loginData);
       const token = data.data.token;
-      authContext?.setAuthData(token);
-      Swal.fire({
-        title: 'Success!',
-        text: 'Login successful',
-        icon: 'success',
-        confirmButtonText: 'OK',
-      }).then(() => {
-        navigate('/');
+      setAuthData(token);
+      navigate('/');
+      toast.success('Logged in successfully!', {
+        position: 'top-center',
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        Swal.fire({
-          title: 'Validation Error',
-          text: error.errors.map(e => e.message).join(', '),
-          icon: 'error',
+        toast.error(error.errors.map(e => e.message).join(', '), {
+          position: 'top-center',
         });
       } else {
-        Swal.fire({
-          title: 'Error!',
-          text:
-            error instanceof Error ? error.message : 'Please try again later.',
-          icon: 'error',
-          confirmButtonText: 'Try Again',
-        });
+        toast.error(
+          error instanceof Error ? error.message : 'Please try again later.',
+          {
+            position: 'top-center',
+          }
+        );
       }
     } finally {
       setLoading(false);
