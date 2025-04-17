@@ -5,7 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useSearchResults } from '../../hooks/useSearchResults';
 import { Story } from '../../types/story';
 import { User } from '../../types/user';
-import MarkdownRenderer from '../MarkdownRenderer';
+import MarkdownRenderer from '../story/MarkdownRenderer';
 import SearchResultSection from './SearchResultSection';
 
 const SearchPopup = ({

@@ -1,5 +1,5 @@
 import { Story } from '../../types/story';
-import StoryCard from '../StoryCard';
+import StoryCard from '../story/StoryCard';
 
 const ProfileStories = ({ stories }: { stories: Story[] }) => {
   if (!stories?.length) return <p>No stories found.</p>;

@@ -1,7 +1,7 @@
 import { MdDeleteOutline, MdOutlineEdit } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import ButtonWithTooltip from './ButtonWithToolTip';
 import { Role } from '../constants/role';
+import ButtonWithTooltip from './story/ButtonWithToolTip';
 
 interface CommentDTO {
   id: string;
