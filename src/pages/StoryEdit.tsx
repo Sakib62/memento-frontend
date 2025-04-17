@@ -1,182 +1,55 @@
 import { useEffect, useState } from 'react';
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import StoryEditor from '../components/StoryEditor';
+import StoryEditor from '../components/story/StoryEditor';
+import TagInput from '../components/story/TagInput';
 import { useAuth } from '../hooks/useAuth';
+import { useEditFetchStory } from '../hooks/useEditFetchStory';
+import { useUpdateStory } from '../hooks/useUpdateStory';
 
 const StoryEdit = () => {
-  const { username, role, token, clearAuthData } = useAuth();
+  const { token } = useAuth();
   if (!token) {
     return <Navigate to='/login' />;
   }
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const initialStory = location.state || null;
   const { id: storyId } = useParams();
 
-  const [story, setStory] = useState(initialStory);
-  const [loading, setLoading] = useState(!initialStory);
+  const [title, setTitle] = useState('');
+  const [markdownContent, setMarkdownContent] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
 
-  const [title, setTitle] = useState(initialStory?.title || '');
-  const [markdownContent, setMarkdownContent] = useState(
-    initialStory?.description || ''
-  );
-
-  const [tags, setTags] = useState<string[]>(initialStory?.tags || []);
-  const maxTagLength = 20;
-  const maxTags = 10;
-
-  const apiUrl = import.meta.env.VITE_API_URL;
-
+  const { story, loading } = useEditFetchStory({
+    storyId,
+  });
   useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 401) {
-          clearAuthData();
-          return;
-        }
-
-        if (response.ok) {
-          const data = await response.json();
-          const fetchedStory = data.data;
-
-          if (fetchedStory.authorUsername !== username && role != 1) {
-            Swal.fire({
-              title: 'Access Denied!',
-              text: 'You are not authorized to edit this story.',
-              icon: 'error',
-              confirmButtonText: 'Okay',
-            });
-            return navigate(`/story/${storyId}`);
-          }
-
-          setStory(fetchedStory);
-          setTitle(fetchedStory.title);
-          setMarkdownContent(fetchedStory.description);
-          setTags(fetchedStory.tags);
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: 'Failed to load the story.',
-            icon: 'error',
-            confirmButtonText: 'Okay',
-          });
-          navigate('/');
-        }
-      } catch (error) {
-        console.error('Error fetching story:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // if (!initialStory) {
-    fetchStory();
-    // }
-  }, [storyId, token, navigate, initialStory]);
+    if (story) {
+      setTitle(story.title);
+      setMarkdownContent(story.description);
+      setTags(story.tags);
+    }
+  }, [story]);
 
   const handleContentChange = (content: string) => {
     setMarkdownContent(content);
   };
 
-  const handleTagInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const input = event.currentTarget.value;
-
-    if (
-      input.length >= maxTagLength &&
-      event.key !== 'Backspace' &&
-      event.key !== 'Enter' &&
-      event.key !== ' '
-    ) {
-      event.preventDefault();
-      return;
-    }
-
-    if (input.length == 0 && event.key === ' ') {
-      event.preventDefault();
-      return;
-    }
-
-    if (input !== '' && (event.key === 'Enter' || event.key === ' ')) {
-      if (tags.length < maxTags && !tags.includes(input)) {
-        setTags(prevTags => [...prevTags, input]);
-
-        event.currentTarget.value = '';
-      }
-      event.preventDefault(); // Prevent space/enter from being added
-    }
-  };
-
-  const removeTag = (tag: string) => {
-    setTags(tags.filter(t => t !== tag));
-  };
-
-  const handleSaveUpdate = async () => {
-    const updatedData = {
-      title: title,
-      description: markdownContent,
-      tags: tags,
-    };
-
-    try {
-      const response = await fetch(`${apiUrl}/api/stories/${story.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedData),
-      });
-
-      const data = await response.json();
-      const updatedStory = data.data;
-
-      if (response.ok) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Story has been updated!',
-          icon: 'success',
-          confirmButtonText: 'Okay',
-        }).then(() => {
-          navigate(`/story/${story.id}`, { state: updatedStory });
-        });
-      } else {
-        Swal.fire({
-          title: 'Error!',
-          text: 'Failed to update story. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'Okay',
-        });
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      Swal.fire({
-        title: 'Error!',
-        text: 'Something went wrong. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'Okay',
-      });
-    }
+  const { handleSaveUpdate, isUpdating } = useUpdateStory();
+  const onClickSave = () => {
+    handleSaveUpdate({
+      title,
+      markdownContent,
+      tags,
+      storyId: story?.id,
+    });
   };
 
   const handleCancelUpdate = async () => {
     if (!isSaveDisabled) {
       const result = await Swal.fire({
         title: 'Unsaved Changes',
-        text: 'You have unsaved changes. Are you sure you want to leave?',
+        text: 'Are you sure you want to leave?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Leave',
@@ -230,62 +103,15 @@ const StoryEdit = () => {
             <div className='rounded-lg shadow-md'>
               <StoryEditor
                 onContentChange={handleContentChange}
-                initialContent={story.description}
+                initialContent={story?.description}
               />
             </div>
           </div>
 
-          {/* Tags section */}
-          <div className='flex-shrink-0 w-full p-5 bg-gray-100 rounded-lg shadow-md md:w-1/4'>
-            <h3 className='mb-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-500'>
-              Add Tags
-            </h3>
-            <input
-              type='text'
-              placeholder='Story tag'
-              onKeyDown={handleTagInput}
-              className={`w-full p-2 mb-2 border border-gray-300 rounded-md focus:outline-none ${
-                tags.length >= maxTags
-                  ? 'cursor-not-allowed opacity-95 bg-gray-200'
-                  : ''
-              }`}
-              disabled={tags.length >= maxTags}
-            />
-            {/* 
-            <p
-              className={`text-sm font-medium mb-2 ${
-                charCount >= maxTagLength ? 'text-red-500' : 'text-gray-600'
-              }`}
-            >
-              {charCount}/{maxTagLength}
-            </p> */}
-
-            {tags.length >= maxTags && (
-              <p className='mb-2 text-sm font-medium text-red-500'>
-                Maximum 10 tags
-              </p>
-            )}
-
-            <div className='flex flex-wrap gap-2'>
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className='flex items-center gap-2 px-4 py-2 text-white bg-blue-500 rounded-full dark:bg-gray-800'
-                >
-                  {tag}
-                  <button
-                    onClick={() => removeTag(tag)}
-                    className='text-sm text-gray-300 hover:text-white'
-                  >
-                    x
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
+          <TagInput tags={tags} setTags={setTags} />
         </div>
 
-        <div className='flex mt-6'>
+        <div className='flex mt-6 mb-10'>
           <button
             onClick={handleCancelUpdate}
             className='px-4 py-2 mr-4 font-semibold text-white bg-red-600 rounded-md shadow-md hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700'
@@ -294,7 +120,7 @@ const StoryEdit = () => {
           </button>
 
           <button
-            onClick={handleSaveUpdate}
+            onClick={onClickSave}
             disabled={isSaveDisabled}
             className={`px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900 ${
               isSaveDisabled ? 'cursor-not-allowed opacity-50' : ''

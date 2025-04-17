@@ -1,94 +1,24 @@
 import { useState } from 'react';
-import toast from 'react-hot-toast';
-import { Navigate, useNavigate } from 'react-router-dom';
-import StoryEditor from '../components/StoryEditor';
+import { Navigate } from 'react-router-dom';
+import StoryEditor from '../components/story/StoryEditor';
+import TagInput from '../components/story/TagInput';
 import { useAuth } from '../hooks/useAuth';
+import { useCreateStory } from '../hooks/useCreateStory';
 
 const StoryCreate = () => {
-  const { username, token } = useAuth();
+  const { token } = useAuth();
   if (!token) {
     return <Navigate to='/login' />;
   }
-
-  const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [markdownContent, setMarkdownContent] = useState('');
   const [tags, setTags] = useState<string[]>([]);
 
-  const maxTagLength = 20;
-  const maxTags = 10;
+  const { createStory, loading } = useCreateStory();
 
   const handleContentChange = (content: string) => {
     setMarkdownContent(content);
-  };
-
-  const handleTagInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const input = event.currentTarget.value;
-    if (
-      input.length >= maxTagLength &&
-      event.key !== 'Backspace' &&
-      event.key !== 'Enter' &&
-      event.key !== ' '
-    ) {
-      event.preventDefault();
-      return;
-    }
-    if (input.length == 0 && event.key === ' ') {
-      event.preventDefault();
-      return;
-    }
-    if (input !== '' && (event.key === 'Enter' || event.key === ' ')) {
-      if (tags.length < maxTags && !tags.includes(input)) {
-        setTags(prevTags => [...prevTags, input]);
-
-        event.currentTarget.value = '';
-      }
-      event.preventDefault();
-    }
-  };
-
-  const removeTag = (tag: string) => {
-    setTags(tags.filter(t => t !== tag));
-  };
-
-  const apiUrl = import.meta.env.VITE_API_URL;
-
-  const handleCreateStory = async () => {
-    if (!title.trim() || !markdownContent.trim()) {
-      toast.error('Title and description are required');
-      return;
-    }
-    const storyData = {
-      title: title,
-      description: markdownContent,
-      authorusername: username,
-      authorName: name,
-      tags: tags,
-    };
-
-    try {
-      const response = await fetch(`${apiUrl}/api/stories/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(storyData),
-      });
-
-      const data = await response.json();
-      const story = data.data;
-
-      if (response.ok) {
-        toast.success('Story has been published!', { position: 'top-center' });
-        navigate(`/story/${story.id}`, { state: story });
-      } else {
-        toast.error('Please try again.');
-      }
-    } catch (error) {
-      toast.error('Something went wrong!');
-    }
   };
 
   return (
@@ -109,64 +39,19 @@ const StoryCreate = () => {
               className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
             />
             <div className='rounded-lg shadow-md'>
-              <StoryEditor onContentChange={handleContentChange} />
+              <StoryEditor onContentChange={handleContentChange}/>
             </div>
           </div>
 
-          <div className='flex-shrink-0 w-full p-5 bg-gray-100 rounded-lg shadow-md md:w-1/4'>
-            <h3 className='mb-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-500'>
-              Add Tags
-            </h3>
-            <input
-              type='text'
-              placeholder='Story tag'
-              onKeyDown={handleTagInput}
-              className={`w-full p-2 mb-2 border border-gray-300 rounded-md focus:outline-none ${
-                tags.length >= maxTags
-                  ? 'cursor-not-allowed opacity-95 bg-gray-200'
-                  : ''
-              }`}
-              disabled={tags.length >= maxTags}
-            />
-            {/* 
-            <p
-              className={`text-sm font-medium mb-2 ${
-                charCount >= maxTagLength ? 'text-red-500' : 'text-gray-600'
-              }`}
-            >
-              {charCount}/{maxTagLength}
-            </p> */}
-
-            {tags.length >= maxTags && (
-              <p className='mb-2 text-sm font-medium text-red-500'>
-                Maximum 10 tags
-              </p>
-            )}
-
-            <div className='flex flex-wrap gap-2'>
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className='flex items-center gap-2 px-4 py-2 text-white bg-blue-500 rounded-full dark:bg-gray-800'
-                >
-                  {tag}
-                  <button
-                    onClick={() => removeTag(tag)}
-                    className='text-sm text-gray-300 hover:text-white'
-                  >
-                    x
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
+          <TagInput tags={tags} setTags={setTags} />
         </div>
 
         <button
-          onClick={handleCreateStory}
-          className='px-4 py-2 mt-6 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900'
+          onClick={() => createStory(title, markdownContent, tags)}
+          disabled={loading}
+          className='px-4 py-2 mt-6 mb-6 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900'
         >
-          Publish
+          {loading ? 'Publishing...' : 'Publish'}
         </button>
       </div>
     </div>

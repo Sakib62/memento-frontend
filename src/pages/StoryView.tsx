@@ -1,13 +1,14 @@
 import MarkdownIt from 'markdown-it';
 import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import ButtonWithTooltip from '../components/ButtonWithToolTip';
 import Comment from '../components/Comment';
+import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
 import { useAuth } from '../hooks/useAuth';
 import { Story } from '../types/story';
 
@@ -86,14 +87,18 @@ const StoryView = () => {
 
         if (!response.ok) throw new Error('Failed to delete story');
 
-        Swal.fire('Deleted!', 'Your story has been deleted.', 'success');
-        navigate('/');
+        navigate(`/`);
+        Swal.fire({
+          title: 'Success!',
+          text: 'Story is deleted!',
+          icon: 'success',
+          timer: 1500,
+          timerProgressBar: false,
+          showConfirmButton: false,
+        });
       } catch (error) {
-        console.error('Error deleting story:', error);
-        Swal.fire('Error!', 'There was a problem deleting the story.', 'error');
+        toast.error('Error deleting story');
       }
-    } else {
-      console.log('Story deletion canceled');
     }
   };
 
@@ -174,9 +179,9 @@ const StoryView = () => {
   }
 
   return (
-    <div className='bg-gray-100 dark:bg-stone-600'>
-      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-3xl p-8 pt-4 mx-auto bg-white dark:bg-neutral-500'>
-        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white dark:bg-neutral-500'>
+    <div className='pt-6 pb-6 bg-gray-100 dark:bg-neutral-800'>
+      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-5xl p-8 pt-4 mx-auto bg-white  dark:bg-stone-700 rounded-lg'>
+        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white '>
           {story.title}
         </h1>
 
@@ -213,7 +218,6 @@ const StoryView = () => {
           </div>
         </div>
 
-        {/* Interaction Buttons */}
         <div className='flex items-center justify-between px-0 mb-4 text-gray-600 dark:text-gray-300'>
           <div className='flex gap-4'>
             <button
@@ -255,9 +259,7 @@ const StoryView = () => {
               <ButtonWithTooltip
                 icon={<MdOutlineModeEdit size={23} />}
                 tooltipText='Edit'
-                onClick={() =>
-                  navigate(`/story/${story.id}/edit`, { state: story })
-                }
+                onClick={() => navigate(`/story/${story.id}/edit`)}
                 buttonClass='hover:scale-105 px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600'
               />
 
@@ -274,7 +276,7 @@ const StoryView = () => {
         <div className='markdown-body'>
           {/* <MarkdownRenderer content={story?.description} /> */}
           <ReactMarkdownEditorLite
-            className='react-markdown-editor-lite editor-content dark:bg-neutral-500 dark:text-white'
+            className='react-markdown-editor-lite editor-content dark:bg-stone-700 dark:text-white'
             value={story?.description}
             style={{ minHeight: '200px', height: 'auto' }}
             renderHTML={text => mdParser.render(text)}

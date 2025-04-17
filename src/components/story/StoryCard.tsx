@@ -1,9 +1,9 @@
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { useStoryStats } from '../hooks/useStoryStats';
-import { Story } from '../types/story';
+import { useAuth } from '../../hooks/useAuth';
+import { useStoryStats } from '../../hooks/useStoryStats';
+import { Story } from '../../types/story';
 import MarkdownRenderer from './MarkdownRenderer';
 
 const StoryCard = ({ story }: { story: Story }) => {
