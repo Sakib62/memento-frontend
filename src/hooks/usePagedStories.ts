@@ -10,7 +10,6 @@ interface StoriesResult {
 }
 
 export const usePagedStories = (
-  token: string,
   currentPage: number,
   limit: number = 6,
   endpoint: string
@@ -20,29 +19,19 @@ export const usePagedStories = (
   const [error, setError] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
 
-  const { clearAuthData } = useAuth();
-
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const { apiFetch, token } = useAuth();
 
   const fetchStories = async (page: number) => {
     const offset = (page - 1) * limit;
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(
-        `${apiUrl}${endpoint}?limit=${limit + 1}&offset=${offset}`,
+      const response = await apiFetch(
+        `${endpoint}?limit=${limit + 1}&offset=${offset}`,
         {
           method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
         }
       );
-
-      if (response.status === 401) {
-        clearAuthData();
-      }
 
       if (!response.ok) {
         throw new Error('Failed to fetch latest stories');

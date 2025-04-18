@@ -5,13 +5,12 @@ import SkeletonStoryCard from '../Skeleton/SkeletonStoryCard';
 import StoryCard from '../story/StoryCard';
 import Pagination from './Pagination';
 
-const TopLikedStories = ({ token }: { token: string }) => {
+const TopLikedStories = () => {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 6;
 
   const { stories, loading, error, hasNextPage } = usePagedStories(
-    token,
     currentPage,
     limit,
     '/api/stories/liked/top'

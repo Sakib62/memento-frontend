@@ -10,9 +10,9 @@ const Home = () => {
   return (
     <div className='min-h-screen px-4 py-12 bg-gray-100 sm:px-6 lg:px-8 dark:bg-stone-600'>
       <div className='mx-auto max-w-7xl'>
-        <LatestStories token={token} />
+        <LatestStories />
         <div className='my-12 border-t border-gray-300'></div>
-        <TopLikedStories token={token} />
+        <TopLikedStories />
       </div>
     </div>
   );

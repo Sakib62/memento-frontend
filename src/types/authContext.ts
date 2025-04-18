@@ -7,4 +7,5 @@ export interface AuthContextType {
   loading: boolean;
   setAuthData: (token: string) => void;
   clearAuthData: () => void;
+  apiFetch: (url: string, options?: RequestInit) => Promise<Response>;
 }

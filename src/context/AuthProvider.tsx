@@ -1,5 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import { ReactNode, useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import AuthContext from './AuthContext';
 
 interface AuthProviderProps {
@@ -33,7 +34,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setToken(storedToken);
           setId(decoded.id);
           setUsername(decoded.username);
-          setName(name);
+          setName(decoded.name);
           setRole(decoded.role);
         }
       } catch (error) {
@@ -54,7 +55,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setToken(newToken);
     setId(decoded.id);
     setUsername(decoded.username);
-    setName(name);
+    setName(decoded.name);
     setRole(decoded.role);
   };
 
@@ -72,6 +73,45 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
+  const apiFetch = async (
+    url: string,
+    options: RequestInit = {}
+  ): Promise<Response> => {
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+    const headers = {
+      ...options.headers,
+      'Content-Type': 'application/json',
+      ...{ Authorization: `Bearer ${token}` },
+    };
+
+    const response = await fetch(`${apiUrl}${url}`, {
+      ...options,
+      headers,
+    });
+
+    if (response.status === 401) {
+      clearAuthData();
+    }
+
+    if (response.status === 404) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'User does not exist!',
+        icon: 'error',
+        timer: 1500,
+        timerProgressBar: false,
+        showConfirmButton: false,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+      }).then(() => {
+        clearAuthData();
+      });
+    }
+
+    return response;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -83,6 +123,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         loading,
         setAuthData,
         clearAuthData,
+        apiFetch,
       }}
     >
       {children}
