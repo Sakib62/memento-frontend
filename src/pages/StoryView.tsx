@@ -10,12 +10,12 @@ import Swal from 'sweetalert2';
 import Comment from '../components/Comment';
 import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
 import { useAuth } from '../hooks/useAuth';
-import { Story } from '../types/story';
+import { useFetchStory } from '../hooks/useFetchStory';
 
 const StoryView = () => {
   const mdParser = new MarkdownIt();
 
-  const { username, role, token, clearAuthData } = useAuth();
+  const { username, role, token } = useAuth();
   if (!token) {
     return <Navigate to='/login' />;
   }
@@ -23,49 +23,8 @@ const StoryView = () => {
   const navigate = useNavigate();
   const { id: storyId } = useParams();
 
-  const [story, setStory] = useState<Story>({
-    id: '',
-    title: 'Loading...',
-    description: '',
-    authorUsername: '',
-    authorName: '',
-    createdAt: new Date(),
-    tags: [],
-  });
-  const [loading, setLoading] = useState(false);
-
   const apiUrl = import.meta.env.VITE_API_URL;
-
-  useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 401) {
-          clearAuthData();
-          return;
-        }
-
-        if (!response.ok) {
-          navigate('/not-found');
-          return;
-        }
-        const data = await response.json();
-        setStory(data.data);
-      } catch (error) {
-        navigate('/not-found');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStory();
-  }, [storyId, token, navigate]);
+  const { story, loading } = useFetchStory(storyId);
 
   const handleDeleteStory = async (storyId: string) => {
     const result = await Swal.fire({
@@ -148,7 +107,7 @@ const StoryView = () => {
     setIsLiked(prevStatus => !prevStatus);
 
     try {
-      const response = await fetch(`${apiUrl}/api/stories/${story.id}`, {
+      const response = await fetch(`${apiUrl}/api/stories/${story?.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,7 +133,7 @@ const StoryView = () => {
     setCommentCount(count);
   };
 
-  if (loading) {
+  if (loading || !story) {
     return <div>Loading...</div>;
   }
 
