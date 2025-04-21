@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState(localStorage.getItem('memento_theme') || 'light');
+  const [theme, setTheme] = useState(
+    localStorage.getItem('memento_theme') || 'light'
+  );
 
   useEffect(() => {
     if (theme === 'dark') {

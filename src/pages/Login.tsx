@@ -25,7 +25,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     const loginData: LoginData = { identifier, password };
-    
+
     try {
       loginSchema.parse(loginData);
       const data = await loginUser(loginData);

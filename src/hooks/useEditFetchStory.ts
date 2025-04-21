@@ -5,7 +5,11 @@ import { Role } from '../constants/role';
 import { Story } from '../types/story';
 import { useAuth } from './useAuth';
 
-export const useEditFetchStory = ({ storyId }: { storyId: string | undefined }) => {
+export const useEditFetchStory = ({
+  storyId,
+}: {
+  storyId: string | undefined;
+}) => {
   const { token, username, role, clearAuthData } = useAuth();
 
   const [story, setStory] = useState<Story | null>(null);

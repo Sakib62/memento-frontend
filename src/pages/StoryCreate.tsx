@@ -39,7 +39,7 @@ const StoryCreate = () => {
               className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
             />
             <div className='rounded-lg shadow-md'>
-              <StoryEditor onContentChange={handleContentChange}/>
+              <StoryEditor onContentChange={handleContentChange} />
             </div>
           </div>
 
