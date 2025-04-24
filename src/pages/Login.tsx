@@ -19,11 +19,19 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<{
+    identifier?: string;
+    password?: string;
+  }>({});
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const { setAuthData } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({});
+    setHasSubmitted(true);
     const loginData: LoginData = { identifier, password };
 
     try {
@@ -37,9 +45,15 @@ const Login = () => {
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        toast.error(error.errors.map(e => e.message).join(', '), {
-          position: 'top-center',
+        const fieldErrors: { identifier?: string; password?: string } = {};
+        error.errors.forEach(err => {
+          if (err.path[0] === 'identifier') {
+            fieldErrors.identifier = err.message;
+          } else if (err.path[0] === 'password') {
+            fieldErrors.password = err.message;
+          }
         });
+        setErrors(fieldErrors);
       } else {
         toast.error(
           error instanceof Error ? error.message : 'Please try again later.',
@@ -53,28 +67,59 @@ const Login = () => {
     }
   };
 
+  const validateField = (field: keyof LoginData, value: string): string => {
+    try {
+      const singleFieldSchema = z.object({ [field]: loginSchema.shape[field] });
+      singleFieldSchema.parse({ [field]: value });
+      return '';
+    } catch (err) {
+      if (err instanceof z.ZodError) return err.errors[0]?.message || '';
+      return '';
+    }
+  };
+
   return (
     <AuthLayout imageSrc={loginImage} imageAlt='Login'>
-      <form onSubmit={handleSubmit} className='space-y-6'>
-        <FormInput
-          label='Email or Username'
-          type='text'
-          id='identifier'
-          value={identifier}
-          onChange={e => setIdentifier(e.target.value)}
-          placeholder='Email or Username'
-          icon={MdEmail}
-        />
+      <form onSubmit={handleSubmit}>
+        <div className='mb-4 space-y-1'>
+          <FormInput
+            label='Email or Username'
+            type='text'
+            id='identifier'
+            value={identifier}
+            onChange={e => {
+              const val = e.target.value;
+              setIdentifier(val);
+              if (hasSubmitted) {
+                const errorMsg = validateField('identifier', val);
+                setErrors(prev => ({ ...prev, identifier: errorMsg }));
+              }
+            }}
+            placeholder='Email or Username'
+            icon={MdEmail}
+            required={false}
+            error={errors.identifier}
+          />
 
-        <FormInput
-          label='Password'
-          type='password'
-          id='password'
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder='Enter your password'
-          icon={RiLockPasswordFill}
-        />
+          <FormInput
+            label='Password'
+            type='password'
+            id='password'
+            value={password}
+            onChange={e => {
+              const val = e.target.value;
+              setPassword(val);
+              if (hasSubmitted) {
+                const errorMsg = validateField('password', val);
+                setErrors(prev => ({ ...prev, password: errorMsg }));
+              }
+            }}
+            placeholder='Enter your password'
+            icon={RiLockPasswordFill}
+            required={false}
+            error={errors.password}
+          />
+        </div>
 
         <SubmitButton
           text='Login'

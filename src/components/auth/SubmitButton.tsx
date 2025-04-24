@@ -17,7 +17,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   return (
     <button
       type='submit'
-      className={`w-full py-2.5 text-base font-bold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all duration-300 flex items-center justify-center ${gap} ${loading ? 'opacity-50 cursor-not-allowed' : ''} `}
+      className={`w-full py-2.5 text-base font-bold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-800 focus:outline-none  transition-all duration-300 flex items-center justify-center ${gap} ${loading ? 'opacity-50 cursor-not-allowed' : ''} `}
     >
       {loading ? (
         <svg

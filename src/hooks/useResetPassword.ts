@@ -50,7 +50,9 @@ export const useResetPassword = (): ResetPasswordResult => {
         icon: 'success',
         title: 'Password Reset Successful',
         text: 'Password has been updated successfully.',
-        confirmButtonColor: '#3085d6',
+        timer: 1000,
+        timerProgressBar: false,
+        showConfirmButton: false,
       });
     } catch (err) {
       const errorMessage =
@@ -60,7 +62,8 @@ export const useResetPassword = (): ResetPasswordResult => {
         icon: 'error',
         title: 'Password Reset Failed',
         text: errorMessage,
-        confirmButtonColor: '#d33',
+        // confirmButtonColor: '#d33',
+        showConfirmButton: false,
       });
       throw err;
     } finally {

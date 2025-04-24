@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { useAuth } from './useAuth';
 
 export const useCreateStory = () => {
-  const { token, username, name } = useAuth();
+  const { token } = useAuth();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -24,8 +24,6 @@ export const useCreateStory = () => {
     const storyData = {
       title,
       description: markdownContent,
-      authorusername: username,
-      authorName: name,
       tags,
     };
 

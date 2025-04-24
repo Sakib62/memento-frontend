@@ -46,7 +46,9 @@ export const useUpdateProfile = (): UpdateProfileResult => {
         icon: 'success',
         title: 'Profile Updated',
         text: 'Profile has been updated successfully.',
-        confirmButtonColor: '#3085d6',
+        timer: 1000,
+        timerProgressBar: false,
+        showConfirmButton: false,
       });
     } catch (err) {
       const errorMessage =

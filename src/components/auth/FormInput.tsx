@@ -10,6 +10,7 @@ interface FormInputProps {
   placeholder: string;
   icon: IconType;
   required?: boolean;
+  error?: string;
 }
 
 const FormInput: React.FC<FormInputProps> = ({
@@ -21,6 +22,7 @@ const FormInput: React.FC<FormInputProps> = ({
   placeholder,
   icon: Icon,
   required = true,
+  error,
 }) => {
   return (
     <div>
@@ -34,11 +36,16 @@ const FormInput: React.FC<FormInputProps> = ({
           id={id}
           value={value}
           onChange={onChange}
-          className='w-full p-3 pl-8 mt-2 text-gray-800 transition-all duration-200 border border-gray-600 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:border-blue-500'
+          className={`w-full bg-gray-50 p-3 pl-8 mt-2 text-gray-800 transition-all duration-200 border ${error ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'} rounded-lg shadow-sm focus:ring-1 focus:outline-none `}
           placeholder={placeholder}
           required={required}
         />
       </div>
+      <p
+        className={`text-sm h-5 ${error ? 'text-red-600' : 'text-transparent'}`}
+      >
+        {error || 'Placeholder'}
+      </p>
     </div>
   );
 };

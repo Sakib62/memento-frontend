@@ -58,46 +58,48 @@ const Register = () => {
       imageAlt='Register'
       maxWidth='md:max-w-5xl'
     >
-      <form onSubmit={handleSubmit} className='space-y-6'>
-        <FormInput
-          label='Username'
-          type='text'
-          id='username'
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          placeholder='Enter your username'
-          icon={MdPerson}
-        />
+      <form onSubmit={handleSubmit}>
+        <div className='mb-4 space-y-1'>
+          <FormInput
+            label='Username'
+            type='text'
+            id='username'
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder='Enter your username'
+            icon={MdPerson}
+          />
 
-        <FormInput
-          label='Full Name'
-          type='text'
-          id='name'
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder='Enter your full name'
-          icon={MdPerson}
-        />
+          <FormInput
+            label='Full Name'
+            type='text'
+            id='name'
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder='Enter your full name'
+            icon={MdPerson}
+          />
 
-        <FormInput
-          label='Email'
-          type='email'
-          id='email'
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder='Enter your email'
-          icon={MdEmail}
-        />
+          <FormInput
+            label='Email'
+            type='email'
+            id='email'
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder='Enter your email'
+            icon={MdEmail}
+          />
 
-        <FormInput
-          label='Password'
-          type='password'
-          id='password'
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          placeholder='Enter your password'
-          icon={RiLockPasswordFill}
-        />
+          <FormInput
+            label='Password'
+            type='password'
+            id='password'
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder='Enter your password'
+            icon={RiLockPasswordFill}
+          />
+        </div>
 
         <SubmitButton
           text='Register'

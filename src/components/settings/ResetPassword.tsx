@@ -48,6 +48,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
         icon: 'error',
         title: 'Password Mismatch',
         text: "Password confirmation doesn't match the password",
+        timer: 1000,
+        timerProgressBar: false,
+        showConfirmButton: false,
       });
       return;
     }
