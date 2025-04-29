@@ -4,10 +4,10 @@ import PrivateRoute from '../components/PrivateRoute';
 import PublicRoute from '../components/PublicRoute';
 import About from '../pages/About';
 import Home from '../pages/Home';
-import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 import ProfilePage from '../pages/ProfilePage';
-import Register from '../pages/Register';
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
 import StoryCreate from '../pages/StoryCreate';
 import StoryEdit from '../pages/StoryEdit';
 import StoryView from '../pages/StoryView';
@@ -17,8 +17,8 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route element={<PublicRoute />}>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<SignIn />} />
+          <Route path='/register' element={<SignUp />} />
         </Route>
 
         <Route element={<PrivateRoute />}>

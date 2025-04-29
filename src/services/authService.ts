@@ -1,59 +1,59 @@
 const apiUrl = import.meta.env.VITE_API_URL;
 
-interface RegisterData {
+interface SignUpData {
   name: string;
   username: string;
   email: string;
   password: string;
 }
 
-interface LoginData {
+interface SignInData {
   identifier: string;
   password: string;
 }
 
-interface LoginResponse {
+interface SignInResponse {
   data: {
     token: string;
   };
   message?: string;
 }
 
-export const loginUser = async (
-  loginData: LoginData
-): Promise<LoginResponse> => {
+export const signInUser = async (
+  signInData: SignInData
+): Promise<SignInResponse> => {
   const response = await fetch(`${apiUrl}/api/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(loginData),
+    body: JSON.stringify(signInData),
     credentials: 'include',
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Login failed');
+    throw new Error(data.message || 'Sign In Failed');
   }
 
   return data;
 };
 
-export const registerUser = async (registerData: RegisterData) => {
+export const signUpUser = async (signUpData: SignUpData) => {
   const response = await fetch(`${apiUrl}/api/auth/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(registerData),
+    body: JSON.stringify(signUpData),
     credentials: 'include',
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Registration failed');
+    throw new Error(data.message || 'Sign Up Failed');
   }
 
   return data;

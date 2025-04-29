@@ -5,16 +5,16 @@ import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import loginImage from '../assets/login-img.png';
+import signInImage from '../assets/signIn.png';
 import AuthLayout from '../components/auth/AuthLayout';
 import FooterLink from '../components/auth/FooterLink';
 import FormInput from '../components/auth/FormInput';
 import SubmitButton from '../components/auth/SubmitButton';
 import { useAuth } from '../hooks/useAuth';
-import { LoginData, loginSchema } from '../schemas/authSchema';
-import { loginUser } from '../services/authService';
+import { SignInData, signInSchema } from '../schemas/authSchema';
+import { signInUser } from '../services/authService';
 
-const Login = () => {
+const SignIn = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -32,26 +32,23 @@ const Login = () => {
     setLoading(true);
     setErrors({});
     setHasSubmitted(true);
-    const loginData: LoginData = { identifier, password };
+    const signInData: SignInData = { identifier, password };
 
     try {
-      loginSchema.parse(loginData);
-      const data = await loginUser(loginData);
+      signInSchema.parse(signInData);
+      const data = await signInUser(signInData);
       const token = data.data.token;
       setAuthData(token);
       navigate('/');
-      toast.success('Logged in successfully!', {
+      toast.success('Signed In Successfully!', {
         position: 'top-center',
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: { identifier?: string; password?: string } = {};
         error.errors.forEach(err => {
-          if (err.path[0] === 'identifier') {
-            fieldErrors.identifier = err.message;
-          } else if (err.path[0] === 'password') {
-            fieldErrors.password = err.message;
-          }
+          const field = err.path[0] as keyof SignInData;
+          fieldErrors[field] = err.message;
         });
         setErrors(fieldErrors);
       } else {
@@ -67,9 +64,11 @@ const Login = () => {
     }
   };
 
-  const validateField = (field: keyof LoginData, value: string): string => {
+  const validateField = (field: keyof SignInData, value: string): string => {
     try {
-      const singleFieldSchema = z.object({ [field]: loginSchema.shape[field] });
+      const singleFieldSchema = z.object({
+        [field]: signInSchema.shape[field],
+      });
       singleFieldSchema.parse({ [field]: value });
       return '';
     } catch (err) {
@@ -79,7 +78,7 @@ const Login = () => {
   };
 
   return (
-    <AuthLayout imageSrc={loginImage} imageAlt='Login'>
+    <AuthLayout imageSrc={signInImage} imageAlt='Sign In'>
       <form onSubmit={handleSubmit}>
         <div className='mb-4 space-y-1'>
           <FormInput
@@ -122,7 +121,7 @@ const Login = () => {
         </div>
 
         <SubmitButton
-          text='Login'
+          text='Sign In'
           icon={CiLogin}
           gap='gap-1'
           loading={loading}
@@ -131,11 +130,11 @@ const Login = () => {
 
       <FooterLink
         text='Don’t have an account?'
-        linkText='Register'
+        linkText='Sign Up'
         linkTo='/register'
       />
     </AuthLayout>
   );
 };
 
-export default Login;
+export default SignIn;
