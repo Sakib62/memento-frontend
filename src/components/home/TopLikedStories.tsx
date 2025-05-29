@@ -9,11 +9,12 @@ const TopLikedStories = () => {
   const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 6;
+  const offset = (currentPage - 1) * limit;
 
   const { stories, loading, error, hasNextPage } = usePagedStories(
     currentPage,
     limit,
-    '/api/stories/liked/top'
+    `/api/stories?offset=${offset}&limit=${limit + 1}&filter=mostLiked`
   );
 
   const handleNext = () => setCurrentPage(prev => prev + 1);
@@ -28,7 +29,7 @@ const TopLikedStories = () => {
           {t('home.top-liked')}
         </h2>
       </div>
-      <div className='grid grid-cols-1 gap-8 mb-8 sm:grid-cols-2 lg:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-8 mb-8 sm:grid-cols-2 lg:grid-cols-3'>
         {loading
           ? [...Array(6)].map((_, index) => <SkeletonStoryCard key={index} />)
           : stories.map(story => <StoryCard key={story.id} story={story} />)}

@@ -20,12 +20,12 @@ const ProfileStories = ({ stories }: { stories: Story[] }) => {
 
   return (
     <div className='grid grid-cols-1 gap-6 pb-4 rounded-lg md:grid-cols-2'>
-      <button
+      {/* <button
         onClick={handleDownload}
         className='px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600'
       >
         Download JSON
-      </button>
+      </button> */}
       {stories.map((story: Story) => (
         <div className='py-0' key={story.id}>
           <StoryCard story={story} />

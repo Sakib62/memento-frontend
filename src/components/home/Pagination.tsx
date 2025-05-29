@@ -39,7 +39,7 @@ const Pagination = ({
           {t('home.prev')}
         </button>
 
-        <button
+        {/* <button
           onClick={toggleDropdown}
           className={`flex items-center text-2xl rounded-lg  focus:outline-none `}
           disabled={currentPage <= 1}
@@ -51,7 +51,7 @@ const Pagination = ({
                 : ''
             }`}
           />
-        </button>
+        </button> */}
 
         {isDropdownOpen && currentPage > 1 && (
           <div className='absolute top-0 z-10 overflow-y-auto -translate-x-1/2 bg-white border rounded-lg shadow-lg left-12 -translate-y-1/4 max-h-28'>
