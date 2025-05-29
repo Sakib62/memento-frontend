@@ -6,6 +6,8 @@ export interface Story {
   authorName: string;
   createdAt: Date;
   tags: string[];
+  likeCount: number;
+  commentCount: number;
 }
 
 export interface Stories {

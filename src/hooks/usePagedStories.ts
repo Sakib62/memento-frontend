@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import { Story } from '../types/story';
 import { useAuth } from './useAuth';
 
@@ -18,20 +19,39 @@ export const usePagedStories = (
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  const { apiFetch, token } = useAuth();
+  const { token, clearAuthData } = useAuth();
 
-  const fetchStories = async (page: number) => {
-    const offset = (page - 1) * limit;
+  const fetchStories = async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await apiFetch(
-        `${endpoint}?limit=${limit + 1}&offset=${offset}`,
-        {
-          method: 'GET',
-        }
-      );
+      const response = await fetch(`${apiUrl}${endpoint}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 401) {
+        clearAuthData();
+      }
+      if (response.status === 404) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'User does not exist!',
+          icon: 'error',
+          timer: 1500,
+          timerProgressBar: false,
+          showConfirmButton: false,
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+        }).then(() => {
+          clearAuthData();
+        });
+      }
 
       if (!response.ok) {
         throw new Error('Failed to fetch latest stories');
@@ -48,7 +68,7 @@ export const usePagedStories = (
   };
 
   useEffect(() => {
-    fetchStories(currentPage);
+    fetchStories();
   }, [token, currentPage]);
 
   return { stories, loading, error, hasNextPage };

@@ -1,65 +1,30 @@
 import MarkdownIt from 'markdown-it';
-import { useEffect, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
+import { useRef, useState } from 'react';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import Comment from '../components/Comment';
 import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
 import { useAuth } from '../hooks/useAuth';
+import useDeleteStory from '../hooks/useDeleteStory';
 import { useFetchStory } from '../hooks/useFetchStory';
+import useLike from '../hooks/useLike';
 
 const StoryView = () => {
-  const mdParser = new MarkdownIt();
-
   const { username, role, token } = useAuth();
   if (!token) {
     return <Navigate to='/login' />;
   }
 
   const navigate = useNavigate();
+  const mdParser = new MarkdownIt();
+
   const { id: storyId } = useParams();
-
-  const apiUrl = import.meta.env.VITE_API_URL;
   const { story, loading } = useFetchStory(storyId);
-
-  const handleDeleteStory = async (storyId: string) => {
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to delete this story?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true,
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) throw new Error('Failed to delete story');
-
-        navigate(`/`);
-        Swal.fire({
-          title: 'Success!',
-          text: 'Story is deleted!',
-          icon: 'success',
-          timer: 1500,
-          timerProgressBar: false,
-          showConfirmButton: false,
-        });
-      } catch (error) {
-        toast.error('Error deleting story');
-      }
-    }
-  };
+  const { hasLiked, likeCount, isLiking, handleLikeClick } = useLike(story?.id);
+  const handleDeleteStory = useDeleteStory();
 
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
   const handleCommentButtonClick = () => {
@@ -72,69 +37,34 @@ const StoryView = () => {
     }
   };
 
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [totalLike, setTotalLike] = useState<number>(0);
-  const [isLiking, setIsLiking] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchLikeData = async () => {
-      try {
-        const response = await fetch(
-          `${apiUrl}/api/stories/${storyId}/likeStatus`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setTotalLike(data.data?.likeCount);
-        setIsLiked(data.data?.likedByUser);
-      } catch (error) {
-        console.error('Error fetching like data:', error);
-      }
-    };
-
-    fetchLikeData();
-  }, [storyId]);
-
-  const handleLikeClick = async () => {
-    if (isLiking) return;
-
-    setIsLiking(true);
-    setIsLiked(prevStatus => !prevStatus);
-
-    try {
-      const response = await fetch(`${apiUrl}/api/stories/${story?.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to toggle like');
-      }
-      const data = await response.json();
-      setTotalLike(data.data.likeCount);
-    } catch (error) {
-      console.error('Error toggling like:', error);
-      setIsLiked(prevStatus => !prevStatus);
-    } finally {
-      setIsLiking(false);
-    }
-  };
-
   const [commentCount, setCommentCount] = useState(0);
   const handleCommentCount = (count: number) => {
     setCommentCount(count);
   };
 
-  if (loading || !story) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (!story) {
+    return (
+      <div className='pt-6 pb-6 bg-gray-100 dark:bg-neutral-800'>
+        <div className='flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] max-w-5xl p-8 pt-4 mx-auto bg-white dark:bg-stone-700 rounded-lg'>
+          <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white'>
+            Story Not Found
+          </h1>
+          <p className='text-gray-600 dark:text-gray-300'>
+            The story you are looking for does not exist or has been deleted.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className='px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          >
+            Go Back to Home
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -187,14 +117,14 @@ const StoryView = () => {
               <FaHeart
                 size='23'
                 className={
-                  isLiked
+                  hasLiked
                     ? 'text-red-500'
                     : 'text-gray-600 dark:text-gray-300 group-hover:text-red-500'
                 }
               />{' '}
-              {totalLike}
+              {likeCount}
               <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
-                {isLiked ? 'Unlike' : 'Like'}
+                {hasLiked ? 'Unlike' : 'Like'}
               </span>
             </button>
 

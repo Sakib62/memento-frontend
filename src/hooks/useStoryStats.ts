@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useAuth } from './useAuth';
 
 interface StoryStats {
   likeCount: number;
@@ -8,7 +9,9 @@ interface StoryStats {
   error: string | null;
 }
 
-export const useStoryStats = (storyId: string, token: string): StoryStats => {
+export const useStoryStats = (storyId: string): StoryStats => {
+  const { token } = useAuth();
+
   const [likeCount, setLikeCount] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [commentCount, setCommentCount] = useState<number>(0);
@@ -34,7 +37,7 @@ export const useStoryStats = (storyId: string, token: string): StoryStats => {
       }
       const data = await response.json();
       setLikeCount(data.data.likeCount);
-      setIsLiked(data.data.likedByUser);
+      setIsLiked(data.data.hasLiked);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     }
@@ -56,7 +59,7 @@ export const useStoryStats = (storyId: string, token: string): StoryStats => {
         throw new Error('Failed to fetch comment count');
       }
       const data = await response.json();
-      setCommentCount(data.data);
+      setCommentCount(data.data.commentCount);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     }

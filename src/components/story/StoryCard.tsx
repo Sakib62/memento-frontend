@@ -15,13 +15,10 @@ const StoryCard = ({ story }: { story: Story }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/story/${story.id}`, { state: story });
+    navigate(`/story/${story.id}`);
   };
 
-  const { likeCount, isLiked, commentCount, loading, error } = useStoryStats(
-    story.id,
-    token
-  );
+  //const { likeCount, commentCount, loading, error } = useStoryStats(story.id);
 
   // if (loading) return <p>Loading stats...</p>;
   // if (error) return <p>{error}</p>;
@@ -29,7 +26,7 @@ const StoryCard = ({ story }: { story: Story }) => {
   return (
     <div
       onClick={handleClick}
-      className='flex items-stretch gap-4 p-4 transition-all duration-300 ease-in-out shadow-md cursor-pointer bg-amber-100 rounded-xl hover:shadow-xl dark:bg-stone-800'
+      className='flex items-stretch gap-4 p-4 transition-all duration-300 ease-in-out bg-white shadow-md cursor-pointer rounded-xl hover:shadow-xl dark:bg-stone-700'
     >
       <div className={`flex flex-col justify-between w-full`}>
         <div>
@@ -54,13 +51,13 @@ const StoryCard = ({ story }: { story: Story }) => {
             <span className='flex items-center gap-1'>
               <FaRegHeart className={` dark:text-gray-400`} />{' '}
               <span className='text-gray-600 dark:text-gray-400'>
-                {likeCount ? likeCount : ''}
+                {story.likeCount ? story.likeCount : ''}
               </span>
             </span>
             <span className='flex items-center gap-1'>
               <FaRegComment className='text-gray-600 dark:text-gray-400' />{' '}
               <span className='text-gray-600 dark:text-gray-400'>
-                {commentCount ? commentCount : ''}
+                {story.commentCount ? story.commentCount : ''}
               </span>
             </span>
           </div>

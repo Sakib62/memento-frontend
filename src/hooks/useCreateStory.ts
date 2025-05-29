@@ -29,7 +29,7 @@ export const useCreateStory = () => {
 
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/stories/`, {
+      const response = await fetch(`${apiUrl}/api/stories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
