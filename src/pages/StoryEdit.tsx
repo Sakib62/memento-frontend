@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import StoryEditor from '../components/story/StoryEditor';
+import StoryEditor, {
+  StoryEditorHandle,
+} from '../components/story/StoryEditor';
 import TagInput from '../components/story/TagInput';
 import { useAuth } from '../hooks/useAuth';
 import { useEditFetchStory } from '../hooks/useEditFetchStory';
@@ -16,8 +18,7 @@ const StoryEdit = () => {
   const navigate = useNavigate();
   const { id: storyId } = useParams();
 
-  const [title, setTitle] = useState('');
-  const [markdownContent, setMarkdownContent] = useState('');
+  const [title, setTitle] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
 
   const { story, loading } = useEditFetchStory({
@@ -26,26 +27,32 @@ const StoryEdit = () => {
   useEffect(() => {
     if (story) {
       setTitle(story.title);
-      setMarkdownContent(story.description);
+      editorRef.current?.setMarkdown(story.description);
       setTags(story.tags);
     }
   }, [story]);
 
-  const handleContentChange = (content: string) => {
-    setMarkdownContent(content);
-  };
+  const editorRef = useRef<StoryEditorHandle>(null);
 
-  const { handleSaveUpdate, isUpdating } = useUpdateStory();
+  const { handleSaveUpdate } = useUpdateStory();
   const onClickSave = () => {
+    const markdown = editorRef.current?.getMarkdown();
     handleSaveUpdate({
       title,
-      markdownContent,
+      markdownContent: markdown,
       tags,
       storyId: story?.id,
     });
   };
 
   const handleCancelUpdate = async () => {
+    const markdown = editorRef.current?.getMarkdown();
+
+    const isSaveDisabled =
+      title === story?.title &&
+      markdown === story?.description &&
+      JSON.stringify(tags) === JSON.stringify(story?.tags);
+
     if (!isSaveDisabled) {
       const result = await Swal.fire({
         title: 'Unsaved Changes',
@@ -73,11 +80,6 @@ const StoryEdit = () => {
     }
   };
 
-  const isSaveDisabled =
-    title === story?.title &&
-    markdownContent === story?.description &&
-    JSON.stringify(tags) === JSON.stringify(story?.tags);
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -85,10 +87,6 @@ const StoryEdit = () => {
   return (
     <div className='flex flex-col min-h-screen'>
       <div className='flex flex-col items-center justify-start flex-grow px-4 pt-10 bg-gray-300 dark:bg-stone-600'>
-        <h1 className='mb-12 text-3xl font-bold text-gray-800 dark:text-gray-200'>
-          Edit Story
-        </h1>
-
         {/* Parent flex container for title/description and tags */}
         <div className='flex flex-col w-full gap-8 max-w-7xl md:flex-row'>
           <div className='flex-1 w-full max-w-4xl'>
@@ -100,11 +98,8 @@ const StoryEdit = () => {
               onChange={e => setTitle(e.target.value)}
               className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
             />
-            <div className='rounded-lg shadow-md'>
-              <StoryEditor
-                onContentChange={handleContentChange}
-                initialContent={story?.description}
-              />
+            <div className='max-w-4xl rounded-lg shadow-md'>
+              <StoryEditor ref={editorRef} />
             </div>
           </div>
 
@@ -121,10 +116,7 @@ const StoryEdit = () => {
 
           <button
             onClick={onClickSave}
-            disabled={isSaveDisabled}
-            className={`px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900 ${
-              isSaveDisabled ? 'cursor-not-allowed opacity-50' : ''
-            }`}
+            className={`px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900`}
           >
             Save
           </button>

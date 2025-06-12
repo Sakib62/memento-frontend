@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from './useAuth';
 
 type Params = {
   title: string;
-  markdownContent: string;
+  markdownContent: string | undefined;
   tags: string[];
   storyId?: string;
 };
