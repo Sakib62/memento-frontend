@@ -22,6 +22,12 @@ export const useCreateStory = () => {
       });
       return;
     }
+    if (!markdownContent?.trim()) {
+      toast.error('Description cannot be empty', {
+        position: 'top-center',
+      });
+      return;
+    }
 
     const storyData = {
       title,

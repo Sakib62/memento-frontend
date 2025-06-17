@@ -40,7 +40,7 @@ const StoryCreate = () => {
         </div>
       </div>
 
-      <div className='flex flex-col gap-8 lg:w-1/4'>
+      <div className='sticky flex flex-col h-full gap-8 lg:w-1/4 top-24'>
         <div className=''>
           <TagInput tags={tags} setTags={setTags} />
         </div>

@@ -98,7 +98,7 @@ const StoryEdit = () => {
         <StoryEditor ref={editorRef} />
       </div>
 
-      <div className='flex flex-col gap-8 lg:w-1/4'>
+      <div className='sticky flex flex-col h-full gap-8 lg:w-1/4 top-24'>
         <TagInput tags={tags} setTags={setTags} />
         <div className='flex justify-center gap-8'>
           <button
