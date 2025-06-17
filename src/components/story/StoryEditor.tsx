@@ -28,64 +28,45 @@ import {
   toolbarPlugin,
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { forwardRef, memo, useImperativeHandle, useRef, useState } from 'react';
 
 export interface StoryEditorHandle {
   getMarkdown: () => string | undefined;
   setMarkdown: (markdown: string) => void;
 }
 
-const StoryEditor = forwardRef<StoryEditorHandle, { isViewMode?: boolean }>(
-  ({ isViewMode = false }, ref) => {
-    const mdxEditorRef = useRef<MDXEditorMethods>(null);
-    const [diffMarkdown, setDiffMarkdown] = useState('');
+const StoryEditor = memo(
+  forwardRef<StoryEditorHandle, { isViewMode?: boolean }>(
+    ({ isViewMode = false }, ref) => {
+      const mdxEditorRef = useRef<MDXEditorMethods>(null);
+      const [diffMarkdown, setDiffMarkdown] = useState('');
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        getMarkdown: () => {
-          const markdown = mdxEditorRef.current?.getMarkdown();
-          const formattedMarkdown = markdown?.replace(/\n{2,}/g, match => {
-            return '\n\n' + '<br />\n'.repeat((match.length - 1) / 2);
-          });
-          return formattedMarkdown;
-        },
+      useImperativeHandle(
+        ref,
+        () => ({
+          getMarkdown: () => {
+            const markdown = mdxEditorRef.current?.getMarkdown();
+            const formattedMarkdown = markdown?.replace(/\n{2,}/g, match => {
+              return '\n\n' + '<br />\n'.repeat((match.length - 1) / 2);
+            });
+            return formattedMarkdown;
+          },
 
-        setMarkdown: (initialMarkdown: string) => {
-          const formattedMarkdown = initialMarkdown.replace(
-            /<br\s*\/?>/g,
-            '&nbsp;\n'
-          );
-          setDiffMarkdown(formattedMarkdown);
-          mdxEditorRef.current?.setMarkdown(formattedMarkdown);
-        },
-      }),
-      []
-    );
+          setMarkdown: (initialMarkdown: string) => {
+            const formattedMarkdown = initialMarkdown.replace(
+              /<br\s*\/?>/g,
+              '&nbsp;\n'
+            );
+            setDiffMarkdown(formattedMarkdown);
+            mdxEditorRef.current?.setMarkdown(formattedMarkdown);
+          },
+        }),
+        []
+      );
 
-    async function imageUploadHandler(image: File): Promise<string> {
-      const formData = new FormData();
-      formData.append('image', image);
-      formData.append('upload_preset', '<your_unsigned_upload_preset>');
-
-      // const response = await fetch(
-      //   'https://api.cloudinary.com/v1_1/<your_cloud_name>/image/upload',
-      //   {
-      //     method: 'POST',
-      //     body: formData,
-      //   }
-      // );
-
-      // const data = await response.json();
-      // return data.secure_url; // Cloudinary-hosted image URL
-
-      return 'https://picsum.photos/200'
-    }
-
-    return (
-      <div className='mt-4'>
+      return (
         <MDXEditor
-          contentEditableClassName='bg-white prose'
+          contentEditableClassName={`h-full prose ${!isViewMode ? 'focus:ring-2 focus:ring-blue-400 border-2 rounded-md shadow-sm bg-neutral-100/30 border-x-slate-300/80 border-b-slate-300/80' : ''}`}
           ref={mdxEditorRef}
           readOnly={isViewMode}
           markdown=''
@@ -106,7 +87,7 @@ const StoryEditor = forwardRef<StoryEditorHandle, { isViewMode?: boolean }>(
             }),
             quotePlugin(),
             thematicBreakPlugin(),
-            imagePlugin({imageUploadHandler}),
+            imagePlugin(),
             linkPlugin(),
             linkDialogPlugin(),
             markdownShortcutPlugin(),
@@ -117,13 +98,13 @@ const StoryEditor = forwardRef<StoryEditorHandle, { isViewMode?: boolean }>(
             ...(!isViewMode
               ? [
                   toolbarPlugin({
-                    toolbarClassName: 'bg-red-500 sticky top-16 ',
+                    toolbarClassName: 'bg-gray-300 sticky top-16',
                     toolbarContents: () => (
                       <>
                         <DiffSourceToggleWrapper>
                           <UndoRedo />
                           <BoldItalicUnderlineToggles />
-                          <ListsToggle />
+                          <ListsToggle options={['bullet', 'number']} />
                           <CodeToggle />
                           <ConditionalContents
                             options={[
@@ -150,9 +131,9 @@ const StoryEditor = forwardRef<StoryEditorHandle, { isViewMode?: boolean }>(
               : []),
           ]}
         />
-      </div>
-    );
-  }
+      );
+    }
+  )
 );
 
 export default StoryEditor;

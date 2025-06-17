@@ -3,18 +3,13 @@
 @tailwind utilities;
 
 /* Hide scrollbar but allow scrolling */
-/* For Chrome, Safari */
-
 .custom-scroll::-webkit-scrollbar {
-  display: none;
+  display: none; /* For Chrome, Safari */
 }
 
-/* For Firefox */
-/* For IE/Edge */
-
 .custom-scroll {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For IE/Edge */
 }
 
 @layer base {
@@ -26,14 +21,6 @@
   }
   .prose a:hover {
     @apply text-blue-800;
-  }
-
-  .prose input[type='checkbox'] {
-    vertical-align: middle; /* aligns checkbox vertically */
-    margin-top: 0; /* reset any margin pushing it down */
-    margin-bottom: 0;
-    position: relative;
-    top: 1px; /* fine-tune vertical position */
   }
 
   .prose code::before,

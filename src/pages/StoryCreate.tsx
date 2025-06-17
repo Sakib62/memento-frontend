@@ -25,33 +25,34 @@ const StoryCreate = () => {
   };
 
   return (
-    <div className='flex flex-col min-h-screen'>
-      <div className='flex flex-col items-center justify-start flex-grow px-4 pt-10 bg-gray-300 dark:bg-stone-600'>
-        <div className='flex flex-col w-full gap-8 max-w-7xl md:flex-row'>
-          <div className='flex-1 w-full max-w-4xl'>
-            <input
-              required
-              type='text'
-              placeholder='Story title'
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
-            />
-            <div className='rounded-lg shadow-md'>
-              <StoryEditor ref={editorRef} />
-            </div>
-          </div>
+    <div className='flex flex-col gap-8 p-8 lg:flex-row'>
+      <div className='flex flex-col gap-8 lg:w-3/4'>
+        <input
+          type='text'
+          placeholder='Enter title...'
+          required
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          className='p-2 text-lg border-2 rounded-md outline-none border-neutral-300 focus:ring-blue-400 focus:ring-2'
+        />
+        <div>
+          <StoryEditor ref={editorRef} />
+        </div>
+      </div>
 
+      <div className='flex flex-col gap-8 lg:w-1/4'>
+        <div className=''>
           <TagInput tags={tags} setTags={setTags} />
         </div>
-
-        <button
-          onClick={() => handleSave()}
-          disabled={loading}
-          className='px-4 py-2 mt-6 mb-6 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900'
-        >
-          {loading ? 'Publishing...' : 'Publish'}
-        </button>
+        <div className='flex justify-center'>
+          <button
+            onClick={handleSave}
+            disabled={loading}
+            className='px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-800'
+          >
+            {loading ? 'Publishing...' : 'Publish'}
+          </button>
+        </div>
       </div>
     </div>
   );

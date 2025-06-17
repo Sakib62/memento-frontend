@@ -85,38 +85,31 @@ const StoryEdit = () => {
   }
 
   return (
-    <div className='flex flex-col min-h-screen'>
-      <div className='flex flex-col items-center justify-start flex-grow px-4 pt-10 bg-gray-300 dark:bg-stone-600'>
-        {/* Parent flex container for title/description and tags */}
-        <div className='flex flex-col w-full gap-8 max-w-7xl md:flex-row'>
-          <div className='flex-1 w-full max-w-4xl'>
-            <input
-              required
-              type='text'
-              placeholder='Story title'
-              value={title}
-              onChange={e => setTitle(e.target.value)}
-              className='w-full p-3 mb-4 text-lg border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400'
-            />
-            <div className='max-w-4xl rounded-lg shadow-md'>
-              <StoryEditor ref={editorRef} />
-            </div>
-          </div>
+    <div className='flex flex-col gap-8 p-8 lg:flex-row'>
+      <div className='flex flex-col gap-8 lg:w-3/4'>
+        <input
+          type='text'
+          required
+          placeholder={story?.title}
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          className='p-2 text-lg border-2 rounded-md outline-none border-neutral-300 focus:ring-2 focus:ring-blue-400'
+        />
+        <StoryEditor ref={editorRef} />
+      </div>
 
-          <TagInput tags={tags} setTags={setTags} />
-        </div>
-
-        <div className='flex mt-6 mb-10'>
+      <div className='flex flex-col gap-8 lg:w-1/4'>
+        <TagInput tags={tags} setTags={setTags} />
+        <div className='flex justify-center gap-8'>
           <button
+            className='px-4 py-2 font-semibold text-white bg-red-600 rounded-md shadow-md hover:bg-red-800'
             onClick={handleCancelUpdate}
-            className='px-4 py-2 mr-4 font-semibold text-white bg-red-600 rounded-md shadow-md hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700'
           >
             Cancel
           </button>
-
           <button
+            className='px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-800'
             onClick={onClickSave}
-            className={`px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-700 dark:bg-gray-800 dark:hover:bg-gray-900`}
           >
             Save
           </button>
