@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import SkeletonStoryEdit from '../components/Skeleton/SkeletonStoryEdit';
 import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
@@ -81,7 +82,7 @@ const StoryEdit = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <SkeletonStoryEdit />;
   }
 
   return (
