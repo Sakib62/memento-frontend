@@ -13,11 +13,19 @@ export const useCreateStory = () => {
 
   const createStory = async (
     title: string,
-    markdownContent: string,
+    markdownContent: string | undefined,
     tags: string[]
   ) => {
-    if (!title.trim() || !markdownContent.trim()) {
-      toast.error('Title and description are required');
+    if (!title.trim()) {
+      toast.error('Title cannot be empty', {
+        position: 'top-center',
+      });
+      return;
+    }
+    if (!markdownContent?.trim()) {
+      toast.error('Description cannot be empty', {
+        position: 'top-center',
+      });
       return;
     }
 

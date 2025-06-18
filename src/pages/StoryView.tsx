@@ -1,12 +1,13 @@
-import MarkdownIt from 'markdown-it';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
-import ReactMarkdownEditorLite from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import Comment from '../components/Comment';
 import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
+import StoryEditor, {
+  StoryEditorHandle,
+} from '../components/story/StoryEditor';
 import { useAuth } from '../hooks/useAuth';
 import useDeleteStory from '../hooks/useDeleteStory';
 import { useFetchStory } from '../hooks/useFetchStory';
@@ -19,10 +20,18 @@ const StoryView = () => {
   }
 
   const navigate = useNavigate();
-  const mdParser = new MarkdownIt();
 
   const { id: storyId } = useParams();
   const { story, loading } = useFetchStory(storyId);
+
+  const editorRef = useRef<StoryEditorHandle>(null);
+
+  useEffect(() => {
+    if (story) {
+      editorRef.current?.setMarkdown(story?.description);
+    }
+  }, [story]);
+
   const { hasLiked, likeCount, isLiking, handleLikeClick } = useLike(story?.id);
   const handleDeleteStory = useDeleteStory();
 
@@ -164,13 +173,7 @@ const StoryView = () => {
 
         <div className='markdown-body'>
           {/* <MarkdownRenderer content={story?.description} /> */}
-          <ReactMarkdownEditorLite
-            className='react-markdown-editor-lite editor-content dark:bg-stone-700 dark:text-white'
-            value={story?.description}
-            style={{ minHeight: '200px', height: 'auto' }}
-            renderHTML={text => mdParser.render(text)}
-            view={{ menu: false, md: false, html: true }}
-          />
+          <StoryEditor ref={editorRef} isViewMode={true} />
         </div>
 
         <Comment

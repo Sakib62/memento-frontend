@@ -2,32 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.react-markdown-editor-lite,
-.react-markdown-editor-lite .editor-wrapper,
-.react-markdown-editor-lite .editor-content {
-  border: none !important;
-}
-
-.react-markdown-editor-lite .editor-wrapper {
-  border: 0px !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.react-markdown-editor-lite .editor-content > * {
-  color: inherit !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.dark .react-markdown-editor-lite .editor-content {
-  color: #fcfcfc;
-}
-
-.dark .react-markdown-editor-lite .editor-wrapper {
-  background-color: #333; /* Dark background in dark mode */
-}
-
 /* Hide scrollbar but allow scrolling */
 .custom-scroll::-webkit-scrollbar {
   display: none; /* For Chrome, Safari */
@@ -36,4 +10,21 @@
 .custom-scroll {
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none; /* For IE/Edge */
+}
+
+@layer base {
+  .prose {
+    @apply max-w-none leading-none !important;
+  }
+  .prose a {
+    @apply text-blue-600 no-underline;
+  }
+  .prose a:hover {
+    @apply text-blue-800;
+  }
+
+  .prose code::before,
+  .prose code::after {
+    content: none;
+  }
 }
