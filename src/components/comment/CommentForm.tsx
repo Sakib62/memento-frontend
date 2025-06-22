@@ -14,6 +14,7 @@ const CommentForm = ({
   const [comment, setComment] = useState<string>('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const TEXTAREA_MAX_HEIGHT = 200;
 
   const resetTextareaHeight = () => {
     if (textareaRef.current) {
@@ -35,7 +36,8 @@ const CommentForm = ({
         onChange={e => {
           setComment(e.target.value);
           e.target.style.height = 'auto';
-          e.target.style.height = Math.min(e.target.scrollHeight, 200) + 'px';
+          e.target.style.height =
+            Math.min(e.target.scrollHeight, TEXTAREA_MAX_HEIGHT) + 'px';
         }}
         className='w-full p-2 mb-2 rounded-md outline-none resize-none bg-stone-200 min-h-20 placeholder:text-stone-400 placeholder:p-0 placeholder:font-medium'
       />

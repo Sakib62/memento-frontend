@@ -45,22 +45,23 @@ const CommentCard = ({
   };
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const TEXTAREA_MAX_HEIGHT = 200;
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height =
-        Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+        Math.min(textareaRef.current.scrollHeight, TEXTAREA_MAX_HEIGHT) + 'px';
     }
   }, [isEditing]);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const commentRef = useRef<HTMLParagraphElement>(null);
-
+  const COMMENT_MAX_HEIGHT = 200;
   useEffect(() => {
     if (commentRef.current && !isExpanded) {
-      setIsOverflowing(commentRef.current.scrollHeight > 200);
+      setIsOverflowing(commentRef.current.scrollHeight > COMMENT_MAX_HEIGHT);
     }
   }, [isExpanded, comment.comment]);
 
@@ -94,7 +95,7 @@ const CommentCard = ({
                 setEditedText(e.target.value);
                 e.target.style.height = 'auto';
                 e.target.style.height =
-                  Math.min(e.target.scrollHeight, 200) + 'px';
+                  Math.min(e.target.scrollHeight, TEXTAREA_MAX_HEIGHT) + 'px';
               }}
               onKeyDown={e => {
                 if (e.key === 'Escape') {
