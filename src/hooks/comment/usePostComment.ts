@@ -11,7 +11,7 @@ const usePostComment = (storyId: string, setComments: SetComments) => {
     retryId?: string
   ): Promise<void> => {
     const tempComment = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       userId: id,
       comment,
       createdAt: new Date().toISOString(),
