@@ -3,7 +3,7 @@ import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 import 'react-markdown-editor-lite/lib/index.css';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import Comment from '../components/Comment';
+import CommentSection from '../components/comment/CommentSection';
 import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
 import StoryEditor, {
   StoryEditorHandle,
@@ -20,12 +20,10 @@ const StoryView = () => {
   }
 
   const navigate = useNavigate();
-
   const { id: storyId } = useParams();
   const { story, loading } = useFetchStory(storyId);
 
   const editorRef = useRef<StoryEditorHandle>(null);
-
   useEffect(() => {
     if (story) {
       editorRef.current?.setMarkdown(story?.description);
@@ -38,7 +36,6 @@ const StoryView = () => {
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
   const handleCommentButtonClick = () => {
     if (commentInputRef.current) {
-      //commentInputRef.current.focus();
       commentInputRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
@@ -77,8 +74,8 @@ const StoryView = () => {
   }
 
   return (
-    <div className='pt-6 pb-6 bg-gray-100 dark:bg-neutral-800'>
-      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-5xl p-8 pt-4 mx-auto bg-white  dark:bg-stone-700 rounded-lg'>
+    <div className='py-6 bg-gray-100 dark:bg-neutral-800'>
+      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 pt-4 mx-auto bg-white  dark:bg-stone-700 rounded-lg'>
         <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white '>
           {story.title}
         </h1>
@@ -98,22 +95,20 @@ const StoryView = () => {
           </div>
         )}
 
-        <div className='flex items-center gap-4 p-2 pt-2 pl-0 mb-4 rounded-lg '>
-          <div>
-            <p
-              onClick={() => navigate(`/profile/${story.authorUsername}`)}
-              className='text-xl font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline'
-            >
-              {story?.authorName}
-            </p>
-            <p className='text-xs text-gray-500 dark:text-gray-300'>
-              {new Date(story.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-            </p>
-          </div>
+        <div className='mb-4'>
+          <p
+            onClick={() => navigate(`/profile/${story.authorUsername}`)}
+            className='text-base font-semibold text-gray-800 cursor-pointer w-fit dark:text-gray-200 hover:underline'
+          >
+            {story?.authorName}
+          </p>
+          <p className='text-xs text-gray-500 dark:text-gray-300'>
+            {new Date(story.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+          </p>
         </div>
 
         <div className='flex items-center justify-between px-0 mb-4 text-gray-600 dark:text-gray-300'>
@@ -171,16 +166,17 @@ const StoryView = () => {
           )}
         </div>
 
-        <div className='markdown-body'>
-          {/* <MarkdownRenderer content={story?.description} /> */}
+        <div>
           <StoryEditor ref={editorRef} isViewMode={true} />
         </div>
 
-        <Comment
-          story={story}
-          onCommentCountChange={handleCommentCount}
-          commentInputRef={commentInputRef}
-        />
+        <div className='mt-8'>
+          <CommentSection
+            storyId={story.id}
+            onCommentCountChange={handleCommentCount}
+            commentInputRef={commentInputRef}
+          />
+        </div>
       </div>
     </div>
   );
