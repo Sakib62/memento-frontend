@@ -7,7 +7,17 @@ import { Comment } from '../../types/comment';
 import CommentCard from './CommentCard';
 import CommentForm from './CommentForm';
 
-const CommentSection = ({ storyId, onCommentCountChange, commentInputRef }) => {
+interface CommentSectionProp {
+  storyId: string;
+  onCommentCountChange: (count: number) => void;
+  commentInputRef: React.RefObject<HTMLTextAreaElement | null>;
+}
+
+const CommentSection = ({
+  storyId,
+  onCommentCountChange,
+  commentInputRef,
+}: CommentSectionProp) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const { loading } = useGetComments(storyId, setComments);
   const postComment = usePostComment(storyId, setComments);
@@ -31,7 +41,7 @@ const CommentSection = ({ storyId, onCommentCountChange, commentInputRef }) => {
   return (
     <div>
       <CommentForm
-        total={comments?.length}
+        commentCount={comments?.length}
         onCreate={postComment}
         commentInputRef={commentInputRef}
       />

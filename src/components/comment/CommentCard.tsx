@@ -3,7 +3,20 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Role } from '../../constants/role';
 import { useAuth } from '../../hooks/useAuth';
+import { Comment } from '../../types/comment';
 import formatDate from '../../utils/formatDate';
+
+interface CommentCardProps {
+  comment: Comment;
+  onDelete: (commentId: string) => Promise<void>;
+  retry: (comment: string, retryId: string) => Promise<void>;
+  discardComment: (commentId: string) => void;
+  onUpdate: (
+    commentId: string,
+    comment: string,
+    abort?: boolean
+  ) => Promise<void>;
+}
 
 const CommentCard = ({
   comment,
@@ -11,7 +24,7 @@ const CommentCard = ({
   retry,
   discardComment,
   onUpdate,
-}) => {
+}: CommentCardProps) => {
   const { role, username } = useAuth();
   const navigate = useNavigate();
   const canModify = role === Role.Admin || comment.authorUsername === username;
@@ -182,7 +195,7 @@ const CommentCard = ({
                   </button>
                   <button
                     onClick={() => {
-                      setEditedText(comment.prevComment);
+                      setEditedText(comment.prevComment || '');
                       onUpdate(comment.id, comment.comment, true);
                     }}
                     className='text-red-300 hover:text-red-500'

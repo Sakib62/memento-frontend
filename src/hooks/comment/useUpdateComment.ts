@@ -1,17 +1,26 @@
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks/useAuth';
+import { SetComments } from '../../types/comment';
 
-const useUpdateComment = setComments => {
+const useUpdateComment = (setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token } = useAuth();
 
-  const updatedComment = async (commentId, comment, abort?) => {
+  const updatedComment = async (
+    commentId: string,
+    comment: string,
+    abort?: boolean
+  ): Promise<void> => {
     if (abort) {
       setComments(prev =>
         prev.map(c => {
           if (c.id === commentId) {
             const { status, prevUpdatedAt, prevComment, ...rest } = c;
-            return { ...rest, comment: prevComment, updatedAt: prevUpdatedAt };
+            return {
+              ...rest,
+              comment: prevComment || '',
+              updatedAt: prevUpdatedAt || '',
+            };
           }
           return c;
         })

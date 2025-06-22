@@ -1,6 +1,16 @@
 import { useRef, useState } from 'react';
 
-const CommentForm = ({ total, onCreate, commentInputRef }) => {
+interface CommentFormProps {
+  commentCount: number;
+  onCreate: (comment: string) => Promise<void>;
+  commentInputRef: React.RefObject<HTMLTextAreaElement | null>;
+}
+
+const CommentForm = ({
+  commentCount,
+  onCreate,
+  commentInputRef,
+}: CommentFormProps) => {
   const [comment, setComment] = useState<string>('');
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -13,7 +23,7 @@ const CommentForm = ({ total, onCreate, commentInputRef }) => {
 
   return (
     <div>
-      <p className='mb-4 text-2xl font-semibold'>Comments ({total})</p>
+      <p className='mb-4 text-2xl font-semibold'>Comments ({commentCount})</p>
       <textarea
         ref={element => {
           textareaRef.current = element;

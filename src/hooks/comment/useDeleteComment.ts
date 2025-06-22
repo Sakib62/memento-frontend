@@ -1,11 +1,12 @@
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks/useAuth';
+import { SetComments } from '../../types/comment';
 
-const useDeleteComment = setComments => {
+const useDeleteComment = (setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token } = useAuth();
 
-  const deleteComment = async (commentId: string) => {
+  const deleteComment = async (commentId: string): Promise<void> => {
     const result = await Swal.fire({
       title: 'Delete Comment?',
       text: 'Are you sure you want to delete this comment?',

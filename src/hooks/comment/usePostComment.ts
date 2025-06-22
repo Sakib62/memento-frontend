@@ -1,11 +1,15 @@
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks/useAuth';
+import { SetComments } from '../../types/comment';
 
-const usePostComment = (storyId, setComments) => {
+const usePostComment = (storyId: string, setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token, id, name, username } = useAuth();
 
-  const postComment = async (comment: string, retryId?: string) => {
+  const postComment = async (
+    comment: string,
+    retryId?: string
+  ): Promise<void> => {
     const tempComment = {
       id: Date.now().toString(),
       userId: id,
@@ -23,8 +27,8 @@ const usePostComment = (storyId, setComments) => {
           c.id === retryId
             ? {
                 ...c,
-                createdAt: new Date().toISOString,
-                updatedAt: new Date().toISOString,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
                 status: 'pending',
               }
             : c

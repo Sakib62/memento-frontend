@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { SetComments } from '../../types/comment';
 
-const useGetComments = (storyId: string, setComments) => {
+const useGetComments = (storyId: string, setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchComments = async () => {
+  const fetchComments = async (): Promise<void> => {
     setLoading(true);
     try {
       const result = await fetch(`${apiUrl}/api/stories/${storyId}/comments`, {
