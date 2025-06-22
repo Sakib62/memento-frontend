@@ -14,7 +14,7 @@ const formatDate = (timestamp: string): string => {
   if (diffMin < 60) return `${diffMin}m`;
   if (diffHour < 24) return `${diffHour}h`;
   if (diffDay < 7) return `${diffDay}d`;
-  if (diffWeek < 52) return `${diffWeek}w`;
+  if (diffWeek <= 52) return `${diffWeek}w`;
   return `${diffYear}y`;
 };
 

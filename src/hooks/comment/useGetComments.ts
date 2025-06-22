@@ -10,15 +10,22 @@ const useGetComments = (storyId: string, setComments: SetComments) => {
   const fetchComments = async (): Promise<void> => {
     setLoading(true);
     try {
-      const result = await fetch(`${apiUrl}/api/stories/${storyId}/comments`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${apiUrl}/api/stories/${storyId}/comments`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      const data = await result.json();
+      if (!response.ok) {
+        throw new Error('Failed to fetch comments');
+      }
+
+      const data = await response.json();
       setComments(data.data);
     } catch (error) {
       console.error('Error fetching comments:', error);
