@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useDeleteComment from '../../hooks/comment/useDeleteComment';
 import useGetComments from '../../hooks/comment/useGetComments';
 import usePostComment from '../../hooks/comment/usePostComment';
@@ -24,7 +24,9 @@ const CommentSection = ({
   const updateComment = useUpdateComment(setComments);
   const deleteComment = useDeleteComment(setComments);
 
-  onCommentCountChange(comments.length);
+  useEffect(() => {
+    onCommentCountChange(comments.length);
+  }, [comments.length]);
 
   const discardFailedComment = (commentId: string) => {
     setComments(prev => prev.filter(c => c.id !== commentId));

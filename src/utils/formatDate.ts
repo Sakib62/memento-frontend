@@ -1,6 +1,6 @@
-const formatDate = (timeStamp: string): string => {
+const formatDate = (timestamp: string): string => {
   const now = new Date();
-  const date = new Date(timeStamp);
+  const date = new Date(timestamp);
 
   const diffMS = now.getTime() - date.getTime();
   const diffSec = Math.floor(diffMS / 1000);

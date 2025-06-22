@@ -29,7 +29,7 @@ const useGetComments = (storyId: string, setComments: SetComments) => {
 
   useEffect(() => {
     fetchComments();
-  }, []);
+  }, [storyId]);
 
   return { loading };
 };
