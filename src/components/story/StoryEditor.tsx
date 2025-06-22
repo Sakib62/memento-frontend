@@ -8,6 +8,7 @@ import {
   DiffSourceToggleWrapper,
   InsertCodeBlock,
   InsertImage,
+  InsertTable,
   InsertThematicBreak,
   ListsToggle,
   MDXEditor,
@@ -24,6 +25,7 @@ import {
   listsPlugin,
   markdownShortcutPlugin,
   quotePlugin,
+  tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
 } from '@mdxeditor/editor';
@@ -41,11 +43,15 @@ const StoryEditor = memo(
       const mdxEditorRef = useRef<MDXEditorMethods>(null);
       const [diffMarkdown, setDiffMarkdown] = useState('');
 
+      const addDefaultLanguage = (markdown?: string): string =>
+        markdown?.replace(/```[\t ]*\n([\s\S]*?)```/g, '```js\n$1```') ?? '';
+
       useImperativeHandle(
         ref,
         () => ({
           getMarkdown: () => {
-            const markdown = mdxEditorRef.current?.getMarkdown();
+            let markdown = mdxEditorRef.current?.getMarkdown();
+            //markdown = addDefaultLanguage(markdown);
             const formattedMarkdown = markdown?.replace(/\n{2,}/g, match => {
               return '\n\n' + '<br />\n'.repeat((match.length - 1) / 2);
             });
@@ -88,6 +94,7 @@ const StoryEditor = memo(
             quotePlugin(),
             thematicBreakPlugin(),
             imagePlugin(),
+            tablePlugin(),
             linkPlugin(),
             linkDialogPlugin(),
             markdownShortcutPlugin(),
@@ -121,6 +128,7 @@ const StoryEditor = memo(
                           <BlockTypeSelect />
                           <InsertImage />
                           <CreateLink />
+                          <InsertTable />
                           <InsertThematicBreak />
                           <StrikeThroughSupSubToggles />
                         </DiffSourceToggleWrapper>
