@@ -2,22 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 import 'react-markdown-editor-lite/lib/index.css';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import CommentSection from '../components/comment/CommentSection';
 import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
 import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
+import { Role } from '../constants/role';
 import { useAuth } from '../hooks/useAuth';
 import useDeleteStory from '../hooks/useDeleteStory';
 import { useFetchStory } from '../hooks/useFetchStory';
 import useLike from '../hooks/useLike';
 
 const StoryView = () => {
-  const { username, role, token } = useAuth();
-  if (!token) {
-    return <Navigate to='/login' />;
-  }
+  const { username, role } = useAuth();
 
   const navigate = useNavigate();
   const { id: storyId } = useParams();
@@ -147,7 +145,7 @@ const StoryView = () => {
             </button>
           </div>
 
-          {(story.authorUsername == username || role == 1) && (
+          {(story.authorUsername === username || role === Role.Admin) && (
             <div className='flex gap-4'>
               <ButtonWithTooltip
                 icon={<MdOutlineModeEdit size={23} />}

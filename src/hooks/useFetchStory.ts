@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Story } from '../types/story';
-import { useAuth } from './useAuth';
 
 export const useFetchStory = (storyId: string | undefined) => {
-  const { token, clearAuthData } = useAuth();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const [story, setStory] = useState<Story | null>(null);
@@ -16,15 +14,10 @@ export const useFetchStory = (storyId: string | undefined) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
       });
 
-      if (response.status === 401) {
-        clearAuthData();
-      } else if (response.status === 404) {
-        setStory(null);
-      } else if (!response.ok) {
+      if (!response.ok) {
         throw new Error('Failed to fetch story');
       } else {
         const data = await response.json();
@@ -38,10 +31,10 @@ export const useFetchStory = (storyId: string | undefined) => {
   };
 
   useEffect(() => {
-    if (token && storyId) {
+    if (storyId) {
       fetchStory();
     }
-  }, [storyId, token]);
+  }, [storyId]);
 
   return { story, loading };
 };

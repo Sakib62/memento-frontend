@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Story } from '../types/story';
 import { User } from '../types/user';
-import { useAuth } from './useAuth';
 
 export const useSearchResults = (searchQuery: string) => {
-  const { token } = useAuth();
-
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const [searchResults, setSearchResults] = useState<{
@@ -38,7 +35,6 @@ export const useSearchResults = (searchQuery: string) => {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token || ''}`,
             },
           }
         );
@@ -56,7 +52,7 @@ export const useSearchResults = (searchQuery: string) => {
     };
 
     fetchSearchResults();
-  }, [searchQuery, apiUrl, token]);
+  }, [searchQuery]);
 
   return { searchResults, loading, error };
 };

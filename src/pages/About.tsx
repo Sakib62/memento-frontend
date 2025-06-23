@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className='flex flex-col h-screen px-6 py-12 mx-auto dark:bg-stone-700'>
+    <div className='flex flex-col min-h-screen px-6 py-12 mx-auto dark:bg-stone-700'>
       <h1 className='mb-8 text-3xl font-bold text-center dark:text-gray-100'>
         About Memento
       </h1>

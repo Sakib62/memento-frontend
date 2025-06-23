@@ -1,18 +1,11 @@
 import { useRef, useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
 import TagInput from '../components/story/TagInput';
-import { useAuth } from '../hooks/useAuth';
 import { useCreateStory } from '../hooks/useCreateStory';
 
 const StoryCreate = () => {
-  const { token } = useAuth();
-  if (!token) {
-    return <Navigate to='/login' />;
-  }
-
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
 

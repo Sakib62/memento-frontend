@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
 interface CommentFormProps {
   commentCount: number;
@@ -22,6 +24,15 @@ const CommentForm = ({
     }
   };
 
+  const { token } = useAuth();
+  const navigate = useNavigate();
+
+  const handleInteraction = () => {
+    if (!token) {
+      navigate('/login');
+    }
+  };
+
   return (
     <div>
       <p className='mb-4 text-2xl font-semibold'>Comments ({commentCount})</p>
@@ -33,6 +44,7 @@ const CommentForm = ({
         placeholder='Write a comment...'
         id='comment-input'
         value={comment}
+        onFocus={handleInteraction}
         onChange={e => {
           setComment(e.target.value);
           e.target.style.height = 'auto';

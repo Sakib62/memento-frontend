@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
 import { SetComments } from '../../types/comment';
 
 const useGetComments = (storyId: string, setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const { token } = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchComments = async (): Promise<void> => {
@@ -16,7 +14,6 @@ const useGetComments = (storyId: string, setComments: SetComments) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -36,7 +33,7 @@ const useGetComments = (storyId: string, setComments: SetComments) => {
 
   useEffect(() => {
     fetchComments();
-  }, [storyId, token]);
+  }, [storyId]);
 
   return { loading };
 };
