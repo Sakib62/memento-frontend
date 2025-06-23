@@ -1,12 +1,9 @@
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { useStoryStats } from '../../hooks/useStoryStats';
 import { Story } from '../../types/story';
 
 const HomeStoryCard = ({ story }: { story: Story }) => {
   const navigate = useNavigate();
-
-  const { likeCount, commentCount, loading, error } = useStoryStats(story.id);
 
   return (
     <div
@@ -37,11 +34,11 @@ const HomeStoryCard = ({ story }: { story: Story }) => {
           <div className='flex space-x-4'>
             <span className='flex items-center gap-1'>
               <FaRegHeart />
-              {likeCount}
+              {story.likeCount}
             </span>
             <span className='flex items-center gap-1'>
               <FaRegComment />
-              {commentCount}
+              {story.commentCount}
             </span>
           </div>
           <span>

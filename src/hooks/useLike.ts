@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './useAuth';
+import useAuthPromptModal from './useAuthPrompt';
 
 const useLike = (storyId: string | undefined) => {
   const [hasLiked, sethasLiked] = useState<boolean>(false);
@@ -11,6 +12,8 @@ const useLike = (storyId: string | undefined) => {
 
   const { token } = useAuth();
   const apiUrl = import.meta.env.VITE_API_URL;
+
+  const authPromptModal = useAuthPromptModal();
 
   const getLikeStatus = async () => {
     try {
@@ -56,13 +59,12 @@ const useLike = (storyId: string | undefined) => {
 
   const handleLikeClick = async () => {
     if (!storyId || isLiking) return;
+    if (!token) {
+      authPromptModal();
+      return;
+    }
     setIsLiking(true);
     try {
-      if (!token) {
-        navigate('/login');
-        return;
-      }
-
       const response = await fetch(`${apiUrl}/api/stories/${storyId}/likes`, {
         method: 'POST',
         headers: {

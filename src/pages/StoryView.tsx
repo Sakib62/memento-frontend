@@ -4,6 +4,7 @@ import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 import 'react-markdown-editor-lite/lib/index.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import CommentSection from '../components/comment/CommentSection';
+import SkeletonStoryView from '../components/Skeleton/SkeletonStoryView';
 import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
 import StoryEditor, {
   StoryEditorHandle,
@@ -47,7 +48,7 @@ const StoryView = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <SkeletonStoryView />;
   }
 
   if (!story) {

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import useAuthPromptModal from '../../hooks/useAuthPrompt';
 import LanguageSwitcher from './LanguageSwitcher';
 import ProfileMenu from './ProfileMenu';
 import SearchPopup from './SearchPopup';
@@ -16,6 +17,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const authPromptModal = useAuthPromptModal();
 
   const toggleSearchPopup = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -48,17 +50,17 @@ const Navbar = () => {
         <div className='flex items-center space-x-2 md:space-x-4'>
           <ThemeToggle />
           <LanguageSwitcher />
-          <li>
+          <span>
             <button
               onClick={() => {
-                token ? navigate('/new-story') : navigate('/login');
+                token ? navigate('/new-story') : authPromptModal();
               }}
               className='flex items-center w-24 gap-1 px-4 py-2 text-white transition-all duration-300 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-28'
             >
               <SquarePen className='w-4 h-4 mr-1 md:mr-2 md:h-5 md:w-5' />
               <span>{t('navbar.write')}</span>
             </button>
-          </li>
+          </span>
           {token ? (
             <ProfileMenu />
           ) : (
