@@ -7,31 +7,23 @@ const Footer = () => {
 
   return (
     <footer className='w-full p-6 bg-stone-300 dark:bg-gray-800'>
-      <div className='container flex flex-col items-center justify-between gap-4 mx-auto sm:flex-row'>
-        <div className='flex flex-col items-center sm:items-start'>
-          <nav className='flex gap-4'>
-            <Link
-              to='/'
-              className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
-            >
-              {t('footer.home')}
-            </Link>
-            <Link
-              to='/about'
-              className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
-            >
-              {t('footer.about')}
-            </Link>
-            <Link
-              to='/new-story'
-              className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
-            >
-              {t('footer.write-a-story')}
-            </Link>
-          </nav>
+      <div className='container flex flex-col items-center gap-4 mx-auto sm:grid sm:grid-cols-3 sm:items-center'>
+        <div className='flex justify-center gap-4 sm:justify-start'>
+          <Link
+            to='/'
+            className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
+          >
+            {t('footer.home')}
+          </Link>
+          <Link
+            to='/about'
+            className='text-gray-600 hover:text-black dark:text-gray-300 dark:hover:text-white'
+          >
+            {t('footer.about')}
+          </Link>
         </div>
 
-        <div className='flex gap-4'>
+        <div className='flex justify-center gap-4'>
           <a
             href='https://github.com/sakib62'
             target='_blank'
@@ -50,9 +42,9 @@ const Footer = () => {
           </a>
         </div>
 
-        <p className='text-sm text-gray-500 dark:text-gray-400'>
+        <div className='flex justify-center text-sm text-center text-gray-500 sm:justify-end dark:text-gray-400 sm:text-right'>
           © {new Date().getFullYear()} Memento. {t('footer.copyright')}
-        </p>
+        </div>
       </div>
     </footer>
   );
