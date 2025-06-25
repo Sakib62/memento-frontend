@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
+import useAuthPromptModal from '../../hooks/useAuthPrompt';
 
 interface CommentFormProps {
   commentCount: number;
@@ -22,32 +24,44 @@ const CommentForm = ({
     }
   };
 
+  const { token } = useAuth();
+  const authPromptModal = useAuthPromptModal();
+
   return (
     <div>
       <p className='mb-4 text-2xl font-semibold'>Comments ({commentCount})</p>
-      <textarea
-        ref={element => {
-          textareaRef.current = element;
-          commentInputRef.current = element;
+      <div
+        onClick={() => {
+          if (!token) authPromptModal();
         }}
-        placeholder='Write a comment...'
-        id='comment-input'
-        value={comment}
-        onChange={e => {
-          setComment(e.target.value);
-          e.target.style.height = 'auto';
-          e.target.style.height =
-            Math.min(e.target.scrollHeight, TEXTAREA_MAX_HEIGHT) + 'px';
-        }}
-        className='w-full p-2 mb-2 rounded-md outline-none resize-none bg-stone-200 min-h-20 placeholder:text-stone-400 placeholder:p-0 placeholder:font-medium'
-      />
+      >
+        <textarea
+          ref={element => {
+            textareaRef.current = element;
+            commentInputRef.current = element;
+          }}
+          placeholder='Write a comment...'
+          id='comment-input'
+          value={comment}
+          readOnly={!token}
+          onChange={e => {
+            setComment(e.target.value);
+            e.target.style.height = 'auto';
+            e.target.style.height =
+              Math.min(e.target.scrollHeight, TEXTAREA_MAX_HEIGHT) + 'px';
+          }}
+          className='w-full p-2 mb-2 rounded-md outline-none resize-none bg-stone-200 placeholder:text-stone-400 placeholder:p-0 placeholder:font-medium'
+        />
+      </div>
+
       <div className='flex justify-end gap-4'>
         <button
+          disabled={!comment.trim()}
           onClick={() => {
             setComment('');
             resetTextareaHeight();
           }}
-          className='px-2 py-1 font-semibold rounded-md bg-stone-300 hover:bg-stone-400'
+          className='px-2 py-1 font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed bg-stone-300 hover:bg-stone-400'
         >
           Cancel
         </button>

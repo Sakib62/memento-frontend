@@ -21,14 +21,17 @@ export default function AppRouter() {
           <Route path='/register' element={<SignUp />} />
         </Route>
 
+        <Route element={<Layout />}>
+          <Route path='/' element={<Home />} />
+          <Route path='/story/:id' element={<StoryView />} />
+          <Route path='/about' element={<About />} />
+        </Route>
+
         <Route element={<PrivateRoute />}>
           <Route element={<Layout />}>
-            <Route path='/' element={<Home />} />
             <Route path='/new-story' element={<StoryCreate />} />
-            <Route path='/story/:id' element={<StoryView />} />
             <Route path='/story/:id/edit' element={<StoryEdit />} />
             <Route path='/profile/:username' element={<ProfilePage />} />
-            <Route path='/about' element={<About />} />
           </Route>
         </Route>
 

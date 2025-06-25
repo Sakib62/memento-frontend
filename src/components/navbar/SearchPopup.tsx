@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { useSearchResults } from '../../hooks/useSearchResults';
 import { Story } from '../../types/story';
 import { User } from '../../types/user';
@@ -17,11 +16,6 @@ const SearchPopup = ({
   searchQuery: string;
   setSearchQuery: (query: string) => void;
 }) => {
-  const { token } = useAuth();
-  if (!token) {
-    return <Navigate to='/login' />;
-  }
-
   const navigate = useNavigate();
   const { t } = useTranslation();
 

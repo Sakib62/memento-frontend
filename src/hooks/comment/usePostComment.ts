@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../../hooks/useAuth';
 import { SetComments } from '../../types/comment';
 
@@ -11,7 +12,7 @@ const usePostComment = (storyId: string, setComments: SetComments) => {
     retryId?: string
   ): Promise<void> => {
     const tempComment = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       userId: id,
       comment,
       createdAt: new Date().toISOString(),

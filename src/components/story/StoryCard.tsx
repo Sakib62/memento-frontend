@@ -1,27 +1,15 @@
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
 import 'react-markdown-editor-lite/lib/index.css';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { useStoryStats } from '../../hooks/useStoryStats';
+import { useNavigate } from 'react-router-dom';
 import { Story } from '../../types/story';
 import MarkdownRenderer from './MarkdownRenderer';
 
 const StoryCard = ({ story }: { story: Story }) => {
-  const { token } = useAuth();
-  if (!token) {
-    return <Navigate to='/login' />;
-  }
-
   const navigate = useNavigate();
 
   const handleClick = () => {
     navigate(`/story/${story.id}`);
   };
-
-  //const { likeCount, commentCount, loading, error } = useStoryStats(story.id);
-
-  // if (loading) return <p>Loading stats...</p>;
-  // if (error) return <p>{error}</p>;
 
   return (
     <div

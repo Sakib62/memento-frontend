@@ -1,21 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import SkeletonStoryEdit from '../components/Skeleton/SkeletonStoryEdit';
 import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
 import TagInput from '../components/story/TagInput';
-import { useAuth } from '../hooks/useAuth';
 import { useEditFetchStory } from '../hooks/useEditFetchStory';
 import { useUpdateStory } from '../hooks/useUpdateStory';
 
 const StoryEdit = () => {
-  const { token } = useAuth();
-  if (!token) {
-    return <Navigate to='/login' />;
-  }
-
   const navigate = useNavigate();
   const { id: storyId } = useParams();
 
