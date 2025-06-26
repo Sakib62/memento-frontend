@@ -25,7 +25,7 @@ const useUserInfo = (username: string, isStoryCount: boolean = false) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch stories..');
+        throw new Error('Failed to fetch user info');
       }
 
       const data = await response.json();

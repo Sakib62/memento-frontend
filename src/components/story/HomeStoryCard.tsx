@@ -42,7 +42,7 @@ const HomeStoryCard = ({
         </div>
         <div className='flex justify-start gap-4 text-gray-500'>
           <span>
-            {new Date(story.createdAt).toLocaleDateString('en-Us', {
+            {new Date(story.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
