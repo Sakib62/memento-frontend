@@ -1,7 +1,7 @@
-import { SquarePen } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaSearch } from 'react-icons/fa';
+import { FaRegPenToSquare } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import useAuthPromptModal from '../../hooks/useAuthPrompt';
@@ -57,7 +57,7 @@ const Navbar = () => {
               }}
               className='flex items-center w-24 gap-1 px-4 py-2 text-white transition-all duration-300 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-28'
             >
-              <SquarePen className='w-4 h-4 mr-1 md:mr-2 md:h-5 md:w-5' />
+              <FaRegPenToSquare className='w-4 h-4 mr-1 md:mr-2 md:h-5 md:w-5' />
               <span>{t('navbar.write')}</span>
             </button>
           </span>

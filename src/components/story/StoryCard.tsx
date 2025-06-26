@@ -1,5 +1,4 @@
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
-import 'react-markdown-editor-lite/lib/index.css';
 import { useNavigate } from 'react-router-dom';
 import { Story } from '../../types/story';
 import MarkdownRenderer from './MarkdownRenderer';
