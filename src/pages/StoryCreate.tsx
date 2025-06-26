@@ -3,7 +3,7 @@ import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
 import TagInput from '../components/story/TagInput';
-import { useCreateStory } from '../hooks/useCreateStory';
+import { useCreateStory } from '../hooks/story/useCreateStory';
 
 const StoryCreate = () => {
   const [title, setTitle] = useState('');

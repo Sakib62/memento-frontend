@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { Role } from '../constants/role';
-import { Story } from '../types/story';
-import { useAuth } from './useAuth';
+import { Role } from '../../constants/role';
+import { Story } from '../../types/story';
+import { useAuth } from '../useAuth';
 
 export const useEditFetchStory = ({
   storyId,

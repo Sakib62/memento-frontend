@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { usePagedStories } from '../../hooks/usePagedStories';
+import { usePagedStories } from '../../hooks/story/usePagedStories';
 import SkeletonStoryCard from '../Skeleton/SkeletonStoryCard';
 import StoryCard from '../story/StoryCard';
 import Pagination from './Pagination';

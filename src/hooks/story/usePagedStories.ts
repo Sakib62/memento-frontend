@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Story } from '../types/story';
+import { Story } from '../../types/story';
 
 interface StoriesResult {
   stories: Story[];

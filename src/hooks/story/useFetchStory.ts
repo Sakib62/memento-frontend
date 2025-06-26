@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Story } from '../types/story';
+import { Story } from '../../types/story';
 
 export const useFetchStory = (storyId: string | undefined) => {
   const apiUrl = import.meta.env.VITE_API_URL;

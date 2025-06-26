@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from './useAuth';
-import useAuthPromptModal from './useAuthPrompt';
+import { useAuth } from '../useAuth';
+import useAuthPromptModal from '../useAuthPrompt';
 
 const useLike = (storyId: string | undefined) => {
   const [hasLiked, sethasLiked] = useState<boolean>(false);
   const [likeCount, setlikeCount] = useState<number>(0);
   const [isLiking, setIsLiking] = useState<boolean>(false);
-
-  const navigate = useNavigate();
 
   const { token } = useAuth();
   const apiUrl = import.meta.env.VITE_API_URL;

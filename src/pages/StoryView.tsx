@@ -10,10 +10,10 @@ import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
 import { Role } from '../constants/role';
+import useDeleteStory from '../hooks/story/useDeleteStory';
+import { useFetchStory } from '../hooks/story/useFetchStory';
+import useLike from '../hooks/story/useLike';
 import { useAuth } from '../hooks/useAuth';
-import useDeleteStory from '../hooks/useDeleteStory';
-import { useFetchStory } from '../hooks/useFetchStory';
-import useLike from '../hooks/useLike';
 
 const StoryView = () => {
   const { username, role } = useAuth();

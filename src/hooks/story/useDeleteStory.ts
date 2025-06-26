@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useAuth } from './useAuth';
+import { useAuth } from '../useAuth';
 
 const useDeleteStory = () => {
   const navigate = useNavigate();

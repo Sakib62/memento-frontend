@@ -6,8 +6,8 @@ import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
 import TagInput from '../components/story/TagInput';
-import { useEditFetchStory } from '../hooks/useEditFetchStory';
-import { useUpdateStory } from '../hooks/useUpdateStory';
+import { useEditFetchStory } from '../hooks/story/useEditFetchStory';
+import { useUpdateStory } from '../hooks/story/useUpdateStory';
 
 const StoryEdit = () => {
   const navigate = useNavigate();
