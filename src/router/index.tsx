@@ -6,6 +6,7 @@ import About from '../pages/About';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import StoryCreate from '../pages/StoryCreate';
@@ -32,6 +33,7 @@ export default function AppRouter() {
           <Route element={<Layout />}>
             <Route path='/new-story' element={<StoryCreate />} />
             <Route path='/story/:id/edit' element={<StoryEdit />} />
+            <Route path='/settings' element={<Settings />} />
           </Route>
         </Route>
 

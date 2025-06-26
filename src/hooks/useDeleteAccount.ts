@@ -1,27 +1,18 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { useAuth } from './useAuth';
 
-interface DeleteAccountParams {
-  userId: string;
-  token: string | null;
-}
-
-interface DeleteAccountResult {
-  deleteAccount: (params: DeleteAccountParams) => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export const useDeleteAccount = (): DeleteAccountResult => {
+export const useDeleteAccount = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { token, clearAuthData } = useAuth();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  const deleteAccount = async ({ userId, token }: DeleteAccountParams) => {
+  const deleteAccount = async (userId: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
@@ -34,11 +25,15 @@ export const useDeleteAccount = (): DeleteAccountResult => {
         throw new Error(errorData.message || 'Failed to delete account');
       }
 
+      clearAuthData();
+
       await Swal.fire({
         icon: 'success',
         title: 'Account Deleted',
         text: 'Account has been successfully deleted.',
-        confirmButtonColor: '#3085d6',
+        timer: 1500,
+        timerProgressBar: false,
+        showConfirmButton: false,
       });
     } catch (err) {
       const errorMessage =

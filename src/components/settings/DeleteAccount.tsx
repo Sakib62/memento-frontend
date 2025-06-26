@@ -1,16 +1,12 @@
-import React from 'react';
 import Swal from 'sweetalert2';
+import { useAuth } from '../../hooks/useAuth';
+import { useDeleteAccount } from '../../hooks/useDeleteAccount';
 import { Heading, SubmitButton } from './Shared';
 
-interface DeleteAccountProps {
-  onDelete: () => void;
-  isLoading?: boolean;
-}
+const DeleteAccount = () => {
+  const { deleteAccount, isLoading } = useDeleteAccount();
+  const { id } = useAuth();
 
-const DeleteAccount: React.FC<DeleteAccountProps> = ({
-  onDelete,
-  isLoading = false,
-}) => {
   const handleDeleteClick = () => {
     Swal.fire({
       title: 'Are you sure?',
@@ -24,7 +20,7 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({
       reverseButtons: true,
     }).then(result => {
       if (result.isConfirmed) {
-        onDelete();
+        deleteAccount(id || '');
       }
     });
   };

@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { z } from 'zod';
+import { useAuth } from '../../hooks/useAuth';
+import { useResetPassword } from '../../hooks/useResetPassword';
 import { FormInput, Heading, SubmitButton } from './Shared';
 
-interface ResetPasswordProps {
-  onSubmit: (currentPassword: string, newPassword: string) => void;
-  isLoading?: boolean;
-}
-
-const ResetPassword: React.FC<ResetPasswordProps> = ({
-  onSubmit,
-  isLoading = false,
-}) => {
+const ResetPassword = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const { resetPassword, isLoading } = useResetPassword();
+  const { id } = useAuth();
 
   const passwordSchema = z.object({
     currentPassword: z
@@ -55,8 +51,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({
       return;
     }
 
-    // If all validations pass, call onSubmit and reset the form
-    await onSubmit(currentPassword, newPassword);
+    await resetPassword({ userId: id || '', currentPassword, newPassword });
     setCurrentPassword('');
     setNewPassword('');
     setConfirmNewPassword('');

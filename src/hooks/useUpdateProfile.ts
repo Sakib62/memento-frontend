@@ -1,33 +1,27 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
 import { User } from '../types/user';
+import { useAuth } from './useAuth';
 
 interface UpdateProfileParams {
   userId: string;
-  token: string | null;
   updatedData: Partial<User>;
 }
 
-interface UpdateProfileResult {
-  updateProfile: (params: UpdateProfileParams) => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export const useUpdateProfile = (): UpdateProfileResult => {
+export const useUpdateProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const updateProfile = async ({
     userId,
-    token,
     updatedData,
   }: UpdateProfileParams) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/api/users/${userId}`, {
         method: 'PUT',
         headers: {
@@ -42,6 +36,8 @@ export const useUpdateProfile = (): UpdateProfileResult => {
         throw new Error(errorData.message || 'Failed to update profile');
       }
 
+      const updatedUser = await response.json();
+
       await Swal.fire({
         icon: 'success',
         title: 'Profile Updated',
@@ -50,6 +46,7 @@ export const useUpdateProfile = (): UpdateProfileResult => {
         timerProgressBar: false,
         showConfirmButton: false,
       });
+      return updatedUser.data;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : 'An unexpected error occurred';

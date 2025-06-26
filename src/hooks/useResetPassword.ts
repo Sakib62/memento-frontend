@@ -1,26 +1,21 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import { useAuth } from './useAuth';
 
 interface ResetPasswordParams {
   userId: string;
-  token: string | null;
   currentPassword: string;
   newPassword: string;
 }
 
-interface ResetPasswordResult {
-  resetPassword: (params: ResetPasswordParams) => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export const useResetPassword = (): ResetPasswordResult => {
+export const useResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { token } = useAuth();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const resetPassword = async ({
     userId,
-    token,
     currentPassword,
     newPassword,
   }: ResetPasswordParams) => {
@@ -28,7 +23,6 @@ export const useResetPassword = (): ResetPasswordResult => {
     setError(null);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(
         `${apiUrl}/api/auth/${userId}/reset-Password`,
         {

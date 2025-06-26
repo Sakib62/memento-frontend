@@ -14,7 +14,7 @@ const Profile = () => {
   const { username } = useParams();
   const { id, role } = useAuth();
 
-  const { userInfo, loading, error } = useUserInfo(username || '');
+  const { userInfo, loading, error } = useUserInfo(username || '', true);
 
   const {
     createdStories,
