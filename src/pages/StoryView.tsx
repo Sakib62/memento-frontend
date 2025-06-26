@@ -1,170 +1,44 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import ButtonWithTooltip from '../components/ButtonWithToolTip';
-import Comment from '../components/Comment';
-import MarkdownRenderer from '../components/MarkdownRenderer';
-import { AuthContext } from '../context/AuthContext';
+import 'react-markdown-editor-lite/lib/index.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import CommentSection from '../components/comment/CommentSection';
+import SkeletonStoryView from '../components/Skeleton/SkeletonStoryView';
+import ButtonWithTooltip from '../components/story/ButtonWithToolTip';
+import StoryEditor, {
+  StoryEditorHandle,
+} from '../components/story/StoryEditor';
+import { Role } from '../constants/role';
+import useDeleteStory from '../hooks/story/useDeleteStory';
+import { useFetchStory } from '../hooks/story/useFetchStory';
+import useLike from '../hooks/story/useLike';
+import { useAuth } from '../hooks/useAuth';
 
 const StoryView = () => {
-  const authContext = useContext(AuthContext);
-  if (!authContext?.token) {
-    return <Navigate to='/login' />;
-  }
-
-  const { username, role, token } = authContext;
+  const { username, role } = useAuth();
 
   const navigate = useNavigate();
-
-  // const location = useLocation();
-  // const initialStory = location.state || null;
   const { id: storyId } = useParams();
+  const { story, loading } = useFetchStory(storyId);
 
-  interface Story {
-    id: string;
-    title: string;
-    description: string;
-    authorUsername: string;
-    authorName: string;
-    createdAt: Date;
-    tags: string[];
-  }
-
-  const [story, setStory] = useState<Story>({
-    id: '',
-    title: 'Loading...',
-    description: '',
-    authorUsername: '',
-    authorName: '',
-    createdAt: new Date(),
-    tags: [],
-  });
-  const [loading, setLoading] = useState(false);
-
-  const apiUrl = import.meta.env.VITE_API_URL;
-
+  const editorRef = useRef<StoryEditorHandle>(null);
   useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          navigate('/not-found');
-          return;
-        }
-        const data = await response.json();
-        setStory(data.data);
-      } catch (error) {
-        navigate('/not-found');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStory();
-  }, [storyId, token, navigate]);
-
-  const handleDeleteStory = async (storyId: string) => {
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to delete this story?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true,
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok) throw new Error('Failed to delete story');
-
-        Swal.fire('Deleted!', 'Your story has been deleted.', 'success');
-        navigate('/');
-      } catch (error) {
-        console.error('Error deleting story:', error);
-        Swal.fire('Error!', 'There was a problem deleting the story.', 'error');
-      }
-    } else {
-      console.log('Story deletion canceled');
+    if (story) {
+      editorRef.current?.setMarkdown(story?.description);
     }
-  };
+  }, [story]);
+
+  const { hasLiked, likeCount, isLiking, handleLikeClick } = useLike(story?.id);
+  const handleDeleteStory = useDeleteStory();
 
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
   const handleCommentButtonClick = () => {
     if (commentInputRef.current) {
-      //commentInputRef.current.focus();
       commentInputRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'center',
       });
-    }
-  };
-
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [totalLike, setTotalLike] = useState<number>(0);
-  const [isLiking, setIsLiking] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchLikeData = async () => {
-      try {
-        const response = await fetch(
-          `${apiUrl}/api/stories/${storyId}/likeStatus`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        setTotalLike(data.data?.likeCount);
-        setIsLiked(data.data?.likedByUser);
-      } catch (error) {
-        console.error('Error fetching like data:', error);
-      }
-    };
-
-    fetchLikeData();
-  }, [storyId]);
-
-  const handleLikeClick = async () => {
-    if (isLiking) return;
-
-    setIsLiking(true);
-    setIsLiked(prevStatus => !prevStatus);
-
-    try {
-      const response = await fetch(`${apiUrl}/api/stories/${story.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to toggle like');
-      }
-      const data = await response.json();
-      setTotalLike(data.data.likeCount);
-    } catch (error) {
-      console.error('Error toggling like:', error);
-      setIsLiked(prevStatus => !prevStatus);
-    } finally {
-      setIsLiking(false);
     }
   };
 
@@ -174,31 +48,68 @@ const StoryView = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <SkeletonStoryView />;
+  }
+
+  if (!story) {
+    return (
+      <div className='pt-6 pb-6 bg-gray-100 dark:bg-neutral-800'>
+        <div className='flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] max-w-5xl p-8 pt-4 mx-auto bg-white dark:bg-stone-700 rounded-lg'>
+          <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white'>
+            Story Not Found
+          </h1>
+          <p className='text-gray-600 dark:text-gray-300'>
+            The story you are looking for does not exist or has been deleted.
+          </p>
+          <button
+            onClick={() => navigate('/')}
+            className='px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+          >
+            Go Back to Home
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className='bg-gray-100 dark:bg-stone-600'>
-      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-3xl p-8 pt-4 mx-auto bg-white dark:bg-neutral-500'>
-        <div className='flex items-center gap-4 p-2 pt-4 pl-0 mb-4 rounded-lg '>
-          <div>
-            <p
-              onClick={() => navigate(`/profile/${story.authorUsername}`)}
-              className='text-xl font-semibold text-gray-800 cursor-pointer dark:text-gray-200 hover:underline'
-            >
-              {story?.authorName}
-            </p>
-            <p className='text-xs text-gray-500 dark:text-gray-300'>
-              {new Date(story.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-            </p>
+    <div className='py-6 bg-gray-100 dark:bg-neutral-800'>
+      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 pt-4 mx-auto bg-white  dark:bg-stone-700 rounded-lg'>
+        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white '>
+          {story.title}
+        </h1>
+
+        {story.tags.length > 0 && (
+          <div className='mb-4'>
+            <div className='flex flex-wrap gap-2'>
+              {story.tags.map((tag: string, index: number) => (
+                <span
+                  key={index}
+                  className='px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600'
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
+        )}
+
+        <div className='mb-4'>
+          <p
+            onClick={() => navigate(`/profile/${story.authorUsername}`)}
+            className='text-base font-semibold text-gray-800 cursor-pointer w-fit dark:text-gray-200 hover:underline'
+          >
+            {story?.authorName}
+          </p>
+          <p className='text-xs text-gray-500 dark:text-gray-300'>
+            {new Date(story.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+          </p>
         </div>
 
-        {/* Interaction Buttons */}
         <div className='flex items-center justify-between px-0 mb-4 text-gray-600 dark:text-gray-300'>
           <div className='flex gap-4'>
             <button
@@ -209,14 +120,14 @@ const StoryView = () => {
               <FaHeart
                 size='23'
                 className={
-                  isLiked
+                  hasLiked
                     ? 'text-red-500'
                     : 'text-gray-600 dark:text-gray-300 group-hover:text-red-500'
                 }
               />{' '}
-              {totalLike}
+              {likeCount}
               <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
-                {isLiked ? 'Unlike' : 'Like'}
+                {hasLiked ? 'Unlike' : 'Like'}
               </span>
             </button>
 
@@ -235,14 +146,12 @@ const StoryView = () => {
             </button>
           </div>
 
-          {(story.authorUsername == username || role == 1) && (
+          {(story.authorUsername === username || role === Role.Admin) && (
             <div className='flex gap-4'>
               <ButtonWithTooltip
                 icon={<MdOutlineModeEdit size={23} />}
                 tooltipText='Edit'
-                onClick={() =>
-                  navigate(`/story/${story.id}/edit`, { state: story })
-                }
+                onClick={() => navigate(`/story/${story.id}/edit`)}
                 buttonClass='hover:scale-105 px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600'
               />
 
@@ -256,33 +165,17 @@ const StoryView = () => {
           )}
         </div>
 
-        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100'>
-          {story.title}
-        </h1>
-        <div className='text-lg leading-relaxed text-gray-700 dark:text-gray-300'>
-          <MarkdownRenderer content={story?.description} />
+        <div>
+          <StoryEditor ref={editorRef} isViewMode={true} />
         </div>
 
-        {story.tags.length > 0 && (
-          <div className='mt-6'>
-            <div className='flex flex-wrap gap-2 mt-2'>
-              {story.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className='px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600'
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <Comment
-          story={story}
-          onCommentCountChange={handleCommentCount}
-          commentInputRef={commentInputRef}
-        />
+        <div className='mt-8'>
+          <CommentSection
+            storyId={story.id}
+            onCommentCountChange={handleCommentCount}
+            commentInputRef={commentInputRef}
+          />
+        </div>
       </div>
     </div>
   );

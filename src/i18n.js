@@ -12,8 +12,13 @@ i18n
       en: { translation: en },
       no: { translation: no },
     },
-    lng: 'en', // Default language
+    lng: 'en',
     fallbackLng: 'en',
+    detection: {
+      order: ['localStorage'],
+      lookupLocalStorage: 'memento_preferredLang',
+      caches: [],
+    },
     interpolation: { escapeValue: false },
   });
 

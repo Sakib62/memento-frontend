@@ -4,10 +4,11 @@ import PrivateRoute from '../components/PrivateRoute';
 import PublicRoute from '../components/PublicRoute';
 import About from '../pages/About';
 import Home from '../pages/Home';
-import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 import Profile from '../pages/Profile';
-import Register from '../pages/Register';
+import Settings from '../pages/Settings';
+import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
 import StoryCreate from '../pages/StoryCreate';
 import StoryEdit from '../pages/StoryEdit';
 import StoryView from '../pages/StoryView';
@@ -17,18 +18,22 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         <Route element={<PublicRoute />}>
-          <Route path='/login' element={<Login />} />
-          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<SignIn />} />
+          <Route path='/register' element={<SignUp />} />
+        </Route>
+
+        <Route element={<Layout />}>
+          <Route path='/' element={<Home />} />
+          <Route path='/story/:id' element={<StoryView />} />
+          <Route path='/profile/:username' element={<Profile />} />
+          <Route path='/about' element={<About />} />
         </Route>
 
         <Route element={<PrivateRoute />}>
           <Route element={<Layout />}>
-            <Route path='/' element={<Home />} />
             <Route path='/new-story' element={<StoryCreate />} />
-            <Route path='/story/:id' element={<StoryView />} />
             <Route path='/story/:id/edit' element={<StoryEdit />} />
-            <Route path='/profile/:username' element={<Profile />} />
-            <Route path='/about' element={<About />} />
+            <Route path='/settings' element={<Settings />} />
           </Route>
         </Route>
 

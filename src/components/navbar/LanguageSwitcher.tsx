@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import Flag from 'react-world-flags'; // Import the Flag component
+import Flag from 'react-world-flags';
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
@@ -7,6 +7,7 @@ const LanguageSwitcher = () => {
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'no' : 'en';
     i18n.changeLanguage(newLang);
+    localStorage.setItem('memento_preferredLang', newLang);
   };
 
   return (
