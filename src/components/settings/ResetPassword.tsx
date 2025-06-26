@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { z } from 'zod';
+import { useResetPassword } from '../../hooks/profile/useResetPassword';
 import { useAuth } from '../../hooks/useAuth';
-import { useResetPassword } from '../../hooks/useResetPassword';
 import { FormInput, Heading, SubmitButton } from './Shared';
 
 const ResetPassword = () => {

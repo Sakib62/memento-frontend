@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { User } from '../types/user';
-import { useAuth } from './useAuth';
+import { User } from '../../types/user';
+import { useAuth } from '../useAuth';
 
 interface UpdateProfileParams {
   userId: string;

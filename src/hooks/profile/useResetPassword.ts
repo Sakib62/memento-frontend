@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { useAuth } from './useAuth';
+import { useAuth } from '../useAuth';
 
 interface ResetPasswordParams {
   userId: string;

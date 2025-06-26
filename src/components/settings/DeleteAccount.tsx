@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks/useAuth';
-import { useDeleteAccount } from '../../hooks/useDeleteAccount';
+import { useDeleteAccount } from '../../hooks/profile/useDeleteAccount';
 import { Heading, SubmitButton } from './Shared';
 
 const DeleteAccount = () => {

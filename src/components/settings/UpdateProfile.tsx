@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { useUpdateProfile } from '../../hooks/profile/useUpdateProfile';
 import useUserInfo from '../../hooks/profile/useUserInfo';
 import { useAuth } from '../../hooks/useAuth';
-import { useUpdateProfile } from '../../hooks/useUpdateProfile';
 import { User } from '../../types/user';
 import { FormInput, Heading, SubmitButton } from './Shared';
 
