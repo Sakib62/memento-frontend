@@ -15,13 +15,9 @@ const Profile = () => {
   const { username } = useParams();
   const { id, role } = useAuth();
 
-  const { userInfo, loading, error } = useUserInfo(username || '', true);
+  const { userInfo, loading } = useUserInfo(username || '', true);
 
-  const {
-    createdStories,
-    loading: createdLoading,
-    error: createdError,
-  } = useUserStories(username || '');
+  const { createdStories } = useUserStories(username || '');
 
   const [activeTab, setActiveTab] = useState<ProfileTab>('created');
 

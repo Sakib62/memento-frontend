@@ -5,7 +5,6 @@ import { MdEmail } from 'react-icons/md';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import signInImage from '../assets/signIn.png';
 import AuthLayout from '../components/auth/AuthLayout';
 import FooterLink from '../components/auth/FooterLink';
 import FormInput from '../components/auth/FormInput';
@@ -78,7 +77,7 @@ const SignIn = () => {
   };
 
   return (
-    <AuthLayout imageSrc={signInImage} imageAlt='Sign In'>
+    <AuthLayout>
       <form onSubmit={handleSubmit}>
         <div className='mb-4 space-y-1'>
           <FormInput
