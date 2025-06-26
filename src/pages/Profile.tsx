@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import CommentedStories from '../components/profile/CommentedStories';
 import LikedStories from '../components/profile/LikedStories';
 import ProfileHeader from '../components/profile/ProfileHeader';
+import SkeletonProfileHeader from '../components/Skeleton/SkeletonProfileHeader';
 import HomeStoryCard from '../components/story/HomeStoryCard';
 import { Role } from '../constants/role';
 import useUserInfo from '../hooks/profile/useUserInfo';
@@ -28,7 +29,7 @@ const Profile = () => {
     setActiveTab('created');
   }, [username, id]);
 
-  if (!userInfo || loading) return <div>Loading...</div>;
+  if (!userInfo || loading) return <SkeletonProfileHeader />;
 
   const isOwner = userInfo.id === id;
   const isAdmin = role === Role.Admin;
