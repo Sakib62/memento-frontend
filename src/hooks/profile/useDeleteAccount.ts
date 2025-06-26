@@ -1,52 +1,37 @@
 import { useState } from 'react';
 import Swal from 'sweetalert2';
-import { User } from '../types/user';
+import { useAuth } from '../useAuth';
 
-interface UpdateProfileParams {
-  userId: string;
-  token: string | null;
-  updatedData: Partial<User>;
-}
-
-interface UpdateProfileResult {
-  updateProfile: (params: UpdateProfileParams) => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
-}
-
-export const useUpdateProfile = (): UpdateProfileResult => {
+export const useDeleteAccount = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { token, clearAuthData } = useAuth();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
-  const updateProfile = async ({
-    userId,
-    token,
-    updatedData,
-  }: UpdateProfileParams) => {
+  const deleteAccount = async (userId: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const apiUrl = import.meta.env.VITE_API_URL;
       const response = await fetch(`${apiUrl}/api/users/${userId}`, {
-        method: 'PUT',
+        method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to update profile');
+        throw new Error(errorData.message || 'Failed to delete account');
       }
+
+      clearAuthData();
 
       await Swal.fire({
         icon: 'success',
-        title: 'Profile Updated',
-        text: 'Profile has been updated successfully.',
-        timer: 1000,
+        title: 'Account Deleted',
+        text: 'Account has been successfully deleted.',
+        timer: 1500,
         timerProgressBar: false,
         showConfirmButton: false,
       });
@@ -56,7 +41,7 @@ export const useUpdateProfile = (): UpdateProfileResult => {
       setError(errorMessage);
       await Swal.fire({
         icon: 'error',
-        title: 'Profile Update Failed',
+        title: 'Account Deletion Failed',
         text: errorMessage,
         confirmButtonColor: '#d33',
       });
@@ -65,6 +50,5 @@ export const useUpdateProfile = (): UpdateProfileResult => {
       setIsLoading(false);
     }
   };
-
-  return { updateProfile, isLoading, error };
+  return { deleteAccount, isLoading, error };
 };

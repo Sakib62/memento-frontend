@@ -55,6 +55,14 @@ const ProfileMenu = () => {
             {t('navbar.profile')}
           </button>
           <button
+            onClick={() => {
+              navigate('/settings');
+            }}
+            className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+          >
+            Settings
+          </button>
+          <button
             onClick={handleLogoutClick}
             className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
           >

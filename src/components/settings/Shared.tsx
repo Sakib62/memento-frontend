@@ -58,7 +58,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
   <button
     type={type}
     onClick={onClick}
-    className={`w-auto px-4 py-2 text-sm font-medium text-white transition-all duration-200 ${bgColor} rounded-lg shadow-sm md:px-6 hover:opacity-90`}
+    className={`w-auto px-4 py-2 text-sm font-medium text-white transition-all duration-200 ${bgColor} rounded-lg shadow-sm md:px-6 hover:opacity-90 disabled:opacity-30`}
     disabled={disabled}
   >
     {text}

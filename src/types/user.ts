@@ -6,3 +6,9 @@ export interface User {
   joinDate: Date;
   role: number;
 }
+
+export type UserWithStoryCount = User & {
+  createdCount?: number;
+  likedCount?: number;
+  commentedCount?: number;
+};

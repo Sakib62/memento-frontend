@@ -1,31 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
+import { useUpdateProfile } from '../../hooks/profile/useUpdateProfile';
+import useUserInfo from '../../hooks/profile/useUserInfo';
+import { useAuth } from '../../hooks/useAuth';
+import { User } from '../../types/user';
 import { FormInput, Heading, SubmitButton } from './Shared';
 
-interface UpdateProfileProps {
-  initialName: string;
-  initialEmail: string;
-  onSubmit: (updates: { name?: string; email?: string }) => void;
-  isLoading?: boolean;
-}
+const UpdateProfile = () => {
+  const { username } = useAuth();
 
-const UpdateProfile: React.FC<UpdateProfileProps> = ({
-  initialName,
-  initialEmail,
-  onSubmit,
-  isLoading = false,
-}) => {
-  const [name, setName] = useState(initialName);
-  const [email, setEmail] = useState(initialEmail);
+  const [localUserInfo, setLocalUserInfo] = useState<User | null>(null);
+  const { userInfo } = useUserInfo(username!);
+  const { updateProfile, isLoading } = useUpdateProfile();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    if (userInfo) {
+      setLocalUserInfo(userInfo);
+      setName(userInfo.name ?? '');
+      setEmail(userInfo.email ?? '');
+    }
+  }, [userInfo]);
+
+  const isUnchanged =
+    name.trim() === (localUserInfo?.name?.trim() ?? '') &&
+    email.trim() === (localUserInfo?.email?.trim() ?? '');
+
+  if (!localUserInfo) return <div>Loading...</div>;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const updates: { name?: string; email?: string } = {};
-    if (name.trim() !== initialName.trim()) {
+
+    if (name.trim() !== localUserInfo.name.trim()) {
       updates.name = name.trim();
     }
-    if (email.trim() !== initialEmail.trim()) {
+    if (email.trim() !== localUserInfo.email.trim()) {
       updates.email = email.trim();
     }
 
@@ -33,13 +46,22 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
       Swal.fire({
         icon: 'info',
         title: 'Nothing to Update',
-        text: 'Please make changes to your name or email before saving.',
+        text: 'Make changes before saving.',
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'OK',
       });
       return;
     }
-    onSubmit(updates);
+
+    try {
+      const updatedUser = await updateProfile({
+        userId: localUserInfo.id,
+        updatedData: updates,
+      });
+      setLocalUserInfo(updatedUser);
+      setName(updatedUser.name ?? name);
+      setEmail(updatedUser.email ?? email);
+    } catch (error) {}
   };
 
   return (
@@ -50,7 +72,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           label='Full Name'
           id='name'
           type='text'
-          value={name}
+          value={name!}
           onChange={e => setName(e.target.value)}
           placeholder='Enter your full name'
         />
@@ -58,7 +80,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           label='Email'
           id='email'
           type='email'
-          value={email}
+          value={email!}
           onChange={e => setEmail(e.target.value)}
           placeholder='Enter your email'
         />
@@ -66,7 +88,7 @@ const UpdateProfile: React.FC<UpdateProfileProps> = ({
           text={isLoading ? 'Saving...' : 'Save Changes'}
           bgColor='bg-blue-600'
           type='submit'
-          disabled={isLoading}
+          disabled={isLoading || isUnchanged}
         />
       </form>
     </div>

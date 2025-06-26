@@ -5,7 +5,8 @@ import PublicRoute from '../components/PublicRoute';
 import About from '../pages/About';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
-import ProfilePage from '../pages/ProfilePage';
+import Profile from '../pages/Profile';
+import Settings from '../pages/Settings';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import StoryCreate from '../pages/StoryCreate';
@@ -24,6 +25,7 @@ export default function AppRouter() {
         <Route element={<Layout />}>
           <Route path='/' element={<Home />} />
           <Route path='/story/:id' element={<StoryView />} />
+          <Route path='/profile/:username' element={<Profile />} />
           <Route path='/about' element={<About />} />
         </Route>
 
@@ -31,7 +33,7 @@ export default function AppRouter() {
           <Route element={<Layout />}>
             <Route path='/new-story' element={<StoryCreate />} />
             <Route path='/story/:id/edit' element={<StoryEdit />} />
-            <Route path='/profile/:username' element={<ProfilePage />} />
+            <Route path='/settings' element={<Settings />} />
           </Route>
         </Route>
 
