@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaArrowUp } from 'react-icons/fa';
 
 interface PaginationProps {
   currentPage: number;
@@ -19,8 +18,6 @@ const Pagination = ({
 }: PaginationProps) => {
   const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => setIsDropdownOpen(prev => !prev);
 
   const previousPages = [...Array(currentPage - 1).keys()].map(i => i + 1);
 

@@ -43,8 +43,8 @@ const StoryEditor = memo(
       const mdxEditorRef = useRef<MDXEditorMethods>(null);
       const [diffMarkdown, setDiffMarkdown] = useState('');
 
-      const addDefaultLanguage = (markdown?: string): string =>
-        markdown?.replace(/```[\t ]*\n([\s\S]*?)```/g, '```js\n$1```') ?? '';
+      // const addDefaultLanguage = (markdown?: string): string =>
+      //   markdown?.replace(/```[\t ]*\n([\s\S]*?)```/g, '```js\n$1```') ?? '';
 
       useImperativeHandle(
         ref,
