@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../components/Layout';
 import PrivateRoute from '../components/PrivateRoute';
 import PublicRoute from '../components/PublicRoute';
+import { useAuth } from '../hooks/useAuth';
 import About from '../pages/About';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
@@ -14,6 +15,15 @@ import StoryEdit from '../pages/StoryEdit';
 import StoryView from '../pages/StoryView';
 
 export default function AppRouter() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className='flex items-center justify-center h-screen'>
+        <div className='w-10 h-10 border-4 border-blue-500 rounded-full border-t-transparent animate-spin' />
+      </div>
+    );
+  }
   return (
     <BrowserRouter>
       <Routes>
