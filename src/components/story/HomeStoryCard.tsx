@@ -15,20 +15,18 @@ const HomeStoryCard = ({
   return (
     <div
       onClick={() => navigate(`/story/${story.id}`)}
-      className='transition-all duration-200 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1'
+      className='transition-all duration-200 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 min-h-[200px]'
     >
-      {/* <div className='flex items-center justify-center h-48 bg-gray-200'>
-        <span className='text-gray-500'>Banner Placeholder</span>
-      </div> */}
       <div className='p-4'>
         {!isForProfile && (
           <div className='mb-2'>
             <p
-              className='font-serif hover:underline'
+              className='font-serif truncate hover:underline'
               onClick={e => {
                 e.stopPropagation();
                 navigate(`/profile/${story.authorUsername}`);
               }}
+              title={story.authorName}
             >
               {story.authorName}
             </p>
@@ -36,12 +34,12 @@ const HomeStoryCard = ({
         )}
         <div className='mb-4 space-y-4'>
           <h2 className='h-8 text-xl font-bold line-clamp-1'>{story.title}</h2>
-          <div className='h-12 line-clamp-2'>
+          <div className='h-12 break-words line-clamp-2'>
             <MarkdownRenderer content={story.description} />
           </div>
         </div>
-        <div className='flex justify-start gap-4 text-gray-500'>
-          <span>
+        <div className='flex justify-start gap-4 text-gray-500 min-h-[24px]'>
+          <span className='flex items-center'>
             {new Date(story.createdAt).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'short',

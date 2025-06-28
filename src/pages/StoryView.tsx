@@ -72,9 +72,9 @@ const StoryView = () => {
   }
 
   return (
-    <div className='py-6 bg-gray-100 dark:bg-neutral-800'>
-      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 pt-4 mx-auto bg-white  dark:bg-stone-700 rounded-lg'>
-        <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white '>
+    <div className='bg-gray-100 dark:bg-neutral-800'>
+      <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 mx-auto bg-white  dark:bg-stone-700'>
+        <h1 className='mb-4 text-3xl font-bold text-gray-900 break-words dark:text-white'>
           {story.title}
         </h1>
 
@@ -96,7 +96,7 @@ const StoryView = () => {
         <div className='mb-4'>
           <p
             onClick={() => navigate(`/profile/${story.authorUsername}`)}
-            className='text-base font-semibold text-gray-800 cursor-pointer w-fit dark:text-gray-200 hover:underline'
+            className='font-semibold text-gray-800 cursor-pointer w-fit dark:text-gray-200 hover:underline'
           >
             {story?.authorName}
           </p>

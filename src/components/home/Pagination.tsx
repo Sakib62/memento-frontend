@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { GrLinkNext, GrLinkPrevious } from 'react-icons/gr';
 
 interface PaginationProps {
   currentPage: number;
@@ -27,13 +28,14 @@ const Pagination = ({
         <button
           onClick={onPrev}
           disabled={currentPage === 1}
+          title={t('home.prev')}
           className={`px-4 py-2 text-white rounded-lg shadow-md ${
             currentPage === 1
               ? 'bg-gray-300 cursor-not-allowed'
               : 'bg-blue-500 hover:bg-blue-600'
           }`}
         >
-          {t('home.prev')}
+          <GrLinkPrevious />
         </button>
 
         {/* <button
@@ -68,20 +70,21 @@ const Pagination = ({
         )}
       </div>
 
-      <span className='flex items-center px-4 py-2 text-lg font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md'>
+      <span className='flex min-w-[90px] text-center items-center px-4 py-2 text-lg font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg shadow-md'>
         {t('home.page')} {currentPage}
       </span>
 
       <button
         onClick={onNext}
         disabled={!hasNextPage}
+        title={t('home.next')}
         className={`px-4 py-2 text-white rounded-lg shadow-md ${
           !hasNextPage
             ? 'bg-gray-300 cursor-not-allowed'
             : 'bg-blue-500 hover:bg-blue-600'
         }`}
       >
-        {t('home.next')}
+        <GrLinkNext />
       </button>
     </div>
   );
