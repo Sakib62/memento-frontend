@@ -10,12 +10,12 @@
     "search": "Search...",
     "write": "Write",
     "profile": "Profile",
+    "settings": "Settings",
     "logout": "Sign Out"
   },
   "footer": {
     "home": "Home",
     "about": "About",
-    "write-a-story": "Write a Story",
     "copyright": "All rights reserved."
   },
   "search": {
@@ -28,31 +28,63 @@
     "no-desc": "No descriptions found"
   },
   "profile": {
-    "userNotFoundTitle": "User Not Found",
-    "userNotFoundText": "The user you are looking for cannot be found.",
-    "goToHome": "Go to Homepage",
-    "loadingError": "An error occurred while loading the profile."
-  },
-  "profile-sidebar": {
     "joined": "Joined",
-    "role": "Role",
-    "admin": "Admin",
-    "user": "User"
-  },
-  "profile-tabs": {
+    "email": "Email",
     "created": "Created",
     "liked": "Liked",
     "commented": "Commented",
-    "settings": "Settings",
-    "dashboard": "Dashboard",
-    "stats": "Statistics"
+    "tabs": {
+      "stories": "Stories",
+      "liked": "Liked",
+      "commented": "Commented"
+    },
+    "no-story": "No stories to display"
   },
   "settings": {
-    "heading": "Account Settings",
-    "update": "Update Profile",
-    "save-changes": "Save Changes",
-    "reset": "Reset Password",
-    "delete": "Delete Account",
-    "delete-msg": "This action cannot be undone. Please confirm to delete your account."
+    "update-profile": {
+      "heading": "Update Profile",
+      "full-name": "Full Name",
+      "placeholder-name": "Enter your full name",
+      "email": "Email",
+      "placeholder-email": "Enter your email",
+      "submit-btn": "Save Changes",
+      "submit-btn-loading": "Saving",
+      "modal-title-success": "Profile Updated",
+      "modal-text-success": "Profile has been updated successfully.",
+      "modal-text-failed": "Profile Update Failed"
+    },
+    "reset-pass": {
+      "heading": "Reset Password",
+      "curr-pass": "Current Password",
+      "new-pass": "New Password",
+      "confirm-pass": "Confirm New Password",
+      "placeholder-curr-pass": "Enter current password",
+      "placeholder-new-pass": "Enter new password",
+      "placeholder-confirm-pass": "Confirm new password",
+      "submit-btn": "Reset Password",
+      "submit-btn-loading": "Resetting",
+      "validation-error": "Validation Error",
+      "curr-pass-too-short": "Current password must be at least 6 characters long",
+      "new-pass-too-short": "New password must be at least 6 characters long",
+      "mismatch-title": "Password Mismatch",
+      "mismatch-text": "Password confirmation doesn't match the password",
+      "modal-success-title": "Password Reset Successful",
+      "modal-success-text": "Password has been updated successfully.",
+      "modal-error-title": "Password Reset Failed"
+    },
+    "delete-account": {
+      "heading": "Delete Account",
+      "message-line-1": "Once you delete your account, all your data will be permanently removed and cannot be recovered.",
+      "message-line-2": "Please proceed only if you're absolutely sure.",
+      "submit-btn": "Delete Account",
+      "submit-btn-loading": "Deleting",
+      "modal-title": "Confirm Account Deletion",
+      "modal-text": "This action is irreversible.",
+      "modal-confirm": "Delete",
+      "modal-cancel": "Cancel",
+      "success-title": "Account Deleted",
+      "success-text": "Account has been permanently deleted.",
+      "error-title": "Account Deletion Failed"
+    }
   }
 }

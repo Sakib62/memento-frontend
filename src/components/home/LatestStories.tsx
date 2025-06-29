@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePagedStories } from '../../hooks/story/usePagedStories';
 import SkeletonStoryCard from '../Skeleton/SkeletonStoryCard';
-import StoryCard from '../story/StoryCard';
+import HomeStoryCard from '../story/HomeStoryCard';
 import Pagination from './Pagination';
 
 const LatestStories = () => {
@@ -29,18 +29,20 @@ const LatestStories = () => {
           {t('home.title')}
         </h1>
       </div>
-      <div className='grid grid-cols-1 gap-8 mb-8 sm:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-8 mb-6 sm:grid-cols-2 lg:grid-cols-3'>
         {loading
           ? [...Array(limit)].map((_, index) => (
               <SkeletonStoryCard key={index} />
             ))
-          : stories.map(story => <StoryCard key={story.id} story={story} />)}
+          : stories.map(story => (
+              <HomeStoryCard key={story.id} story={story} />
+            ))}
       </div>
       {loading ? (
         <div className='flex items-center justify-center space-x-4'>
-          <div className='w-20 h-10 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
-          <div className='w-24 h-10 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
-          <div className='w-20 h-10 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
+          <div className='w-12 h-8 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
+          <div className='w-16 h-10 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
+          <div className='w-12 h-8 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
         </div>
       ) : (
         <Pagination

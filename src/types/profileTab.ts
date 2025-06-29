@@ -1,8 +1,7 @@
-export type ProfileTab = 'created' | 'liked' | 'commented' | 'statistics';
+export type ProfileTab = 'created' | 'liked' | 'commented';
 
 export const profileTabLabels: Record<ProfileTab, string> = {
-  created: 'Stories',
-  liked: 'Liked',
-  commented: 'Commented',
-  statistics: 'Statistics',
+  created: 'stories',
+  liked: 'liked',
+  commented: 'commented',
 };

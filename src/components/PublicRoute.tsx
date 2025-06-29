@@ -2,11 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
 const PublicRoute = () => {
-  const { token, loading } = useAuth();
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
+  const { token } = useAuth();
   return token ? <Navigate to='/' /> : <Outlet />;
 };
 

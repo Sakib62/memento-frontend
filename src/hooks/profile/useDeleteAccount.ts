@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { useAuth } from '../useAuth';
 
@@ -6,6 +7,7 @@ export const useDeleteAccount = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { token, clearAuthData } = useAuth();
+  const { t } = useTranslation();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const deleteAccount = async (userId: string) => {
@@ -29,8 +31,8 @@ export const useDeleteAccount = () => {
 
       await Swal.fire({
         icon: 'success',
-        title: 'Account Deleted',
-        text: 'Account has been successfully deleted.',
+        title: t('settings.delete-account.success-title'),
+        text: t('settings.delete-account.success-text'),
         timer: 1500,
         timerProgressBar: false,
         showConfirmButton: false,
@@ -41,7 +43,7 @@ export const useDeleteAccount = () => {
       setError(errorMessage);
       await Swal.fire({
         icon: 'error',
-        title: 'Account Deletion Failed',
+        title: t('settings.delete-account.error-title'),
         text: errorMessage,
         confirmButtonColor: '#d33',
       });

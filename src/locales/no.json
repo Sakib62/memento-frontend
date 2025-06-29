@@ -1,44 +1,90 @@
 {
   "home": {
-    "title": "Siste historier",
-    "prev": "Foregående",
+    "title": "Nyeste Historier",
+    "prev": "Forrige",
     "next": "Neste",
     "page": "Side",
-    "top-liked": "Mest likte historier"
+    "top-liked": "Mest Likte Historier"
   },
   "navbar": {
-    "search": "Søke...",
-    "write": "Skrive",
+    "search": "Søk...",
+    "write": "Skriv",
     "profile": "Profil",
-    "logout": "Logg ut"
+    "settings": "Innstillinger",
+    "logout": "Logg Ut"
   },
   "footer": {
     "home": "Hjem",
-    "about": "Om",
-    "write-a-story": "Skriv en historie",
-    "copyright": "Alle rettigheter forbeholdt."
+    "about": "Om Oss",
+    "copyright": "Alle rettigheter reservert."
   },
   "search": {
     "placeholder": "Søk etter brukere, titler, beskrivelser",
     "users": "Brukere",
-    "story-by-title": "Historie etter titler",
-    "story-by-desc": "Historie etter beskrivelser",
+    "story-by-title": "Historier etter Tittel",
+    "story-by-desc": "Historier etter Beskrivelse",
     "no-user": "Ingen brukere funnet",
     "no-title": "Ingen titler funnet",
     "no-desc": "Ingen beskrivelser funnet"
   },
-  "profile-sidebar": {
-    "joined": "Ble med",
-    "role": "Rolle",
-    "admin": "Admin",
-    "user": "Bruker"
-  },
-  "profile-tabs": {
+  "profile": {
+    "joined": "Ble Med",
+    "email": "E-post",
     "created": "Opprettet",
     "liked": "Likte",
     "commented": "Kommenterte",
-    "settings": "Innstillinger",
-    "dashboard": "Dashbord",
-    "stats": "Statistikk"
+    "tabs": {
+      "stories": "Historier",
+      "liked": "Likte",
+      "commented": "Kommenterte"
+    },
+    "no-story": "Ingen historier å vise"
+  },
+  "settings": {
+    "update-profile": {
+      "heading": "Oppdater Profil",
+      "full-name": "Fullt Navn",
+      "placeholder-name": "Skriv inn ditt fulle navn",
+      "email": "E-post",
+      "placeholder-email": "Skriv inn din e-post",
+      "submit-btn": "Lagre Endringer",
+      "submit-btn-loading": "Lagrer",
+      "modal-title-success": "Profil Oppdatert",
+      "modal-text-success": "Profilen ble oppdatert.",
+      "modal-text-failed": "Profiloppdatering Feilet"
+    },
+    "reset-pass": {
+      "heading": "Tilbakestill Passord",
+      "curr-pass": "Nåværende Passord",
+      "new-pass": "Nytt Passord",
+      "confirm-pass": "Bekreft Nytt Passord",
+      "placeholder-curr-pass": "Skriv inn nåværende passord",
+      "placeholder-new-pass": "Skriv inn nytt passord",
+      "placeholder-confirm-pass": "Bekreft nytt passord",
+      "submit-btn": "Tilbakestill Passord",
+      "submit-btn-loading": "Tilbakestiller",
+      "validation-error": "Valideringsfeil",
+      "curr-pass-too-short": "Nåværende passord må være minst 6 tegn langt",
+      "new-pass-too-short": "Nytt passord må være minst 6 tegn langt",
+      "mismatch-title": "Passord Samsvarer Ikke",
+      "mismatch-text": "Bekreftelsen samsvarer ikke med det nye passordet",
+      "modal-success-title": "Passord Tilbakestilt",
+      "modal-success-text": "Passordet har blitt oppdatert.",
+      "modal-error-title": "Tilbakestilling av Passord Feilet"
+    },
+    "delete-account": {
+      "heading": "Slett Konto",
+      "message-line-1": "Når du sletter kontoen din, vil alle data bli permanent fjernet og kan ikke gjenopprettes.",
+      "message-line-2": "Fortsett kun hvis du er helt sikker.",
+      "submit-btn": "Slett Konto",
+      "submit-btn-loading": "Sletter",
+      "modal-title": "Bekreft Sletting av Konto",
+      "modal-text": "Denne handlingen kan ikke angres.",
+      "modal-confirm": "Slett",
+      "modal-cancel": "Avbryt",
+      "success-title": "Konto Slettet",
+      "success-text": "Kontoen har blitt permanent slettet.",
+      "error-title": "Kunne Ikke Slette Kontoen"
+    }
   }
 }

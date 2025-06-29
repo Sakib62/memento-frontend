@@ -50,7 +50,7 @@ const ProfileMenu = () => {
         <div className='absolute right-0 z-10 w-24 py-1 mt-2 transition-all duration-200 ease-in-out transform scale-95 bg-gray-100 rounded-lg shadow-lg dark:bg-gray-800 top-10 hover:scale-100'>
           <button
             onClick={handleProfileClick}
-            className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+            className='w-full px-2 py-1.5 text-sm text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
           >
             {t('navbar.profile')}
           </button>
@@ -58,13 +58,13 @@ const ProfileMenu = () => {
             onClick={() => {
               navigate('/settings');
             }}
-            className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+            className='w-full px-2 py-1.5 text-sm text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
           >
-            Settings
+            {t('navbar.settings')}
           </button>
           <button
             onClick={handleLogoutClick}
-            className='w-full px-2 py-1.5 text-sm text-center text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+            className='w-full px-2 py-1.5 text-sm text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
           >
             {t('navbar.logout')}
           </button>

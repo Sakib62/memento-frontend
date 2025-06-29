@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { useUpdateProfile } from '../../hooks/profile/useUpdateProfile';
 import useUserInfo from '../../hooks/profile/useUserInfo';
@@ -8,9 +9,10 @@ import { FormInput, Heading, SubmitButton } from './Shared';
 
 const UpdateProfile = () => {
   const { username } = useAuth();
+  const { t } = useTranslation();
 
   const [localUserInfo, setLocalUserInfo] = useState<User | null>(null);
-  const { userInfo } = useUserInfo(username!);
+  const { userInfo, loading } = useUserInfo(username!);
   const { updateProfile, isLoading } = useUpdateProfile();
 
   const [name, setName] = useState('');
@@ -61,34 +63,62 @@ const UpdateProfile = () => {
       setLocalUserInfo(updatedUser);
       setName(updatedUser.name ?? name);
       setEmail(updatedUser.email ?? email);
-    } catch (error) {}
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
   };
+
+  const renderSkeletonField = (label: string, id: string) => (
+    <div>
+      <label htmlFor={id} className='block text-sm font-medium text-gray-600'>
+        {label}
+      </label>
+      <div className='w-full h-10 mt-1 bg-gray-200 rounded-md md:w-3/4 animate-pulse' />
+    </div>
+  );
 
   return (
     <div className='mb-6'>
-      <Heading title='Update Profile' />
+      <Heading title={t('settings.update-profile.heading')} />
       <form onSubmit={handleSubmit} className='space-y-4'>
-        <FormInput
-          label='Full Name'
-          id='name'
-          type='text'
-          value={name!}
-          onChange={e => setName(e.target.value)}
-          placeholder='Enter your full name'
-        />
-        <FormInput
-          label='Email'
-          id='email'
-          type='email'
-          value={email!}
-          onChange={e => setEmail(e.target.value)}
-          placeholder='Enter your email'
-        />
+        {loading ? (
+          <div className='space-y-4'>
+            {renderSkeletonField(
+              t('settings.update-profile.full-name'),
+              'name'
+            )}
+            {renderSkeletonField(t('settings.update-profile.email'), 'email')}
+          </div>
+        ) : (
+          <>
+            <FormInput
+              label={t('settings.update-profile.full-name')}
+              id='name'
+              type='text'
+              value={name!}
+              onChange={e => setName(e.target.value)}
+              placeholder={t('settings.update-profile.placeholder-name')}
+            />
+
+            <FormInput
+              label={t('settings.update-profile.email')}
+              id='email'
+              type='email'
+              value={email!}
+              onChange={e => setEmail(e.target.value)}
+              placeholder={t('settings.update-profile.placeholder-email')}
+            />
+          </>
+        )}
         <SubmitButton
-          text={isLoading ? 'Saving...' : 'Save Changes'}
+          text={
+            isLoading
+              ? `${t('settings.update-profile.submit-btn-loading')}...`
+              : `${t('settings.update-profile.submit-btn')}`
+          }
           bgColor='bg-blue-600'
           type='submit'
-          disabled={isLoading || isUnchanged}
+          disabled={isLoading || loading || isUnchanged}
         />
       </form>
     </div>

@@ -1,22 +1,24 @@
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
-import { useAuth } from '../../hooks/useAuth';
 import { useDeleteAccount } from '../../hooks/profile/useDeleteAccount';
+import { useAuth } from '../../hooks/useAuth';
 import { Heading, SubmitButton } from './Shared';
 
 const DeleteAccount = () => {
   const { deleteAccount, isLoading } = useDeleteAccount();
   const { id } = useAuth();
+  const { t } = useTranslation();
 
   const handleDeleteClick = () => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'This action cannot be undone. Account will be permanently deleted.',
+      title: t('settings.delete-account.modal-title'),
+      text: t('settings.delete-account.modal-text'),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: t('settings.delete-account.modal-confirm'),
+      cancelButtonText: t('settings.delete-account.modal-cancel'),
       reverseButtons: true,
     }).then(result => {
       if (result.isConfirmed) {
@@ -27,12 +29,21 @@ const DeleteAccount = () => {
 
   return (
     <div>
-      <Heading title='Delete Account' />
-      <p className='mb-3 text-sm text-gray-600'>
-        This action cannot be undone. Please confirm to delete your account.
+      <Heading title={t('settings.delete-account.heading')} />
+      <p className='mb-4 text-sm text-gray-600'>
+        {t('settings.delete-account.message-line-1')}
+        <br />
+        <span className='italic font-bold text-gray-500'>
+          {t('settings.delete-account.message-line-2')}
+        </span>
       </p>
+
       <SubmitButton
-        text={isLoading ? 'Deleting...' : 'Delete Account'}
+        text={
+          isLoading
+            ? `${t('settings.delete-account.submit-btn-loading')}...`
+            : `${t('settings.delete-account.submit-btn')}`
+        }
         bgColor='bg-red-600'
         onClick={handleDeleteClick}
         type='button'
