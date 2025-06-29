@@ -86,5 +86,24 @@
       "success-text": "Kontoen har blitt permanent slettet.",
       "error-title": "Kunne Ikke Slette Kontoen"
     }
+  },
+  "story": {
+    "like": "Liker",
+    "unlike": "ulikt",
+    "comment": "Kommentar",
+    "edit": "Rediger",
+    "delete": "Slett",
+    "not-found-title": "Historien ble ikke funnet",
+    "not-found-message": "Historien du leter etter eksisterer ikke eller har blitt slettet.",
+    "go-back-home": "Gå tilbake til forsiden",
+    "error-message": "Oops! Noe gikk galt."
+  },
+  "comments": {
+    "heading": "Kommentarer",
+    "post": {
+      "placeholder": "Skriv en kommentar...",
+      "cancel": "Avbryt",
+      "post": "Publiser"
+    }
   }
 }
