@@ -10,7 +10,7 @@ const UpdateProfile = () => {
   const { username } = useAuth();
 
   const [localUserInfo, setLocalUserInfo] = useState<User | null>(null);
-  const { userInfo } = useUserInfo(username!);
+  const { userInfo, loading } = useUserInfo(username!);
   const { updateProfile, isLoading } = useUpdateProfile();
 
   const [name, setName] = useState('');
@@ -61,34 +61,55 @@ const UpdateProfile = () => {
       setLocalUserInfo(updatedUser);
       setName(updatedUser.name ?? name);
       setEmail(updatedUser.email ?? email);
-    } catch (error) {}
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
   };
+
+  const renderSkeletonField = (label: string, id: string) => (
+    <div>
+      <label htmlFor={id} className='block text-sm font-medium text-gray-600'>
+        {label}
+      </label>
+      <div className='w-full h-10 mt-1 bg-gray-200 rounded-md md:w-3/4 animate-pulse' />
+    </div>
+  );
 
   return (
     <div className='mb-6'>
       <Heading title='Update Profile' />
       <form onSubmit={handleSubmit} className='space-y-4'>
-        <FormInput
-          label='Full Name'
-          id='name'
-          type='text'
-          value={name!}
-          onChange={e => setName(e.target.value)}
-          placeholder='Enter your full name'
-        />
-        <FormInput
-          label='Email'
-          id='email'
-          type='email'
-          value={email!}
-          onChange={e => setEmail(e.target.value)}
-          placeholder='Enter your email'
-        />
+        {loading ? (
+          <div className='space-y-4'>
+            {renderSkeletonField('Full Name', 'name')}
+            {renderSkeletonField('Email', 'email')}
+          </div>
+        ) : (
+          <>
+            <FormInput
+              label='Full Name'
+              id='name'
+              type='text'
+              value={name!}
+              onChange={e => setName(e.target.value)}
+              placeholder='Enter your full name'
+            />
+
+            <FormInput
+              label='Email'
+              id='email'
+              type='email'
+              value={email!}
+              onChange={e => setEmail(e.target.value)}
+              placeholder='Enter your email'
+            />
+          </>
+        )}
         <SubmitButton
           text={isLoading ? 'Saving...' : 'Save Changes'}
           bgColor='bg-blue-600'
           type='submit'
-          disabled={isLoading || isUnchanged}
+          disabled={isLoading || loading || isUnchanged}
         />
       </form>
     </div>
