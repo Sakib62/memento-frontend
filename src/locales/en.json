@@ -103,25 +103,42 @@
     "post": {
       "placeholder": "Write a comment...",
       "cancel": "Cancel",
-      "post": "Post"
+      "post": "Post",
+      "modal-title": "Error!",
+      "modal-text": "Failed to post comment."
     },
     "item": {
       "copy": "Copy",
       "edit": "Edit",
       "delete": "Delete",
       "edited": "edited",
-      "posting": "Posting",
-      "deleting": "Deleting"
+      "deleting": "Deleting...",
+      "posting": "Posting...",
+      "updating": "Updating...",
+      "post-unable": "Unable to post comment.",
+      "post-retry": "Try again",
+      "post-discard": "Discard",
+      "edit-unable": "Unable to edit comment.",
+      "edit-retry": "Try again",
+      "edit-abort": "Abort edit",
+      "copy-success": "Copied to clipboard!",
+      "copy-error": "Failed to copy!",
+      "see-less": "See less",
+      "see-more": "See more"
     },
     "edit": {
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "modal-title": "Error!",
+      "modal-text": "Failed to update comment."
     },
     "delete": {
       "modal-title": "Delete Comment?",
       "modal-text": "Are you sure you want to delete this comment?",
       "modal-confirm": "Delete",
-      "modal-cancel": "Cancel"
+      "modal-cancel": "Cancel",
+      "modal-error-title": "Error!",
+      "modal-error-text": "Failed to delete comment."
     }
   }
 }

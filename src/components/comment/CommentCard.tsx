@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Role } from '../../constants/role';
 import { useAuth } from '../../hooks/useAuth';
@@ -26,6 +27,7 @@ const CommentCard = ({
   onUpdate,
 }: CommentCardProps) => {
   const { role, username } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const canModify = role === Role.Admin || comment.authorUsername === username;
 
@@ -68,9 +70,10 @@ const CommentCard = ({
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast.success('Copied to clipboard!');
+      toast.success(t('comments.item.copy-success'));
     } catch (error) {
-      toast.error('Failed to copy!');
+      toast.error(t('comments.item.copy-error'));
+      console.error(error);
     }
   };
 
@@ -113,14 +116,14 @@ const CommentCard = ({
                 }}
                 className='text-red-500 hover:scale-105'
               >
-                Cancel
+                {t('comments.edit.cancel')}
               </button>
               <button
                 disabled={editedText.trim() === comment.comment}
                 onClick={handleSave}
                 className='text-blue-600 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50'
               >
-                Save
+                {t('comments.edit.save')}
               </button>
             </div>
           </>
@@ -137,7 +140,9 @@ const CommentCard = ({
                 onClick={() => setIsExpanded(!isExpanded)}
                 className='font-medium text-blue-600'
               >
-                {isExpanded ? 'See less' : 'See more'}
+                {isExpanded
+                  ? t('comments.item.see-less')
+                  : t('comments.item.see-more')}
               </button>
             )}
           </div>
@@ -145,23 +150,23 @@ const CommentCard = ({
       </div>
       <div className='flex gap-4 mt-1 ml-4 font-medium dark:text-gray-200'>
         {isDeleting ? (
-          <p>Deleting...</p>
+          <p>{t('comments.item.deleting')}.</p>
         ) : isPending ? (
-          <p>Posting...</p>
+          <p>{t('comments.item.posting')}</p>
         ) : isError ? (
           <>
-            <p className='text-red-500'>Unable to post comment.</p>
+            <p className='text-red-500'>{t('comments.item.post-unable')}</p>
             <button
               onClick={() => retry(comment.comment, comment.id)}
               className='text-blue-500 hover:scale-105'
             >
-              Try again
+              {t('comments.item.post-retry')}
             </button>
             <button
               onClick={() => discardComment(comment.id)}
               className='text-red-300 hover:text-red-500'
             >
-              Discard
+              {t('comments.item.post-discard')}
             </button>
           </>
         ) : (
@@ -172,7 +177,9 @@ const CommentCard = ({
                 {!isUpdating &&
                   !isUpdateError &&
                   comment.updatedAt !== comment.createdAt && (
-                    <span className='ml-1 text-sm'>(edited)</span>
+                    <span className='ml-1 text-sm'>
+                      ({t('comments.item.edited')})
+                    </span>
                   )}
               </p>
               <button
@@ -180,19 +187,21 @@ const CommentCard = ({
                 onClick={() => copyToClipboard(comment.comment)}
                 className='opacity-80 hover:opacity-100 hover:scale-105'
               >
-                Copy
+                {t('comments.item.copy')}
               </button>
 
               {isUpdating ? (
-                <p>Updating...</p>
+                <p>{t('comments.item.updating')}.</p>
               ) : isUpdateError ? (
                 <>
-                  <p className='text-red-500'>Unable to edit comment.</p>
+                  <p className='text-red-500'>
+                    {t('comments.item.edit-unable')}
+                  </p>
                   <button
                     onClick={() => onUpdate(comment.id, comment.comment)}
                     className='text-blue-500 hover:scale-105'
                   >
-                    Try again
+                    {t('comments.item.edit-retry')}
                   </button>
                   <button
                     onClick={() => {
@@ -201,7 +210,7 @@ const CommentCard = ({
                     }}
                     className='text-red-300 hover:text-red-500'
                   >
-                    Abort edit
+                    {t('comments.item.edit-abort')}
                   </button>
                 </>
               ) : (
@@ -211,13 +220,13 @@ const CommentCard = ({
                       onClick={() => setIsEditing(true)}
                       className='opacity-80 hover:opacity-100 hover:scale-105'
                     >
-                      Edit
+                      {t('comments.item.edit')}
                     </button>
                     <button
                       onClick={() => onDelete(comment.id)}
                       className='opacity-80 hover:opacity-100 hover:scale-105'
                     >
-                      Delete
+                      {t('comments.item.delete')}
                     </button>
                   </>
                 )
