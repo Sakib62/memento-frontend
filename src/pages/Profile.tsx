@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import SkeletonProfileHeader from '../components/Skeleton/SkeletonProfileHeader';
@@ -18,6 +19,7 @@ import { Story } from '../types/story';
 const Profile = () => {
   const { username } = useParams();
   const { id, role, token } = useAuth();
+  const { t } = useTranslation();
 
   const { userInfo, loading } = useUserInfo(username || '', true);
   const { createdStories, loading: createdLoading } = useUserStories(
@@ -108,7 +110,7 @@ const Profile = () => {
     if (!stories.length) {
       return (
         <p className='pl-2 text-gray-500 col-span-full'>
-          No stories to display.
+          {t('profile.no-story')}
         </p>
       );
     }
@@ -129,7 +131,7 @@ const Profile = () => {
             onClick={() => setActiveTab(tab)}
             className={`border-b-2  hover:border-blue-400  ${activeTab === tab ? 'border-blue-600 font-semibold' : 'border-transparent'}`}
           >
-            {profileTabLabels[tab]}
+            {t(`profile.tabs.${profileTabLabels[tab]}`, profileTabLabels[tab])}
           </button>
         ))}
       </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { User } from '../../types/user';
 import { useAuth } from '../useAuth';
@@ -12,6 +13,7 @@ export const useUpdateProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { token } = useAuth();
+  const { t } = useTranslation();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const updateProfile = async ({
@@ -40,8 +42,8 @@ export const useUpdateProfile = () => {
 
       await Swal.fire({
         icon: 'success',
-        title: 'Profile Updated',
-        text: 'Profile has been updated successfully.',
+        title: t('settings.update-profile.modal-title-success'),
+        text: t('settings.update-profile.modal-text-success'),
         timer: 1000,
         timerProgressBar: false,
         showConfirmButton: false,
@@ -53,7 +55,7 @@ export const useUpdateProfile = () => {
       setError(errorMessage);
       await Swal.fire({
         icon: 'error',
-        title: 'Profile Update Failed',
+        title: t('settings.update-profile.modal-text-failed'),
         text: errorMessage,
         confirmButtonColor: '#d33',
       });

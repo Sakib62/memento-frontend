@@ -52,9 +52,9 @@ const Navbar = () => {
           <LanguageSwitcher />
           <span>
             <button
-              onClick={() => {
-                token ? navigate('/new-story') : authPromptModal();
-              }}
+              onClick={() =>
+                token ? navigate('/new-story') : authPromptModal()
+              }
               className='flex items-center w-24 gap-1 px-4 py-2 text-white transition-all duration-300 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 md:w-28'
             >
               <FaRegPenToSquare className='w-4 h-4 mr-1 md:mr-2 md:h-5 md:w-5' />

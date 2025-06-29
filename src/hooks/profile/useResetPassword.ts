@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { useAuth } from '../useAuth';
 
@@ -12,6 +13,7 @@ export const useResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { token } = useAuth();
+  const { t } = useTranslation();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const resetPassword = async ({
@@ -42,8 +44,8 @@ export const useResetPassword = () => {
 
       await Swal.fire({
         icon: 'success',
-        title: 'Password Reset Successful',
-        text: 'Password has been updated successfully.',
+        title: t('settings.reset-pass.modal-success-title'),
+        text: t('settings.reset-pass.modal-success-text'),
         timer: 1000,
         timerProgressBar: false,
         showConfirmButton: false,
@@ -54,9 +56,8 @@ export const useResetPassword = () => {
       setError(errorMessage);
       await Swal.fire({
         icon: 'error',
-        title: 'Password Reset Failed',
+        title: t('settings.reset-pass.modal-error-title'),
         text: errorMessage,
-        // confirmButtonColor: '#d33',
         showConfirmButton: false,
       });
       throw err;

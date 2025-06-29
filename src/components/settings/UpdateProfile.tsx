@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { useUpdateProfile } from '../../hooks/profile/useUpdateProfile';
 import useUserInfo from '../../hooks/profile/useUserInfo';
@@ -8,6 +9,7 @@ import { FormInput, Heading, SubmitButton } from './Shared';
 
 const UpdateProfile = () => {
   const { username } = useAuth();
+  const { t } = useTranslation();
 
   const [localUserInfo, setLocalUserInfo] = useState<User | null>(null);
   const { userInfo, loading } = useUserInfo(username!);
@@ -77,36 +79,43 @@ const UpdateProfile = () => {
 
   return (
     <div className='mb-6'>
-      <Heading title='Update Profile' />
+      <Heading title={t('settings.update-profile.heading')} />
       <form onSubmit={handleSubmit} className='space-y-4'>
         {loading ? (
           <div className='space-y-4'>
-            {renderSkeletonField('Full Name', 'name')}
-            {renderSkeletonField('Email', 'email')}
+            {renderSkeletonField(
+              t('settings.update-profile.full-name'),
+              'name'
+            )}
+            {renderSkeletonField(t('settings.update-profile.email'), 'email')}
           </div>
         ) : (
           <>
             <FormInput
-              label='Full Name'
+              label={t('settings.update-profile.full-name')}
               id='name'
               type='text'
               value={name!}
               onChange={e => setName(e.target.value)}
-              placeholder='Enter your full name'
+              placeholder={t('settings.update-profile.placeholder-name')}
             />
 
             <FormInput
-              label='Email'
+              label={t('settings.update-profile.email')}
               id='email'
               type='email'
               value={email!}
               onChange={e => setEmail(e.target.value)}
-              placeholder='Enter your email'
+              placeholder={t('settings.update-profile.placeholder-email')}
             />
           </>
         )}
         <SubmitButton
-          text={isLoading ? 'Saving...' : 'Save Changes'}
+          text={
+            isLoading
+              ? `${t('settings.update-profile.submit-btn-loading')}...`
+              : `${t('settings.update-profile.submit-btn')}`
+          }
           bgColor='bg-blue-600'
           type='submit'
           disabled={isLoading || loading || isUnchanged}
