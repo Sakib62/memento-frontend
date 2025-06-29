@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import SkeletonStoryEdit from '../components/Skeleton/SkeletonStoryEdit';
@@ -12,6 +13,7 @@ import { useUpdateStory } from '../hooks/story/useUpdateStory';
 const StoryEdit = () => {
   const navigate = useNavigate();
   const { id: storyId } = useParams();
+  const { t } = useTranslation();
 
   const [title, setTitle] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
@@ -29,7 +31,7 @@ const StoryEdit = () => {
 
   const editorRef = useRef<StoryEditorHandle>(null);
 
-  const { handleSaveUpdate } = useUpdateStory();
+  const { handleSaveUpdate, isUpdating } = useUpdateStory();
   const onClickSave = () => {
     const markdown = editorRef.current?.getMarkdown();
     handleSaveUpdate({
@@ -50,13 +52,13 @@ const StoryEdit = () => {
 
     if (!isSaveDisabled) {
       const result = await Swal.fire({
-        title: 'Unsaved Changes',
-        text: 'Are you sure you want to leave?',
+        title: t('edit-story.modal-title'),
+        text: t('edit-story.modal-text'),
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Leave',
-        cancelButtonText: 'Stay',
-        reverseButtons: true,
+        confirmButtonText: t('edit-story.modal-confirm'),
+        cancelButtonText: t('edit-story.modal-cancel'),
+        reverseButtons: false,
         focusCancel: true,
         customClass: {
           confirmButton:
@@ -100,13 +102,13 @@ const StoryEdit = () => {
             className='px-4 py-2 font-semibold text-white bg-red-600 rounded-md shadow-md hover:bg-red-800'
             onClick={handleCancelUpdate}
           >
-            Cancel
+            {t('edit-story.cancel')}
           </button>
           <button
             className='px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-800'
             onClick={onClickSave}
           >
-            Save
+            {isUpdating ? t('edit-story.save-loading') : t('edit-story.save')}
           </button>
         </div>
       </div>

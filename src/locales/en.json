@@ -91,12 +91,21 @@
     "like": "Like",
     "unlike": "Unlike",
     "comment": "Comment",
-    "edit": "Edit",
-    "delete": "Delete",
     "not-found-title": "Story Not Found",
     "not-found-message": "The story you are looking for does not exist or has been deleted.",
     "go-back-home": "Go Back to Home",
-    "error-message": "Oops! Something went wrong."
+    "error-message": "Oops! Something went wrong.",
+    "edit": "Edit",
+    "delete": {
+      "title": "Delete",
+      "modal-title": "Are you sure?",
+      "modal-text": "Do you really want to delete this story?",
+      "modal-confirm": "Delete",
+      "modal-cancel": "Cancel",
+      "modal-success-title": "Success!",
+      "modal-success-text": "Story is deleted!",
+      "modal-error-toast": "Error deleting story"
+    }
   },
   "comments": {
     "heading": "Comments",
@@ -140,5 +149,18 @@
       "modal-error-title": "Error!",
       "modal-error-text": "Failed to delete comment."
     }
+  },
+  "edit-story": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "save-loading": "Saving...",
+    "modal-title": "Unsaved Changes",
+    "modal-text": "Are you sure you want to leave?",
+    "modal-confirm": "Leave",
+    "modal-cancel": "Stay",
+    "modal-success-title": "Success!",
+    "modal-success-text": "Story is updated!",
+    "toast-failed": "Failed to update story.\nPlease try again.",
+    "toast-error": "Something went wrong.\nPlease try again."
   }
 }

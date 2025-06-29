@@ -174,7 +174,7 @@ const StoryView = () => {
 
               <ButtonWithTooltip
                 icon={<MdDeleteOutline size={23} />}
-                tooltipText={t('story.delete')}
+                tooltipText={t('story.delete.title')}
                 onClick={() => handleDeleteStory(story.id)}
                 buttonClass='hover:scale-105 px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600'
               />

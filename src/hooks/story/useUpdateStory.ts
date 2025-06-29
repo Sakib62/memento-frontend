@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../useAuth';
@@ -15,6 +16,7 @@ export const useUpdateStory = () => {
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token } = useAuth();
+  const { t } = useTranslation();
 
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -46,8 +48,8 @@ export const useUpdateStory = () => {
 
       if (response.ok) {
         Swal.fire({
-          title: 'Success!',
-          text: 'Story is updated!',
+          title: t('edit-story.modal-success-title'),
+          text: t('edit-story.modal-success-text'),
           icon: 'success',
           timer: 1000,
           timerProgressBar: false,
@@ -57,10 +59,10 @@ export const useUpdateStory = () => {
           },
         });
       } else {
-        toast.error('Failed to update story.\nPlease try again.');
+        toast.error(t('edit-story.toast-failed'));
       }
     } catch (error) {
-      toast.error('Something went wrong.\nPlease try again.');
+      toast.error(t('edit-story.toast-error'));
     } finally {
       setIsUpdating(false);
     }
