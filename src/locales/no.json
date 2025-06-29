@@ -91,12 +91,21 @@
     "like": "Liker",
     "unlike": "ulikt",
     "comment": "Kommentar",
-    "edit": "Rediger",
-    "delete": "Slett",
     "not-found-title": "Historien ble ikke funnet",
     "not-found-message": "Historien du leter etter eksisterer ikke eller har blitt slettet.",
     "go-back-home": "Gå tilbake til forsiden",
-    "error-message": "Oops! Noe gikk galt."
+    "error-message": "Oops! Noe gikk galt.",
+    "edit": "Rediger",
+    "delete": {
+      "title": "Slett",
+      "modal-title": "Er du sikker?",
+      "modal-text": "Vil du virkelig slette denne historien?",
+      "modal-confirm": "Slett",
+      "modal-cancel": "Avbryt",
+      "modal-success-title": "Vellykket!",
+      "modal-success-text": "Historien er slettet!",
+      "modal-error-toast": "Feil ved sletting av historien"
+    }
   },
   "comments": {
     "heading": "Kommentarer",
@@ -140,5 +149,18 @@
       "modal-error-title": "Feil!",
       "modal-error-text": "Kunne ikke slette kommentaren."
     }
+  },
+  "edit-story": {
+    "cancel": "Avbryt",
+    "save": "Lagre",
+    "save-loading": "Lagrer...",
+    "modal-title": "Ulagrede endringer",
+    "modal-text": "Er du sikker på at du vil forlate?",
+    "modal-confirm": "Forlat",
+    "modal-cancel": "Bli",
+    "modal-success-title": "Vellykket!",
+    "modal-success-text": "Historien er oppdatert!",
+    "toast-failed": "Kunne ikke oppdatere historien.\nVennligst prøv igjen.",
+    "toast-error": "Noe gikk galt.\nVennligst prøv igjen."
   }
 }
