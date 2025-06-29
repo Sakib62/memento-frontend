@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../useAuth';
@@ -7,6 +8,7 @@ import { useAuth } from '../useAuth';
 export const useCreateStory = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [loading, setLoading] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -17,13 +19,13 @@ export const useCreateStory = () => {
     tags: string[]
   ) => {
     if (!title.trim()) {
-      toast.error('Title cannot be empty', {
+      toast.error(t('create-story.no-empty-title'), {
         position: 'top-center',
       });
       return;
     }
     if (!markdownContent?.trim()) {
-      toast.error('Description cannot be empty', {
+      toast.error(t('create-story.no-empty-description'), {
         position: 'top-center',
       });
       return;
@@ -51,8 +53,8 @@ export const useCreateStory = () => {
 
       if (response.ok) {
         Swal.fire({
-          title: 'Success!',
-          text: 'Story is published!',
+          title: t('create-story.modal-success-title'),
+          text: t('create-story.modal-success-text'),
           icon: 'success',
           timer: 1000,
           timerProgressBar: false,
@@ -62,11 +64,11 @@ export const useCreateStory = () => {
           },
         });
       } else {
-        toast.error('Failed to publish story.\nPlease try again.');
+        toast.error(t('create-story.toast-failed'));
         setLoading(false);
       }
     } catch (error) {
-      toast.error('Something went wrong!\nPlease try again.');
+      toast.error(t('create-story.toast-error'));
       setLoading(false);
     }
   };

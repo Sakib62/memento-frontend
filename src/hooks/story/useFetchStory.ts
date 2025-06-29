@@ -6,9 +6,11 @@ export const useFetchStory = (storyId: string | undefined) => {
 
   const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchStory = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
         method: 'GET',
@@ -18,13 +20,20 @@ export const useFetchStory = (storyId: string | undefined) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch story');
+        if (response.status === 404) {
+          setError('not_found');
+        } else {
+          setError('generic_error');
+        }
+        setStory(null);
       } else {
         const data = await response.json();
         setStory(data.data);
       }
     } catch (error) {
       console.error('Error fetching story:', error);
+      setError('generic_error');
+      setStory(null);
     } finally {
       setLoading(false);
     }
@@ -36,5 +45,5 @@ export const useFetchStory = (storyId: string | undefined) => {
     }
   }, [storyId]);
 
-  return { story, loading };
+  return { story, loading, error };
 };

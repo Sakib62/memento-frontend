@@ -1,4 +1,5 @@
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { useAuth } from '../useAuth';
@@ -7,16 +8,17 @@ const useDeleteStory = () => {
   const navigate = useNavigate();
 
   const { token } = useAuth();
+  const { t } = useTranslation();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleDeleteStory = async (storyId: string) => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to delete this story?',
+      title: t('story.delete.modal-title'),
+      text: t('story.delete.modal-text'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
+      confirmButtonText: t('story.delete.modal-confirm'),
+      cancelButtonText: t('story.delete.modal-cancel'),
       reverseButtons: true,
     });
 
@@ -31,15 +33,15 @@ const useDeleteStory = () => {
 
         navigate(`/`);
         Swal.fire({
-          title: 'Success!',
-          text: 'Story is deleted!',
+          title: t('story.delete.modal-success-title'),
+          text: t('story.delete.modal-success-text'),
           icon: 'success',
           timer: 1500,
           timerProgressBar: false,
           showConfirmButton: false,
         });
       } catch (error) {
-        toast.error('Error deleting story');
+        toast.error(t('story.delete.modal-error-toast'));
       }
     }
   };

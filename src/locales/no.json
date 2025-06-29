@@ -86,5 +86,99 @@
       "success-text": "Kontoen har blitt permanent slettet.",
       "error-title": "Kunne Ikke Slette Kontoen"
     }
+  },
+  "story": {
+    "like": "Liker",
+    "unlike": "ulikt",
+    "comment": "Kommentar",
+    "not-found-title": "Historien ble ikke funnet",
+    "not-found-message": "Historien du leter etter eksisterer ikke eller har blitt slettet.",
+    "go-back-home": "Gå tilbake til forsiden",
+    "error-message": "Oops! Noe gikk galt.",
+    "edit": "Rediger",
+    "delete": {
+      "title": "Slett",
+      "modal-title": "Er du sikker?",
+      "modal-text": "Vil du virkelig slette denne historien?",
+      "modal-confirm": "Slett",
+      "modal-cancel": "Avbryt",
+      "modal-success-title": "Vellykket!",
+      "modal-success-text": "Historien er slettet!",
+      "modal-error-toast": "Feil ved sletting av historien"
+    }
+  },
+  "comments": {
+    "heading": "Kommentarer",
+    "post": {
+      "placeholder": "Skriv en kommentar...",
+      "cancel": "Avbryt",
+      "post": "Publiser",
+      "modal-title": "Feil! ",
+      "modal-text": "Kunne ikke publisere kommentaren."
+    },
+    "item": {
+      "copy": "Kopier",
+      "edit": "Rediger",
+      "delete": "Slett",
+      "edited": "redigert",
+      "deleting": "Sletter...",
+      "posting": "Publiserer...",
+      "updating": "Oppdaterer...",
+      "post-unable": "Kunne ikke publisere kommentaren.",
+      "post-retry": "Prøv igjen",
+      "post-discard": "Forkast",
+      "edit-unable": "Kunne ikke redigere kommentaren.",
+      "edit-retry": "Prøv igjen",
+      "edit-abort": "Avbryt redigering",
+      "copy-success": "Kopiert til utklippstavlen!",
+      "copy-error": "Kunne ikke kopiere!",
+      "see-less": "Vis mindre",
+      "see-more": "Vis mer"
+    },
+    "edit": {
+      "cancel": "Avbryt",
+      "save": "Lagre",
+      "modal-title": "Feil!",
+      "modal-text": "Kunne ikke oppdatere kommentaren."
+    },
+    "delete": {
+      "modal-title": "Slett kommentar?",
+      "modal-text": "Er du sikker på at du vil slette denne kommentaren?",
+      "modal-confirm": "Slett",
+      "modal-cancel": "Avbryt",
+      "modal-error-title": "Feil!",
+      "modal-error-text": "Kunne ikke slette kommentaren."
+    }
+  },
+  "edit-story": {
+    "cancel": "Avbryt",
+    "save": "Lagre",
+    "save-loading": "Lagrer...",
+    "modal-title": "Ulagrede endringer",
+    "modal-text": "Er du sikker på at du vil forlate?",
+    "modal-confirm": "Forlat",
+    "modal-cancel": "Bli",
+    "modal-success-title": "Vellykket!",
+    "modal-success-text": "Historien er oppdatert!",
+    "toast-failed": "Kunne ikke oppdatere historien.\nVennligst prøv igjen.",
+    "toast-error": "Noe gikk galt.\nVennligst prøv igjen."
+  },
+  "create-story": {
+    "title-placeholder": "Skriv inn tittel...",
+    "publish": "Publiser",
+    "publish-loading": "Publiserer...",
+    "no-empty-title": "Tittelen kan ikke være tom",
+    "no-empty-description": "Beskrivelsen kan ikke være tom",
+    "modal-success-title": "Vellykket!",
+    "modal-success-text": "Historien er publisert!",
+    "toast-failed": "Kunne ikke publisere historien.\nVennligst prøv igjen.",
+    "toast-error": "Noe gikk galt!\nVennligst prøv igjen."
+  },
+  "tags": {
+    "heading": "Legg til tags",
+    "placeholder": "Story tags",
+    "max-length-error": "Tag er for lang (maks {{length}} tegn)",
+    "max-tags-error": "Maksimalt {{max}} tags",
+    "duplicate-error": "Tag finnes allerede"
   }
 }

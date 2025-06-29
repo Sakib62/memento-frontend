@@ -30,7 +30,31 @@ const UpdateProfile = () => {
     name.trim() === (localUserInfo?.name?.trim() ?? '') &&
     email.trim() === (localUserInfo?.email?.trim() ?? '');
 
-  if (!localUserInfo) return <div>Loading...</div>;
+  const renderSkeletonField = (label: string, id: string) => (
+    <div>
+      <label htmlFor={id} className='block text-sm font-medium text-gray-600'>
+        {label}
+      </label>
+      <div className='w-full h-10 mt-1 bg-gray-200 rounded-md md:w-3/4 animate-pulse' />
+    </div>
+  );
+
+  if (!localUserInfo || loading)
+    return (
+      <div className='mb-6'>
+        <Heading title={t('settings.update-profile.heading')} />
+        <div className='space-y-4'>
+          {renderSkeletonField(t('settings.update-profile.full-name'), 'name')}
+          {renderSkeletonField(t('settings.update-profile.email'), 'email')}
+        </div>
+        <SubmitButton
+          text={t('settings.update-profile.submit-btn')}
+          bgColor='bg-blue-600'
+          type='submit'
+          disabled={isLoading || loading || isUnchanged}
+        />
+      </div>
+    );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,48 +92,28 @@ const UpdateProfile = () => {
     }
   };
 
-  const renderSkeletonField = (label: string, id: string) => (
-    <div>
-      <label htmlFor={id} className='block text-sm font-medium text-gray-600'>
-        {label}
-      </label>
-      <div className='w-full h-10 mt-1 bg-gray-200 rounded-md md:w-3/4 animate-pulse' />
-    </div>
-  );
-
   return (
     <div className='mb-6'>
       <Heading title={t('settings.update-profile.heading')} />
       <form onSubmit={handleSubmit} className='space-y-4'>
-        {loading ? (
-          <div className='space-y-4'>
-            {renderSkeletonField(
-              t('settings.update-profile.full-name'),
-              'name'
-            )}
-            {renderSkeletonField(t('settings.update-profile.email'), 'email')}
-          </div>
-        ) : (
-          <>
-            <FormInput
-              label={t('settings.update-profile.full-name')}
-              id='name'
-              type='text'
-              value={name!}
-              onChange={e => setName(e.target.value)}
-              placeholder={t('settings.update-profile.placeholder-name')}
-            />
+        <FormInput
+          label={t('settings.update-profile.full-name')}
+          id='name'
+          type='text'
+          value={name!}
+          onChange={e => setName(e.target.value)}
+          placeholder={t('settings.update-profile.placeholder-name')}
+        />
 
-            <FormInput
-              label={t('settings.update-profile.email')}
-              id='email'
-              type='email'
-              value={email!}
-              onChange={e => setEmail(e.target.value)}
-              placeholder={t('settings.update-profile.placeholder-email')}
-            />
-          </>
-        )}
+        <FormInput
+          label={t('settings.update-profile.email')}
+          id='email'
+          type='email'
+          value={email!}
+          onChange={e => setEmail(e.target.value)}
+          placeholder={t('settings.update-profile.placeholder-email')}
+        />
+
         <SubmitButton
           text={
             isLoading

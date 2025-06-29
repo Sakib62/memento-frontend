@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaComment, FaHeart } from 'react-icons/fa';
 import { MdDeleteOutline, MdOutlineModeEdit } from 'react-icons/md';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,10 +17,11 @@ import { useAuth } from '../hooks/useAuth';
 
 const StoryView = () => {
   const { username, role } = useAuth();
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const { id: storyId } = useParams();
-  const { story, loading } = useFetchStory(storyId);
+  const { story, loading, error } = useFetchStory(storyId);
 
   const editorRef = useRef<StoryEditorHandle>(null);
   useEffect(() => {
@@ -50,25 +52,41 @@ const StoryView = () => {
     return <SkeletonStoryView />;
   }
 
-  if (!story) {
+  if (error === 'not_found') {
     return (
       <div className='pt-6 pb-6 bg-gray-100 dark:bg-neutral-800'>
         <div className='flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] max-w-5xl p-8 pt-4 mx-auto bg-white dark:bg-stone-700 rounded-lg'>
           <h1 className='mb-4 text-3xl font-bold text-gray-900 dark:text-white'>
-            Story Not Found
+            {t('story.not-found-title')}
           </h1>
           <p className='text-gray-600 dark:text-gray-300'>
-            The story you are looking for does not exist or has been deleted.
+            {t('story.not-found-message')}
           </p>
           <button
             onClick={() => navigate('/')}
             className='px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600'
           >
-            Go Back to Home
+            {t('story.go-back-home')}
           </button>
         </div>
       </div>
     );
+  }
+
+  if (error === 'generic_error') {
+    return (
+      <div className='flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gray-100 dark:bg-neutral-800 p-6'>
+        <div className='max-w-md p-6 text-center bg-white rounded-md shadow-md dark:bg-stone-700'>
+          <p className='text-lg text-gray-700 dark:text-gray-300'>
+            {t('story.error-message')}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!story) {
+    return null;
   }
 
   return (
@@ -126,7 +144,7 @@ const StoryView = () => {
               />{' '}
               {likeCount}
               <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
-                {hasLiked ? 'Unlike' : 'Like'}
+                {hasLiked ? t('story.unlike') : t('story.like')}
               </span>
             </button>
 
@@ -140,7 +158,7 @@ const StoryView = () => {
               />{' '}
               {commentCount}
               <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
-                Comment
+                {t('story.comment')}
               </span>
             </button>
           </div>
@@ -149,14 +167,14 @@ const StoryView = () => {
             <div className='flex gap-4'>
               <ButtonWithTooltip
                 icon={<MdOutlineModeEdit size={23} />}
-                tooltipText='Edit'
+                tooltipText={t('story.edit')}
                 onClick={() => navigate(`/story/${story.id}/edit`)}
                 buttonClass='hover:scale-105 px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600'
               />
 
               <ButtonWithTooltip
                 icon={<MdDeleteOutline size={23} />}
-                tooltipText='Delete'
+                tooltipText={t('story.delete.title')}
                 onClick={() => handleDeleteStory(story.id)}
                 buttonClass='hover:scale-105 px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600'
               />

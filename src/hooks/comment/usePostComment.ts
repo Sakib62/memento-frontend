@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '../../hooks/useAuth';
@@ -6,6 +7,7 @@ import { SetComments } from '../../types/comment';
 const usePostComment = (storyId: string, setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token, id, name, username } = useAuth();
+  const { t } = useTranslation();
 
   const postComment = async (
     comment: string,
@@ -73,8 +75,8 @@ const usePostComment = (storyId: string, setComments: SetComments) => {
         prev.map(c => (c.id === commentId ? { ...c, status: 'error' } : c))
       );
       Swal.fire({
-        title: 'Error!',
-        text: 'Failed to post comment.',
+        title: t('comments.post.modal-title'),
+        text: t('comments.post.modal-text'),
         icon: 'error',
         timer: 2000,
         timerProgressBar: false,

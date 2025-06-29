@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks/useAuth';
 import { SetComments } from '../../types/comment';
@@ -5,15 +6,16 @@ import { SetComments } from '../../types/comment';
 const useDeleteComment = (setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token } = useAuth();
+  const { t } = useTranslation();
 
   const deleteComment = async (commentId: string): Promise<void> => {
     const result = await Swal.fire({
-      title: 'Delete Comment?',
-      text: 'Are you sure you want to delete this comment?',
+      title: t('comments.delete.modal-title'),
+      text: t('comments.delete.modal-text'),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'No',
+      confirmButtonText: t('comments.delete.modal-confirm'),
+      cancelButtonText: t('comments.delete.modal-cancel'),
       reverseButtons: true,
     });
 
@@ -50,8 +52,8 @@ const useDeleteComment = (setComments: SetComments) => {
       );
 
       Swal.fire({
-        title: 'Error!',
-        text: 'Failed to delete comment.',
+        title: t('comments.delete.modal-error-title'),
+        text: t('comments.delete.modal-error-text'),
         icon: 'error',
         timer: 2000,
         timerProgressBar: false,

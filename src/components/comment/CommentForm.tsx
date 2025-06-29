@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../hooks/useAuth';
 import useAuthPromptModal from '../../hooks/useAuthPrompt';
 
@@ -25,11 +26,14 @@ const CommentForm = ({
   };
 
   const { token } = useAuth();
+  const { t } = useTranslation();
   const authPromptModal = useAuthPromptModal();
 
   return (
     <div>
-      <p className='mb-4 text-2xl font-semibold'>Comments ({commentCount})</p>
+      <p className='mb-4 text-2xl font-semibold'>
+        {t('comments.heading')} ({commentCount})
+      </p>
       <div
         onClick={() => {
           if (!token) authPromptModal();
@@ -40,7 +44,7 @@ const CommentForm = ({
             textareaRef.current = element;
             commentInputRef.current = element;
           }}
-          placeholder='Write a comment...'
+          placeholder={t('comments.post.placeholder')}
           id='comment-input'
           value={comment}
           readOnly={!token}
@@ -63,7 +67,7 @@ const CommentForm = ({
           }}
           className='px-2 py-1 font-semibold rounded-md disabled:opacity-50 disabled:cursor-not-allowed bg-stone-300 hover:bg-stone-400'
         >
-          Cancel
+          {t('comments.post.cancel')}
         </button>
         <button
           disabled={!comment.trim()}
@@ -74,7 +78,7 @@ const CommentForm = ({
           }}
           className='px-2 py-1 font-semibold bg-blue-500 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-600'
         >
-          Post
+          {t('comments.post.post')}
         </button>
       </div>
     </div>

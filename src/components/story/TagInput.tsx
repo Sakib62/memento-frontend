@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { FaPlus } from 'react-icons/fa';
 import { MAX_TAG_LENGTH, MAX_TAGS } from '../../constants/story';
 
@@ -10,6 +11,7 @@ interface TagInputProps {
 
 const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
   const [inputValue, setInputValue] = useState('');
+  const { t } = useTranslation();
 
   const handleTagInput = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const tag = event.currentTarget.value;
@@ -39,17 +41,17 @@ const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
     if (tag.length == 0) return;
 
     if (tag.length > MAX_TAG_LENGTH) {
-      toast.error(`Tag too long (max ${MAX_TAG_LENGTH} characters)`);
+      toast.error(t('tags.max-length-error', { length: MAX_TAG_LENGTH }));
       return;
     }
 
     if (tags.length >= MAX_TAGS) {
-      toast.error(`Maximum ${MAX_TAGS} tags`);
+      toast.error(t('tags.max-tags-error', { max: MAX_TAGS }));
       return;
     }
 
     if (tags.includes(tag)) {
-      toast.error('Tag already exists');
+      toast.error(t('tags.duplicate-error'));
       return;
     }
 
@@ -64,12 +66,12 @@ const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
   return (
     <div className='flex-shrink-0 w-full p-4 bg-gray-100 rounded-lg shadow-md '>
       <h3 className='mb-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-500'>
-        Add Tags
+        {t('tags.heading')}
       </h3>
       <div className='flex items-center gap-2'>
         <input
           type='text'
-          placeholder='Story tag'
+          placeholder={t('tags.placeholder')}
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           onKeyDown={handleTagInput}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { useAuth } from '../../hooks/useAuth';
 import { SetComments } from '../../types/comment';
@@ -5,6 +6,7 @@ import { SetComments } from '../../types/comment';
 const useUpdateComment = (setComments: SetComments) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const { token } = useAuth();
+  const { t } = useTranslation();
 
   const updatedComment = async (
     commentId: string,
@@ -83,8 +85,8 @@ const useUpdateComment = (setComments: SetComments) => {
         )
       );
       Swal.fire({
-        title: 'Error!',
-        text: 'Failed to update comment.',
+        title: t('comments.edit.modal-title'),
+        text: t('comments.edit.modal-text'),
         icon: 'error',
         timer: 2000,
         timerProgressBar: false,
