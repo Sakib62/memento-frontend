@@ -8,7 +8,6 @@ import useAuthPromptModal from '../../hooks/useAuthPrompt';
 import LanguageSwitcher from './LanguageSwitcher';
 import ProfileMenu from './ProfileMenu';
 import SearchPopup from './SearchPopup';
-import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
   const { token } = useAuth();
@@ -48,7 +47,7 @@ const Navbar = () => {
         </div>
 
         <div className='flex items-center space-x-2 md:space-x-4'>
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           <LanguageSwitcher />
           <span>
             <button

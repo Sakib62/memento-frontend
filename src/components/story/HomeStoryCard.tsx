@@ -21,7 +21,7 @@ const HomeStoryCard = ({
         {!isForProfile && (
           <div className='mb-2'>
             <p
-              className='font-serif truncate hover:underline'
+              className='font-serif truncate hover:underline w-fit'
               onClick={e => {
                 e.stopPropagation();
                 navigate(`/profile/${story.authorUsername}`);
