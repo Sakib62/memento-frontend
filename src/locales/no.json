@@ -162,5 +162,23 @@
     "modal-success-text": "Historien er oppdatert!",
     "toast-failed": "Kunne ikke oppdatere historien.\nVennligst prøv igjen.",
     "toast-error": "Noe gikk galt.\nVennligst prøv igjen."
+  },
+  "create-story": {
+    "title-placeholder": "Skriv inn tittel...",
+    "publish": "Publiser",
+    "publish-loading": "Publiserer...",
+    "no-empty-title": "Tittelen kan ikke være tom",
+    "no-empty-description": "Beskrivelsen kan ikke være tom",
+    "modal-success-title": "Vellykket!",
+    "modal-success-text": "Historien er publisert!",
+    "toast-failed": "Kunne ikke publisere historien.\nVennligst prøv igjen.",
+    "toast-error": "Noe gikk galt!\nVennligst prøv igjen."
+  },
+  "tags": {
+    "heading": "Legg til tags",
+    "placeholder": "Story tags",
+    "max-length-error": "Tag er for lang (maks {{length}} tegn)",
+    "max-tags-error": "Maksimalt {{max}} tags",
+    "duplicate-error": "Tag finnes allerede"
   }
 }

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import StoryEditor, {
   StoryEditorHandle,
 } from '../components/story/StoryEditor';
@@ -8,6 +9,7 @@ import { useCreateStory } from '../hooks/story/useCreateStory';
 const StoryCreate = () => {
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const { t } = useTranslation();
 
   const { createStory, loading } = useCreateStory();
   const editorRef = useRef<StoryEditorHandle>(null);
@@ -22,7 +24,7 @@ const StoryCreate = () => {
       <div className='flex flex-col gap-8 lg:w-3/4'>
         <input
           type='text'
-          placeholder='Enter title...'
+          placeholder={t('create-story.title-placeholder')}
           required
           value={title}
           onChange={e => setTitle(e.target.value)}
@@ -43,7 +45,9 @@ const StoryCreate = () => {
             disabled={loading}
             className='px-4 py-2 font-semibold text-white bg-blue-600 rounded-md shadow-md hover:bg-blue-800'
           >
-            {loading ? 'Publishing...' : 'Publish'}
+            {loading
+              ? t('create-story.publish-loading')
+              : t('create-story.publish')}
           </button>
         </div>
       </div>
