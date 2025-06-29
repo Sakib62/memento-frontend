@@ -162,5 +162,23 @@
     "modal-success-text": "Story is updated!",
     "toast-failed": "Failed to update story.\nPlease try again.",
     "toast-error": "Something went wrong.\nPlease try again."
+  },
+  "create-story": {
+    "title-placeholder": "Enter title...",
+    "publish": "Publish",
+    "publish-loading": "Publishing...",
+    "no-empty-title": "Title cannot be empty",
+    "no-empty-description": "Description cannot be empty",
+    "modal-success-title": "Success!",
+    "modal-success-text": "Story is published!",
+    "toast-failed": "Failed to publish story.\nPlease try again.",
+    "toast-error": "Something went wrong!\nPlease try again."
+  },
+  "tags": {
+    "heading": "Add Tags",
+    "placeholder": "Story tags",
+    "max-length-error": "Tag too long (max {{length}} characters)",
+    "max-tags-error": "Maximum {{max}} tags",
+    "duplicate-error": "Tag already exists"
   }
 }
