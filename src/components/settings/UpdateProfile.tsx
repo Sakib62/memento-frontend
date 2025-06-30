@@ -43,7 +43,7 @@ const UpdateProfile = () => {
     return (
       <div className='mb-6'>
         <Heading title={t('settings.update-profile.heading')} />
-        <div className='space-y-4'>
+        <div className='mb-4 space-y-4'>
           {renderSkeletonField(t('settings.update-profile.full-name'), 'name')}
           {renderSkeletonField(t('settings.update-profile.email'), 'email')}
         </div>

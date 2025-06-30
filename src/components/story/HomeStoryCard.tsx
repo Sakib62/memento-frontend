@@ -1,5 +1,5 @@
 import { FaRegComment, FaRegHeart } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Story } from '../../types/story';
 import MarkdownRenderer from './MarkdownRenderer';
 
@@ -10,26 +10,22 @@ const HomeStoryCard = ({
   story: Story;
   isForProfile?: boolean;
 }) => {
-  const navigate = useNavigate();
-
   return (
-    <div
-      onClick={() => navigate(`/story/${story.id}`)}
-      className='transition-all duration-200 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 min-h-[200px]'
+    <Link
+      to={`/story/${story.id}`}
+      className='block transition-all duration-200 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 min-h-[200px]'
     >
       <div className='p-4'>
         {!isForProfile && (
           <div className='mb-2'>
-            <p
+            <Link
+              to={`/profile/${story.authorUsername}`}
               className='font-serif truncate hover:underline w-fit'
-              onClick={e => {
-                e.stopPropagation();
-                navigate(`/profile/${story.authorUsername}`);
-              }}
+              onClick={e => e.stopPropagation()}
               title={story.authorName}
             >
               {story.authorName}
-            </p>
+            </Link>
           </div>
         )}
         <div className='mb-4 space-y-4'>
@@ -58,7 +54,7 @@ const HomeStoryCard = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
