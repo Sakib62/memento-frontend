@@ -1,19 +1,22 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const useAuthPromptModal = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const showAuthPromptModal = () => {
     Swal.fire({
-      title: 'Sign in to continue',
+      title: t('auth-prompt-modal.text'),
       icon: 'info',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
+      confirmButtonColor: '#3085d6',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sign In',
-      cancelButtonText: 'Create Account',
+      confirmButtonText: t('auth-prompt-modal.confirm'),
+      cancelButtonText: t('auth-prompt-modal.cancel'),
       reverseButtons: true,
+      focusConfirm: true,
     }).then(result => {
       if (result.isConfirmed) {
         navigate('/login');

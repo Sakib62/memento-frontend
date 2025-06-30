@@ -5,17 +5,17 @@ import en from './locales/en.json';
 import no from './locales/no.json';
 
 i18n
-  .use(initReactI18next)
   .use(LanguageDetector)
+  .use(initReactI18next)
   .init({
     resources: {
       en: { translation: en },
       no: { translation: no },
     },
-    lng: 'en',
+    //lng: localStorage.getItem('memento_preferredLang') || 'en',
     fallbackLng: 'en',
     detection: {
-      order: ['localStorage'],
+      order: ['localStorage', 'navigator'],
       lookupLocalStorage: 'memento_preferredLang',
       caches: [],
     },

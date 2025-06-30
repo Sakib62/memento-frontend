@@ -180,5 +180,10 @@
     "max-length-error": "Tag too long (max {{length}} characters)",
     "max-tags-error": "Maximum {{max}} tags",
     "duplicate-error": "Tag already exists"
+  },
+  "auth-prompt-modal": {
+    "text": "Sign in to continue",
+    "confirm": "Sign In",
+    "cancel": "Create Account"
   }
 }

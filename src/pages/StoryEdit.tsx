@@ -82,7 +82,7 @@ const StoryEdit = () => {
   }
 
   return (
-    <div className='flex flex-col gap-8 p-8 lg:flex-row'>
+    <div className='flex flex-col gap-8 px-4 py-6 md:p-8 lg:flex-row'>
       <div className='flex flex-col gap-8 lg:w-3/4'>
         <input
           type='text'

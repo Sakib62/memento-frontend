@@ -180,5 +180,10 @@
     "max-length-error": "Tag er for lang (maks {{length}} tegn)",
     "max-tags-error": "Maksimalt {{max}} tags",
     "duplicate-error": "Tag finnes allerede"
+  },
+  "auth-prompt-modal": {
+    "text": "Logg inn for å fortsette",
+    "confirm": "Logg inn",
+    "cancel": "Opprett konto"
   }
 }

@@ -92,9 +92,9 @@ const StoryView = () => {
   return (
     <div className='bg-gray-100 dark:bg-neutral-800'>
       <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 mx-auto bg-white  dark:bg-stone-700'>
-        <h1 className='mb-4 text-3xl font-bold text-gray-900 break-words dark:text-white'>
+        <p className='mb-4 text-3xl font-bold text-gray-900 break-words dark:text-white'>
           {story.title}
-        </h1>
+        </p>
 
         {story.tags.length > 0 && (
           <div className='mb-4'>
