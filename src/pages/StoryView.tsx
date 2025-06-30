@@ -31,7 +31,7 @@ const StoryView = () => {
   }, [story]);
 
   const { hasLiked, likeCount, isLiking, handleLikeClick } = useLike(story?.id);
-  const handleDeleteStory = useDeleteStory();
+  const { handleDeleteStory, isDeleting } = useDeleteStory();
 
   const commentInputRef = useRef<HTMLTextAreaElement>(null);
   const handleCommentButtonClick = () => {
@@ -92,106 +92,114 @@ const StoryView = () => {
   return (
     <div className='bg-gray-100 dark:bg-neutral-800'>
       <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 mx-auto bg-white  dark:bg-stone-700'>
-        <p className='mb-4 text-3xl font-bold text-gray-900 break-words dark:text-white'>
-          {story.title}
-        </p>
-
-        {story.tags.length > 0 && (
-          <div className='mb-4'>
-            <div className='flex flex-wrap gap-2'>
-              {story.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className='px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600'
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+        {isDeleting && (
+          <div className='fixed bottom-0 left-0 right-0 z-50 flex items-start justify-center pt-10 bg-white bg-opacity-50 top-16'>
+            <div className='w-6 h-6 border-4 border-blue-500 rounded-full border-t-transparent animate-spin'></div>
           </div>
         )}
 
-        <div className='mb-4'>
-          <p
-            onClick={() => navigate(`/profile/${story.authorUsername}`)}
-            className='font-semibold text-gray-800 cursor-pointer w-fit dark:text-gray-200 hover:underline'
-          >
-            {story?.authorName}
+        <div className={isDeleting ? 'pointer-events-none opacity-50' : ''}>
+          <p className='mb-4 text-3xl font-bold text-gray-900 break-words dark:text-white'>
+            {story.title}
           </p>
-          <p className='text-xs text-gray-500 dark:text-gray-300'>
-            {new Date(story.createdAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-            })}
-          </p>
-        </div>
 
-        <div className='flex items-center justify-between px-0 mb-4 text-gray-600 dark:text-gray-300'>
-          <div className='flex gap-4'>
-            <button
-              onClick={handleLikeClick}
-              disabled={isLiking}
-              className='relative flex items-center gap-1 group'
-            >
-              <FaHeart
-                size='23'
-                className={
-                  hasLiked
-                    ? 'text-red-500'
-                    : 'text-gray-600 dark:text-gray-300 group-hover:text-red-500'
-                }
-              />{' '}
-              {likeCount}
-              <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
-                {hasLiked ? t('story.unlike') : t('story.like')}
-              </span>
-            </button>
-
-            <button
-              onClick={handleCommentButtonClick}
-              className='relative flex items-center gap-1 group'
-            >
-              <FaComment
-                size='23'
-                className='text-gray-600 dark:text-gray-300 group-hover:text-blue-500'
-              />{' '}
-              {commentCount}
-              <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
-                {t('story.comment')}
-              </span>
-            </button>
-          </div>
-
-          {(story.authorUsername === username || role === Role.Admin) && (
-            <div className='flex gap-4'>
-              <ButtonWithTooltip
-                icon={<MdOutlineModeEdit size={23} />}
-                tooltipText={t('story.edit')}
-                onClick={() => navigate(`/story/${story.id}/edit`)}
-                buttonClass='hover:scale-105 px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600'
-              />
-
-              <ButtonWithTooltip
-                icon={<MdDeleteOutline size={23} />}
-                tooltipText={t('story.delete.title')}
-                onClick={() => handleDeleteStory(story.id)}
-                buttonClass='hover:scale-105 px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600'
-              />
+          {story.tags.length > 0 && (
+            <div className='mb-4'>
+              <div className='flex flex-wrap gap-2'>
+                {story.tags.map((tag: string, index: number) => (
+                  <span
+                    key={index}
+                    className='px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-full hover:bg-blue-600'
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
-        </div>
 
-        <div>
-          <StoryEditor ref={editorRef} isViewMode={true} />
-        </div>
+          <div className='mb-4'>
+            <p
+              onClick={() => navigate(`/profile/${story.authorUsername}`)}
+              className='font-semibold text-gray-800 cursor-pointer w-fit dark:text-gray-200 hover:underline'
+            >
+              {story?.authorName}
+            </p>
+            <p className='text-xs text-gray-500 dark:text-gray-300'>
+              {new Date(story.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+              })}
+            </p>
+          </div>
 
-        <div className='mt-8'>
-          <CommentSection
-            storyId={story.id}
-            onCommentCountChange={handleCommentCount}
-            commentInputRef={commentInputRef}
-          />
+          <div className='flex items-center justify-between px-0 mb-4 text-gray-600 dark:text-gray-300'>
+            <div className='flex gap-4'>
+              <button
+                onClick={handleLikeClick}
+                disabled={isLiking}
+                className='relative flex items-center gap-1 group'
+              >
+                <FaHeart
+                  size='23'
+                  className={
+                    hasLiked
+                      ? 'text-red-500'
+                      : 'text-gray-600 dark:text-gray-300 group-hover:text-red-500'
+                  }
+                />{' '}
+                {likeCount}
+                <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
+                  {hasLiked ? t('story.unlike') : t('story.like')}
+                </span>
+              </button>
+
+              <button
+                onClick={handleCommentButtonClick}
+                className='relative flex items-center gap-1 group'
+              >
+                <FaComment
+                  size='23'
+                  className='text-gray-600 dark:text-gray-300 group-hover:text-blue-500'
+                />{' '}
+                {commentCount}
+                <span className='absolute invisible px-2 py-1 text-sm text-white -translate-x-1/2 bg-black rounded-md opacity-0 dark:text-black dark:bg-white group-hover:visible group-hover:opacity-100 -top-8 left-1/2'>
+                  {t('story.comment')}
+                </span>
+              </button>
+            </div>
+
+            {(story.authorUsername === username || role === Role.Admin) && (
+              <div className='flex gap-4'>
+                <ButtonWithTooltip
+                  icon={<MdOutlineModeEdit size={23} />}
+                  tooltipText={t('story.edit')}
+                  onClick={() => navigate(`/story/${story.id}/edit`)}
+                  buttonClass='hover:scale-105 px-2 py-1 text-white bg-blue-500 rounded-md hover:bg-blue-600'
+                />
+
+                <ButtonWithTooltip
+                  icon={<MdDeleteOutline size={23} />}
+                  tooltipText={t('story.delete.title')}
+                  onClick={() => handleDeleteStory(story.id)}
+                  buttonClass='hover:scale-105 px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600'
+                />
+              </div>
+            )}
+          </div>
+
+          <div>
+            <StoryEditor ref={editorRef} isViewMode={true} />
+          </div>
+
+          <div className='mt-8'>
+            <CommentSection
+              storyId={story.id}
+              onCommentCountChange={handleCommentCount}
+              commentInputRef={commentInputRef}
+            />
+          </div>
         </div>
       </div>
     </div>

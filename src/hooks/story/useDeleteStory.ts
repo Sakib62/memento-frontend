@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +11,7 @@ const useDeleteStory = () => {
   const { token } = useAuth();
   const { t } = useTranslation();
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeleteStory = async (storyId: string) => {
     const result = await Swal.fire({
@@ -24,14 +26,13 @@ const useDeleteStory = () => {
 
     if (result.isConfirmed) {
       try {
+        setIsDeleting(true);
         const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!response.ok) throw new Error('Failed to delete story');
-
-        navigate(`/`);
         Swal.fire({
           title: t('story.delete.modal-success-title'),
           text: t('story.delete.modal-success-text'),
@@ -40,13 +41,23 @@ const useDeleteStory = () => {
           timerProgressBar: false,
           showConfirmButton: false,
         });
+
+        setTimeout(() => {
+          try {
+            navigate(-1);
+          } catch {
+            navigate('/');
+          }
+        }, 300);
       } catch (error) {
         toast.error(t('story.delete.modal-error-toast'));
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
 
-  return handleDeleteStory;
+  return { handleDeleteStory, isDeleting };
 };
 
 export default useDeleteStory;
