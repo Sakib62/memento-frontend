@@ -185,5 +185,14 @@
     "text": "Sign in to continue",
     "confirm": "Sign In",
     "cancel": "Create Account"
+  },
+  "sign-out": {
+    "manual": "You have been signed out.",
+    "auto": "You have been signed out. Please sign in again."
+  },
+  "not-found": {
+    "title": "404 - Page Not Found",
+    "message": "Oops! The page you're looking for doesn't exist.",
+    "back-home": "Go Back to Home"
   }
 }

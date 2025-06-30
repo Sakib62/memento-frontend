@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { FaUserAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,7 @@ const ProfileMenu = () => {
 
   const handleLogoutClick = () => {
     clearAuthData();
+    toast.success(t('sign-out.manual'));
     setIsOpen(false);
   };
 

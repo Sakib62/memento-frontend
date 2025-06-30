@@ -3,7 +3,14 @@ import { useAuth } from '../hooks/useAuth';
 
 const PrivateRoute = () => {
   const { token } = useAuth();
-  return token ? <Outlet /> : <Navigate to='/login' />;
+
+  // useEffect(() => {
+  //   if (!token) {
+  //     toast.error(t('sign-out.auto'));
+  //   }
+  // }, [token]);
+
+  return token ? <Outlet /> : <Navigate to='/' />;
 };
 
 export default PrivateRoute;

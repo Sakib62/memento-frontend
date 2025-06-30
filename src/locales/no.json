@@ -185,5 +185,14 @@
     "text": "Logg inn for å fortsette",
     "confirm": "Logg inn",
     "cancel": "Opprett konto"
+  },
+  "sign-out": {
+    "manual": "Du har logget ut.",
+    "auto": "Du har blitt logget ut. Vennligst logg inn igjen."
+  },
+  "not-found": {
+    "title": "404 - Siden ble ikke funnet",
+    "message": "Oops! Siden du leter etter finnes ikke.",
+    "back-home": "Gå tilbake til startsiden"
   }
 }
