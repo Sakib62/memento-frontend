@@ -1,7 +1,7 @@
 const SkeletonStoryView = () => {
   return (
-    <div className='py-6 bg-gray-100 dark:bg-neutral-800'>
-      <div className='flex flex-col max-w-2xl gap-4 p-8 pt-4 mx-auto bg-white rounded-lg dark:bg-stone-700 animate-pulse'>
+    <div className='min-h-screen bg-gray-100 dark:bg-neutral-800'>
+      <div className='flex flex-col max-w-2xl min-h-screen gap-4 p-8 pt-4 mx-auto bg-white rounded-lg dark:bg-stone-700 animate-pulse'>
         <div className='w-full bg-gray-300 rounded-md h-14 dark:bg-gray-600'></div>
 
         <div className='flex gap-2'>

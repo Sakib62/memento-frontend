@@ -90,7 +90,7 @@ const StoryView = () => {
   }
 
   return (
-    <div className='bg-gray-100 dark:bg-neutral-800'>
+    <div className='flex flex-col min-h-screen bg-gray-100 dark:bg-neutral-800'>
       <div className='flex flex-col flex-grow min-h-[calc(100vh-4rem)] max-w-2xl p-8 mx-auto bg-white  dark:bg-stone-700'>
         {isDeleting && (
           <div className='fixed bottom-0 left-0 right-0 z-50 flex items-start justify-center pt-10 bg-white bg-opacity-50 top-16'>

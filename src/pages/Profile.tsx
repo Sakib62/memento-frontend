@@ -109,7 +109,7 @@ const Profile = () => {
 
     if (!stories.length) {
       return (
-        <p className='pl-2 text-gray-500 col-span-full'>
+        <p className='pl-2 mt-10 text-xl font-semibold text-center text-gray-500 col-span-full'>
           {t('profile.no-story')}
         </p>
       );
@@ -121,7 +121,7 @@ const Profile = () => {
   };
 
   return (
-    <div className='flex flex-col p-0'>
+    <div className='flex flex-col min-h-screen'>
       <ProfileHeader user={userInfo} />
 
       <div className='p-2 pb-0 pl-6 space-x-2 md:space-x-4 font-sans bg-[#dcf3ff] font-light border-b-2 border-gray-300'>
@@ -136,17 +136,19 @@ const Profile = () => {
         ))}
       </div>
 
-      <div className='grid grid-cols-1 gap-8 p-6 bg-gray-100 md:grid-cols-2 lg:grid-cols-3'>
-        {activeTab === 'created' &&
-          renderStories(createdLoading, createdStories, 6, true)}
+      <div className='flex-grow bg-gray-100'>
+        <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 lg:grid-cols-3'>
+          {activeTab === 'created' &&
+            renderStories(createdLoading, createdStories, 6, true)}
 
-        {activeTab === 'liked' &&
-          isLoggedIn &&
-          renderStories(likedLoading, likedStories)}
+          {activeTab === 'liked' &&
+            isLoggedIn &&
+            renderStories(likedLoading, likedStories)}
 
-        {activeTab === 'commented' &&
-          (isOwner || isAdmin) &&
-          renderStories(commentedLoading, commentedStories)}
+          {activeTab === 'commented' &&
+            (isOwner || isAdmin) &&
+            renderStories(commentedLoading, commentedStories)}
+        </div>
       </div>
     </div>
   );
