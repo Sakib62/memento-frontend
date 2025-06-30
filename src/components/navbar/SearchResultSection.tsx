@@ -1,4 +1,5 @@
 import { JSX } from 'react';
+import { Link } from 'react-router-dom';
 import { Story } from '../../types/story';
 import { User } from '../../types/user';
 
@@ -10,6 +11,7 @@ const SearchResultSection = <T extends User | Story>({
   primary,
   secondary,
   loading,
+  getLink,
 }: {
   title: string;
   data: T[];
@@ -18,6 +20,7 @@ const SearchResultSection = <T extends User | Story>({
   primary: (item: T) => string;
   secondary: (item: T) => JSX.Element;
   loading?: boolean;
+  getLink: (item: T) => string;
 }) => (
   <div>
     <h3 className='mb-2 font-bold text-gray-500 dark:text-white'>{title}</h3>
@@ -35,16 +38,17 @@ const SearchResultSection = <T extends User | Story>({
       </div>
     ) : data?.length ? (
       data.map((item, index) => (
-        <div
+        <Link
           key={index}
-          className='p-3 mb-2 font-medium text-blue-600 transition duration-200 bg-white rounded-lg shadow-md cursor-pointer dark:bg-stone-800 hover:shadow-lg'
+          to={getLink(item)}
           onClick={() => onClick(item)}
+          className='block p-3 mb-2 font-medium text-blue-600 transition duration-200 bg-white rounded-lg shadow-md cursor-pointer dark:bg-stone-800 hover:shadow-lg'
         >
           <p className='text-md line-clamp-1'>{primary(item)}</p>
           <div className='mt-1 overflow-hidden text-xs text-gray-500 line-clamp-1 dark:text-gray-300'>
             {secondary(item)}
           </div>
-        </div>
+        </Link>
       ))
     ) : (
       <p className='mt-2 text-sm text-gray-500 dark:text-gray-300'>

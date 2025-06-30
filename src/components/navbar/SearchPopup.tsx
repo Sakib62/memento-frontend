@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { useSearchResults } from '../../hooks/useSearchResults';
 import { Story } from '../../types/story';
 import { User } from '../../types/user';
@@ -16,7 +15,6 @@ const SearchPopup = ({
   searchQuery: string;
   setSearchQuery: (query: string) => void;
 }) => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,10 +56,10 @@ const SearchPopup = ({
               title={t('search.users')}
               data={searchResults.users || []}
               emptyMessage={t('search.no-user')}
-              onClick={user => {
+              getLink={user => `/profile/${user.username}`}
+              onClick={() => {
                 setSearchQuery('');
                 closePopup();
-                navigate(`/profile/${user.username}`);
               }}
               primary={user => user.name}
               secondary={user => <>{user.username}</>}
@@ -73,10 +71,10 @@ const SearchPopup = ({
               title={t('search.story-by-title')}
               data={searchResults.storyTitles || []}
               emptyMessage={t('search.no-title')}
-              onClick={story => {
+              getLink={story => `/story/${story.id}`}
+              onClick={() => {
                 setSearchQuery('');
                 closePopup();
-                navigate(`/story/${story.id}`, { state: story });
               }}
               primary={story => story.title}
               secondary={story => (
@@ -90,10 +88,10 @@ const SearchPopup = ({
               title={t('search.story-by-desc')}
               data={searchResults.storyDescriptions || []}
               emptyMessage={t('search.no-desc')}
-              onClick={story => {
+              getLink={story => `/story/${story.id}`}
+              onClick={() => {
                 setSearchQuery('');
                 closePopup();
-                navigate(`/story/${story.id}`, { state: story });
               }}
               primary={story => story.title}
               secondary={story => (
