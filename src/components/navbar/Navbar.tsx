@@ -52,9 +52,9 @@ const Navbar = () => {
               onClick={() =>
                 token ? navigate('/new-story') : authPromptModal()
               }
-              className='flex items-center gap-1 p-2 text-white rounded-md md:px-4 bg-emerald-600 hover:bg-emerald-700 md:w-28'
+              className='flex items-center justify-center gap-1 p-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 md:w-20'
             >
-              <FaRegPenToSquare className='w-4 h-4 md:mr-2 md:h-5 md:w-5' />
+              <FaRegPenToSquare className='w-4 h-4 md:h-5 md:w-5' />
               <span className='hidden md:inline'>{t('navbar.write')}</span>
             </button>
           </span>
@@ -63,7 +63,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className='p-1 font-medium bg-green-500 rounded-md hover:bg-green-600'
+              className='p-1 font-medium text-white bg-blue-700 rounded-md md:p-2 hover:bg-blue-800'
             >
               Sign In
             </button>

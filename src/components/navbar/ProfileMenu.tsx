@@ -44,15 +44,15 @@ const ProfileMenu = () => {
       className='relative flex items-center space-x-2 cursor-pointer'
     >
       <FaUserAlt
-        className='w-10 h-10 p-2 text-white bg-gray-500 border-2 border-white rounded-full dark:bg-gray-600'
+        className='w-10 h-10 p-2 text-white bg-blue-700 border-2 rounded-full border-slate-300 hover:bg-blue-800 hover:border-sky-200'
         onClick={toggleMenu}
       />
 
       {isOpen && (
-        <div className='absolute right-0 z-10 w-24 py-1 mt-2 transition-all duration-200 ease-in-out transform scale-95 bg-gray-100 rounded-lg shadow-lg dark:bg-gray-800 top-10 hover:scale-100'>
+        <div className='absolute right-0 z-10 px-2 py-1 mt-2 transition-all duration-200 ease-in-out transform scale-95 bg-gray-100 rounded-lg shadow-lg w-28 dark:bg-gray-800 top-10 hover:scale-100'>
           <button
             onClick={handleProfileClick}
-            className='w-full px-2 py-1.5 text-sm text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+            className='w-full px-2 py-1.5 text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 hover:font-semibold border-b-2'
           >
             {t('navbar.profile')}
           </button>
@@ -60,13 +60,13 @@ const ProfileMenu = () => {
             onClick={() => {
               navigate('/settings');
             }}
-            className='w-full px-2 py-1.5 text-sm text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+            className='w-full px-2 py-1.5 text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 hover:font-semibold border-b-2'
           >
             {t('navbar.settings')}
           </button>
           <button
             onClick={handleLogoutClick}
-            className='w-full px-2 py-1.5 text-sm text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700'
+            className='w-full px-2 py-1.5 text-left text-gray-800 dark:text-gray-200 hover:bg-gray-200 hover:font-semibold'
           >
             {t('navbar.logout')}
           </button>
