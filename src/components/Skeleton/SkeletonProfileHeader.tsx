@@ -1,6 +1,6 @@
 const SkeletonProfileHeader = () => {
   return (
-    <div className='p-8'>
+    <div className='p-0'>
       <div className='flex flex-col h-auto bg-[#f0f8ff] rounded-md rounded-b-none md:flex-row animate-pulse'>
         <div className='w-full p-4 space-y-4 md:w-1/2'>
           <div className='w-2/5 h-12 bg-gray-300 rounded-md'></div>
@@ -14,7 +14,7 @@ const SkeletonProfileHeader = () => {
         </div>
       </div>
 
-      <div className='flex h-10 gap-4 py-2 pl-4 bg-[#fcfcf7] rounded-md rounded-t-none'>
+      <div className='flex h-10 gap-4 py-2 pl-4 bg-[#dcf3ff] rounded-md rounded-t-none'>
         <div className='w-16 h-6 bg-gray-300 rounded-md'></div>
         <div className='w-20 h-6 bg-gray-300 rounded-md'></div>
         <div className='w-16 h-6 bg-gray-300 rounded-md'></div>

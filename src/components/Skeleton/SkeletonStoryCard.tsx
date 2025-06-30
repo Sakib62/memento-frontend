@@ -4,8 +4,10 @@ const SkeletonStoryCard = ({
   isForProfile?: boolean;
 }) => {
   return (
-    <div className='flex items-stretch gap-4 p-4 bg-white rounded-lg shadow-lg dark:bg-stone-800 animate-pulse min-h-[200px]'>
-      <div className='flex flex-col justify-between flex-1 '>
+    <div
+      className={`flex items-stretch gap-4 p-4 bg-white rounded-lg shadow-lg   ${isForProfile ? 'min-h-[170px]' : 'min-h-[204px]'} `}
+    >
+      <div className='flex flex-col justify-between flex-1 animate-pulse'>
         <div>
           {!isForProfile && (
             <div className='w-1/3 h-6 mb-2 bg-gray-200 rounded'></div>

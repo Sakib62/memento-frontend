@@ -24,10 +24,10 @@ const LatestStories = () => {
 
   return (
     <div className='mb-8'>
-      <div className='mb-10 text-center'>
-        <h1 className='text-4xl font-semibold text-gray-800 dark:text-white'>
+      <div className='mb-6 text-center'>
+        <p className='text-3xl font-semibold text-gray-800 dark:text-white'>
           {t('home.title')}
-        </h1>
+        </p>
       </div>
       <div className='grid grid-cols-1 gap-8 mb-6 sm:grid-cols-2 lg:grid-cols-3'>
         {loading

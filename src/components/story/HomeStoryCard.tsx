@@ -13,7 +13,7 @@ const HomeStoryCard = ({
   return (
     <Link
       to={`/story/${story.id}`}
-      className='block transition-all duration-200 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 min-h-[200px]'
+      className={`block transition-all duration-200 bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 ${isForProfile ? 'min-h-[170px]' : 'min-h-[204px]'}`}
     >
       <div className='p-4'>
         {!isForProfile && (

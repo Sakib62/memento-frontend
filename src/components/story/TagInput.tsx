@@ -64,7 +64,7 @@ const TagInput: React.FC<TagInputProps> = ({ tags, setTags }) => {
   };
 
   return (
-    <div className='flex-shrink-0 w-full p-4 bg-gray-100 rounded-lg shadow-md '>
+    <div className='flex-shrink-0 w-full p-4 bg-gray-200 rounded-lg shadow-md '>
       <h3 className='mb-4 text-xl font-semibold text-center text-gray-800 dark:text-gray-500'>
         {t('tags.heading')}
       </h3>

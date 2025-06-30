@@ -121,22 +121,22 @@ const Profile = () => {
   };
 
   return (
-    <div className='flex flex-col p-6 px-8'>
+    <div className='flex flex-col p-0'>
       <ProfileHeader user={userInfo} />
 
-      <div className='p-2 pb-0 space-x-6 font-mono bg-[#fcfcf7] font-light border-b-2 border-gray-300'>
+      <div className='p-2 pb-0 pl-6 space-x-2 md:space-x-4 font-sans bg-[#dcf3ff] font-light border-b-2 border-gray-300'>
         {visibleTabs.map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`border-b-2  hover:border-blue-400  ${activeTab === tab ? 'border-blue-600 font-semibold' : 'border-transparent'}`}
+            className={`border-b-2 px-2 font-medium rounded-md hover:border-blue-500  ${activeTab === tab ? 'border-blue-700 bg-[#38BDF8] font-bold' : 'border-blue-400 bg-[#bae6fd] hover:bg-[#7dd3fc]'}`}
           >
             {t(`profile.tabs.${profileTabLabels[tab]}`, profileTabLabels[tab])}
           </button>
         ))}
       </div>
 
-      <div className='grid grid-cols-1 gap-8 mt-6 md:grid-cols-2 lg:grid-cols-3'>
+      <div className='grid grid-cols-1 gap-8 p-6 bg-gray-100 md:grid-cols-2 lg:grid-cols-3'>
         {activeTab === 'created' &&
           renderStories(createdLoading, createdStories, 6, true)}
 
