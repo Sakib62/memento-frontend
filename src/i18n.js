@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
+import bn from './locales/bn.json';
 import en from './locales/en.json';
 import no from './locales/no.json';
 
@@ -11,6 +12,7 @@ i18n
     resources: {
       en: { translation: en },
       no: { translation: no },
+      bn: { translation: bn },
     },
     //lng: localStorage.getItem('memento_preferredLang') || 'en',
     fallbackLng: 'en',
