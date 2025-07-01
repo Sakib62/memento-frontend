@@ -57,7 +57,8 @@ export const useResetPassword = () => {
       await Swal.fire({
         icon: 'error',
         title: t('settings.reset-pass.modal-error-title'),
-        text: errorMessage,
+        timer: 3000,
+        timerProgressBar: false,
         showConfirmButton: false,
       });
       throw err;

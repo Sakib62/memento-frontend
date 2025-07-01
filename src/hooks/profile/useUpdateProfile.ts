@@ -56,8 +56,9 @@ export const useUpdateProfile = () => {
       await Swal.fire({
         icon: 'error',
         title: t('settings.update-profile.modal-text-failed'),
-        text: errorMessage,
-        confirmButtonColor: '#d33',
+        timer: 3000,
+        timerProgressBar: false,
+        showConfirmButton: false,
       });
       throw err;
     } finally {

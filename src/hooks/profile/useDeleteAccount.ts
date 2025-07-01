@@ -44,8 +44,9 @@ export const useDeleteAccount = () => {
       await Swal.fire({
         icon: 'error',
         title: t('settings.delete-account.error-title'),
-        text: errorMessage,
-        confirmButtonColor: '#d33',
+        timer: 3000,
+        timerProgressBar: false,
+        showConfirmButton: false,
       });
       throw err;
     } finally {
