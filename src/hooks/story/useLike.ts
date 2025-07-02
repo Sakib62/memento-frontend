@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../useAuth';
 import useAuthPromptModal from '../useAuthPrompt';
 
@@ -9,6 +11,7 @@ const useLike = (storyId: string | undefined) => {
 
   const { token } = useAuth();
   const apiUrl = import.meta.env.VITE_API_URL;
+  const { t } = useTranslation();
 
   const authPromptModal = useAuthPromptModal();
 
@@ -77,7 +80,7 @@ const useLike = (storyId: string | undefined) => {
       setlikeCount(data.data.likeCount);
       sethasLiked(data.data.hasLiked);
     } catch (error) {
-      console.error('Error toggling like:', error);
+      toast.error(t('story.like-update-failed'));
     } finally {
       setIsLiking(false);
     }

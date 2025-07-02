@@ -92,6 +92,7 @@
   },
   "story": {
     "like": "Like",
+    "like-update-failed": "Failed to update like status.",
     "unlike": "Unlike",
     "comment": "Comment",
     "not-found-title": "Story Not Found",

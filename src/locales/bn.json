@@ -92,6 +92,7 @@
   },
   "story": {
     "like": "পছন্দ করুন",
+    "like-update-failed": "লাইক আপডেট করতে ব্যর্থ।",
     "unlike": "অপছন্দ করুন",
     "comment": "মন্তব্য",
     "not-found-title": "গল্প পাওয়া যায়নি",

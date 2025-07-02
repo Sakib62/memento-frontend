@@ -92,6 +92,7 @@
   },
   "story": {
     "like": "Liker",
+    "like-update-failed": "Kunne ikke oppdatere likestatus.",
     "unlike": "ulikt",
     "comment": "Kommentar",
     "not-found-title": "Historien ble ikke funnet",

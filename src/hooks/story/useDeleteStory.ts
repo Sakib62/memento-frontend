@@ -43,9 +43,13 @@ const useDeleteStory = () => {
         });
 
         setTimeout(() => {
-          try {
+          const fromHistory =
+            document.referrer &&
+            new URL(document.referrer).origin === window.location.origin;
+
+          if (fromHistory) {
             navigate(-1);
-          } catch {
+          } else {
             navigate('/');
           }
         }, 300);
