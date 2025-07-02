@@ -1,13 +1,16 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePagedStories } from '../../hooks/story/usePagedStories';
 import SkeletonStoryCard from '../Skeleton/SkeletonStoryCard';
 import HomeStoryCard from '../story/HomeStoryCard';
 import Pagination from './Pagination';
 
-const LatestStories = () => {
+type LatestStoriesProps = {
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+};
+
+const LatestStories = ({ currentPage, setCurrentPage }: LatestStoriesProps) => {
   const { t } = useTranslation();
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 6;
   const offset = (currentPage - 1) * limit;
 
@@ -17,8 +20,12 @@ const LatestStories = () => {
     `/api/stories?offset=${offset}&limit=${limit + 1}`
   );
 
-  const handleNext = () => setCurrentPage(prev => prev + 1);
-  const handlePrev = () => setCurrentPage(prev => (prev > 1 ? prev - 1 : 1));
+  const handleNext = () => {
+    if (hasNextPage) setCurrentPage(currentPage + 1);
+  };
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
 
   if (error) return <p className='text-center text-red-500'>{error}</p>;
 

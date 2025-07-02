@@ -1,24 +1,22 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePagedStories } from '../../hooks/story/usePagedStories';
 import SkeletonStoryCard from '../Skeleton/SkeletonStoryCard';
 import HomeStoryCard from '../story/HomeStoryCard';
-import Pagination from './Pagination';
 
 const TopLikedStories = () => {
   const { t } = useTranslation();
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const limit = 6;
-  const offset = (currentPage - 1) * limit;
+  const currentPage = 1;
+  // const offset = (currentPage - 1) * limit;
 
-  const { stories, loading, error, hasNextPage } = usePagedStories(
+  const { stories, loading, error } = usePagedStories(
     currentPage,
     limit,
-    `/api/stories?offset=${offset}&limit=${limit + 1}&filter=mostLiked`
+    `/api/stories?filter=mostLiked`
   );
 
-  const handleNext = () => setCurrentPage(prev => prev + 1);
-  const handlePrev = () => setCurrentPage(prev => (prev > 1 ? prev - 1 : 1));
+  // const handleNext = () => setCurrentPage(prev => prev + 1);
+  // const handlePrev = () => setCurrentPage(prev => (prev > 1 ? prev - 1 : 1));
 
   if (error) return <p className='text-center text-red-500'>{error}</p>;
 
@@ -36,7 +34,7 @@ const TopLikedStories = () => {
               <HomeStoryCard key={story.id} story={story} />
             ))}
       </div>
-      {loading ? (
+      {/* {loading ? (
         <div className='flex items-center justify-center space-x-4'>
           <div className='w-12 h-8 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
           <div className='w-16 h-10 bg-gray-300 rounded-lg dark:bg-stone-600 animate-pulse'></div>
@@ -50,7 +48,7 @@ const TopLikedStories = () => {
           onNext={handleNext}
           onPageSelect={setCurrentPage}
         />
-      )}
+      )} */}
     </div>
   );
 };

@@ -1,13 +1,17 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import Navbar from './navbar/Navbar';
 
 const Layout = () => {
   const location = useLocation();
+  const prevPath = useRef(location.pathname);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (location.pathname !== prevPath.current) {
+      window.scrollTo(0, 0);
+    }
+    prevPath.current = location.pathname;
   }, [location]);
 
   return (
