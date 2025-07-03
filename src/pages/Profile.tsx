@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import ProfileHeader from '../components/profile/ProfileHeader';
@@ -20,66 +20,122 @@ const Profile = () => {
   const { username } = useParams();
   const { id, role, token } = useAuth();
   const { t } = useTranslation();
+  const limit = 6;
 
   const { userInfo, loading } = useUserInfo(username || '', true);
-  const { createdStories, loading: createdLoading } = useUserStories(
-    username || ''
-  );
+
+  const {
+    createdStories,
+    hasNextPage: hasMoreCreated,
+    loading: createdLoading,
+    loadMore: loadMoreCreated,
+  } = useUserStories(username || '');
 
   const [likedStories, setLikedStories] = useState<Story[]>([]);
-  const [isLikedFetched, setIsLikedFetched] = useState(false);
+  const [likedPage, setLikedPage] = useState(1);
+  const [hasMoreLiked, setHasMoreLiked] = useState(false);
   const [likedLoading, setLikedLoading] = useState(false);
-
-  const [commentedStories, setCommentedStories] = useState<Story[]>([]);
-  const [isCommentedFetched, setIsCommentedFetched] = useState(false);
-  const [commentedLoading, setCommentedLoading] = useState(false);
+  const likedFetchTracker = useRef<Record<string, boolean>>({});
 
   const [activeTab, setActiveTab] = useState<ProfileTab>('created');
 
   useEffect(() => {
     setActiveTab('created');
+
+    setLikedStories([]);
+    setLikedPage(1);
+    setHasMoreLiked(false);
+    likedFetchTracker.current = {};
+
+    setCommentedStories([]);
+    setCommentedPage(1);
+    setHasMoreCommented(false);
+    commentedFetchTracker.current = {};
   }, [username, id]);
 
   useEffect(() => {
-    const getLikedStories = async () => {
+    if (activeTab !== 'liked' || !userInfo?.id || !token) return;
+
+    const fetchLikedStories = async () => {
+      const fetchKey = `${userInfo.id}-${likedPage}`;
+
+      if (likedFetchTracker.current[fetchKey]) return;
+      likedFetchTracker.current[fetchKey] = true;
+
       setLikedLoading(true);
       try {
-        const data = await fetchUserLikedStories(userInfo?.id || '', token);
-        setLikedStories(data);
-        setIsLikedFetched(true);
-      } catch (err) {
-        console.error(err);
+        const offset = (likedPage - 1) * limit;
+        const response = await fetchUserLikedStories(
+          userInfo.id,
+          token,
+          offset,
+          limit + 1
+        );
+
+        const fetchedStories = response;
+        setLikedStories(prev => [...prev, ...fetchedStories.slice(0, limit)]);
+        setHasMoreLiked(fetchedStories.length > limit);
+      } catch (error) {
+        console.error('Error fetching liked stories:', error);
       } finally {
         setLikedLoading(false);
       }
     };
 
-    if (activeTab === 'liked' && !isLikedFetched && userInfo?.id && token) {
-      getLikedStories();
-    }
+    fetchLikedStories();
+  }, [activeTab, likedPage, userInfo?.id, token]);
 
-    const getCommentedStories = async () => {
+  const loadMoreLiked = () => {
+    if (!likedLoading && hasMoreLiked) {
+      setLikedPage(prev => prev + 1);
+    }
+  };
+
+  const [commentedStories, setCommentedStories] = useState<Story[]>([]);
+  const [commentedPage, setCommentedPage] = useState(1);
+  const [hasMoreCommented, setHasMoreCommented] = useState(false);
+  const [commentedLoading, setCommentedLoading] = useState(false);
+  const commentedFetchTracker = useRef<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (activeTab !== 'commented' || !userInfo?.id || !token) return;
+
+    const fetchCommentedStories = async () => {
+      const fetchKey = `${userInfo.id}-${commentedPage}`;
+
+      if (commentedFetchTracker.current[fetchKey]) return;
+      commentedFetchTracker.current[fetchKey] = true;
+
       setCommentedLoading(true);
       try {
-        const data = await fetchUserCommentedStories(userInfo?.id || '', token);
-        setCommentedStories(data);
-        setIsCommentedFetched(true);
-      } catch (err) {
-        console.error(err);
+        const offset = (commentedPage - 1) * limit;
+        const fetchedStories = await fetchUserCommentedStories(
+          userInfo.id,
+          token,
+          offset,
+          limit + 1
+        );
+
+        setCommentedStories(prev => [
+          ...prev,
+          ...fetchedStories.slice(0, limit),
+        ]);
+        setHasMoreCommented(fetchedStories.length > limit);
+      } catch (error) {
+        console.error('Error fetching commented stories:', error);
       } finally {
         setCommentedLoading(false);
       }
     };
 
-    if (
-      activeTab === 'commented' &&
-      !isCommentedFetched &&
-      userInfo?.id &&
-      token
-    ) {
-      getCommentedStories();
+    fetchCommentedStories();
+  }, [activeTab, commentedPage, userInfo?.id, token, limit]);
+
+  const loadMoreCommented = () => {
+    if (!commentedLoading && hasMoreCommented) {
+      setCommentedPage(prev => prev + 1);
     }
-  }, [activeTab, isLikedFetched, isCommentedFetched, userInfo?.id, token]);
+  };
 
   if (!userInfo || loading) return <SkeletonProfileHeader />;
 
@@ -95,29 +151,35 @@ const Profile = () => {
     visibleTabs.push('commented');
   }
 
-  const renderStories = (
-    loading: boolean,
-    stories: Story[],
-    skeletonCount = 6,
-    isForProfile = false
-  ) => {
-    if (loading) {
-      return Array.from({ length: skeletonCount }).map((_, index) => (
-        <SkeletonStoryCard key={index} isForProfile={isForProfile} />
-      ));
-    }
+  const displayStories =
+    activeTab === 'created'
+      ? createdStories
+      : activeTab === 'liked'
+        ? likedStories
+        : commentedStories;
 
-    if (!stories.length) {
-      return (
-        <p className='pl-2 mt-10 text-xl font-semibold text-center text-gray-500 col-span-full'>
-          {t('profile.no-story')}
-        </p>
-      );
-    }
+  const isLoading =
+    activeTab === 'created'
+      ? createdLoading
+      : activeTab === 'liked'
+        ? likedLoading
+        : commentedLoading;
 
-    return stories.map(story => (
-      <HomeStoryCard key={story.id} story={story} isForProfile={isForProfile} />
-    ));
+  const hasMoreStories =
+    activeTab === 'created'
+      ? hasMoreCreated
+      : activeTab === 'liked'
+        ? hasMoreLiked
+        : hasMoreCommented;
+
+  const handleLoadMore = () => {
+    if (activeTab === 'created') {
+      loadMoreCreated();
+    } else if (activeTab === 'liked') {
+      loadMoreLiked();
+    } else if (activeTab === 'commented') {
+      loadMoreCommented();
+    }
   };
 
   return (
@@ -128,8 +190,12 @@ const Profile = () => {
         {visibleTabs.map(tab => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`border-b-2 px-2 font-medium rounded-md hover:border-blue-500  ${activeTab === tab ? 'border-blue-700 bg-[#38BDF8] font-bold' : 'border-blue-400 bg-[#bae6fd] hover:bg-[#7dd3fc]'}`}
+            onClick={() => setActiveTab(tab as ProfileTab)}
+            className={`border-b-2 px-2 font-medium rounded-md hover:border-blue-500 ${
+              activeTab === tab
+                ? 'border-blue-700 bg-[#38BDF8] font-bold'
+                : 'border-blue-400 bg-[#bae6fd] hover:bg-[#7dd3fc]'
+            }`}
           >
             {t(`profile.tabs.${profileTabLabels[tab]}`, profileTabLabels[tab])}
           </button>
@@ -138,17 +204,49 @@ const Profile = () => {
 
       <div className='flex-grow bg-gray-100'>
         <div className='grid grid-cols-1 gap-8 p-6 md:grid-cols-2 lg:grid-cols-3'>
-          {activeTab === 'created' &&
-            renderStories(createdLoading, createdStories, 6, true)}
+          {displayStories.length === 0 &&
+            isLoading &&
+            Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonStoryCard
+                key={`initial-${i}`}
+                isForProfile={activeTab === 'created'}
+              />
+            ))}
 
-          {activeTab === 'liked' &&
-            isLoggedIn &&
-            renderStories(likedLoading, likedStories)}
+          {displayStories.length > 0 ? (
+            displayStories.map(story => (
+              <HomeStoryCard
+                key={story.id}
+                story={story}
+                isForProfile={activeTab === 'created'}
+              />
+            ))
+          ) : !isLoading ? (
+            <p className='pl-2 mt-10 text-xl font-semibold text-center text-gray-500 col-span-full'>
+              {t('profile.no-story', 'No stories found')}
+            </p>
+          ) : null}
 
-          {activeTab === 'commented' &&
-            (isOwner || isAdmin) &&
-            renderStories(commentedLoading, commentedStories)}
+          {isLoading &&
+            displayStories.length > 0 &&
+            Array.from({ length: 3 }).map((_, i) => (
+              <SkeletonStoryCard
+                key={`loading-${i}`}
+                isForProfile={activeTab === 'created'}
+              />
+            ))}
         </div>
+
+        {!isLoading && hasMoreStories && (
+          <div className='flex justify-center pb-8'>
+            <button
+              onClick={handleLoadMore}
+              className='px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700'
+            >
+              {t('profile.loadMore', 'Load More')}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

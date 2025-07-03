@@ -2,17 +2,22 @@ import { Story } from '../types/story';
 
 export const fetchUserLikedStories = async (
   userId: string,
-  token: string | null
+  token: string | null,
+  offset: number = 0,
+  limit: number = 6
 ): Promise<Story[]> => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const response = await fetch(`${apiUrl}/api/users/${userId}/stories/liked`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(
+    `${apiUrl}/api/users/${userId}/stories/liked?offset=${offset}&limit=${limit}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   if (!response.ok) {
     throw new Error('Failed to fetch liked stories');
@@ -24,12 +29,14 @@ export const fetchUserLikedStories = async (
 
 export const fetchUserCommentedStories = async (
   userId: string,
-  token: string | null
+  token: string | null,
+  offset: number = 0,
+  limit: number = 6
 ): Promise<Story[]> => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const response = await fetch(
-    `${apiUrl}/api/users/${userId}/stories/commented`,
+    `${apiUrl}/api/users/${userId}/stories/commented?offset=${offset}&limit=${limit}`,
     {
       method: 'GET',
       headers: {
