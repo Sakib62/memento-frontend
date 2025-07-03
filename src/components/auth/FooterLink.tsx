@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface FooterLinkProps {
   text: string;
@@ -8,17 +8,16 @@ interface FooterLinkProps {
 }
 
 const FooterLink: React.FC<FooterLinkProps> = ({ text, linkText, linkTo }) => {
-  const navigate = useNavigate();
-
   return (
     <p className='mt-4 text-center text-gray-500 text-md'>
       {text}{' '}
-      <button
-        onClick={() => navigate(linkTo)}
+      <Link
+        to={linkTo}
         className='font-semibold text-blue-600 transition-colors duration-200 hover:text-blue-800 hover:underline'
+        replace={true}
       >
         {linkText}
-      </button>
+      </Link>
     </p>
   );
 };
