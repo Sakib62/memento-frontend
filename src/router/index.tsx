@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../components/Layout';
-import PrivateRoute from '../components/PrivateRoute';
-import PublicRoute from '../components/PublicRoute';
 import { useAuth } from '../hooks/useAuth';
 import About from '../pages/About';
 import Home from '../pages/Home';
@@ -13,6 +11,8 @@ import SignUp from '../pages/SignUp';
 import StoryCreate from '../pages/StoryCreate';
 import StoryEdit from '../pages/StoryEdit';
 import StoryView from '../pages/StoryView';
+import PrivateRoute from './PrivateRoute';
+import PublicRoute from './PublicRoute';
 
 export default function AppRouter() {
   const { loading } = useAuth();
