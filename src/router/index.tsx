@@ -1,18 +1,25 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../components/Layout';
+import HomePageSkeleton from '../components/Skeleton/HomePageSkeleton';
+import ProfilePageSkeleton from '../components/Skeleton/ProfilePageSkeleton';
+import SettingsPageSkeleton from '../components/Skeleton/SettingsPageSkeleton';
+import SkeletonStoryEdit from '../components/Skeleton/SkeletonStoryEdit';
+import SkeletonStoryView from '../components/Skeleton/SkeletonStoryView';
 import { useAuth } from '../hooks/useAuth';
 import About from '../pages/About';
-import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
-import Profile from '../pages/Profile';
-import Settings from '../pages/Settings';
 import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
-import StoryCreate from '../pages/StoryCreate';
-import StoryEdit from '../pages/StoryEdit';
-import StoryView from '../pages/StoryView';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+
+const Home = lazy(() => import('../pages/Home'));
+const Profile = lazy(() => import('../pages/Profile'));
+const StoryView = lazy(() => import('../pages/StoryView'));
+const StoryEdit = lazy(() => import('../pages/StoryEdit'));
+const StoryCreate = lazy(() => import('../pages/StoryCreate'));
+const Settings = lazy(() => import('../pages/Settings'));
 
 export default function AppRouter() {
   const { loading } = useAuth();
@@ -33,17 +40,59 @@ export default function AppRouter() {
         </Route>
 
         <Route element={<Layout />}>
-          <Route path='/' element={<Home />} />
-          <Route path='/story/:id' element={<StoryView />} />
-          <Route path='/profile/:username' element={<Profile />} />
+          <Route
+            path='/'
+            element={
+              <Suspense fallback={<HomePageSkeleton />}>
+                <Home />
+              </Suspense>
+            }
+          />
+          <Route
+            path='/story/:id'
+            element={
+              <Suspense fallback={<SkeletonStoryView />}>
+                <StoryView />
+              </Suspense>
+            }
+          />
+          <Route
+            path='/profile/:username'
+            element={
+              <Suspense fallback={<ProfilePageSkeleton />}>
+                <Profile />
+              </Suspense>
+            }
+          />
           <Route path='/about' element={<About />} />
         </Route>
 
         <Route element={<PrivateRoute />}>
           <Route element={<Layout />}>
-            <Route path='/new-story' element={<StoryCreate />} />
-            <Route path='/story/:id/edit' element={<StoryEdit />} />
-            <Route path='/settings' element={<Settings />} />
+            <Route
+              path='/new-story'
+              element={
+                <Suspense fallback={<SkeletonStoryEdit />}>
+                  <StoryCreate />
+                </Suspense>
+              }
+            />
+            <Route
+              path='/story/:id/edit'
+              element={
+                <Suspense fallback={<SkeletonStoryEdit />}>
+                  <StoryEdit />
+                </Suspense>
+              }
+            />
+            <Route
+              path='/settings'
+              element={
+                <Suspense fallback={<SettingsPageSkeleton />}>
+                  <Settings />
+                </Suspense>
+              }
+            />
           </Route>
         </Route>
 

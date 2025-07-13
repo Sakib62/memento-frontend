@@ -1,13 +1,22 @@
 import { useState } from 'react';
+import CountryFlag from 'react-country-flag';
 import { useTranslation } from 'react-i18next';
 import { FaChevronDown } from 'react-icons/fa';
-import Flag from 'react-world-flags';
 
 const languages = [
   { code: 'en', label: 'EN', flag: 'US' },
   { code: 'no', label: 'NO', flag: 'NO' },
   { code: 'bn', label: 'BN', flag: 'BD' },
 ];
+
+const Flag = ({ code, className }: { code: string; className?: string }) => (
+  <CountryFlag
+    svg
+    countryCode={code}
+    className={className}
+    aria-label={`${code} flag`}
+  />
+);
 
 const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
