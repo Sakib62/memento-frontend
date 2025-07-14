@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -10,8 +10,58 @@ export const useCreateStory = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [loading, setLoading] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
+  const queryClient = useQueryClient();
+
+  const postStory = async (storyData: {
+    title: string;
+    description: string;
+    tags: string[];
+  }) => {
+    const response = await fetch(`${apiUrl}/api/stories`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(storyData),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || 'failed');
+    }
+    return data.data;
+  };
+
+  const mutation = useMutation({
+    mutationFn: (storyData: {
+      title: string;
+      description: string;
+      tags: string[];
+    }) => postStory(storyData),
+    onSuccess: story => {
+      queryClient.invalidateQueries({ queryKey: ['pagedStories'] });
+      Swal.fire({
+        title: t('create-story.modal-success-title'),
+        text: t('create-story.modal-success-text'),
+        icon: 'success',
+        timer: 1000,
+        timerProgressBar: false,
+        showConfirmButton: false,
+        willClose: () => {
+          navigate(`/story/${story.id}`, { state: story });
+        },
+      });
+    },
+    onError: error => {
+      toast.error(
+        error?.message === 'failed'
+          ? t('create-story.toast-failed')
+          : error?.message || t('create-story.toast-error'),
+        { position: 'top-center' }
+      );
+    },
+  });
 
   const createStory = async (
     title: string,
@@ -30,48 +80,8 @@ export const useCreateStory = () => {
       });
       return;
     }
-
-    const storyData = {
-      title,
-      description: markdownContent,
-      tags,
-    };
-
-    setLoading(true);
-    try {
-      const response = await fetch(`${apiUrl}/api/stories`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(storyData),
-      });
-
-      const data = await response.json();
-      const story = data.data;
-
-      if (response.ok) {
-        Swal.fire({
-          title: t('create-story.modal-success-title'),
-          text: t('create-story.modal-success-text'),
-          icon: 'success',
-          timer: 1000,
-          timerProgressBar: false,
-          showConfirmButton: false,
-          willClose: () => {
-            navigate(`/story/${story.id}`, { state: story });
-          },
-        });
-      } else {
-        toast.error(t('create-story.toast-failed'));
-        setLoading(false);
-      }
-    } catch (error) {
-      toast.error(t('create-story.toast-error'));
-      setLoading(false);
-    }
+    mutation.mutate({ title, description: markdownContent, tags });
   };
 
-  return { createStory, loading };
+  return { createStory, loading: mutation.isPending };
 };

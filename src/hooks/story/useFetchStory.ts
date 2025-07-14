@@ -1,49 +1,42 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Story } from '../../types/story';
 
 export const useFetchStory = (storyId: string | undefined) => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const [story, setStory] = useState<Story | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const fetchStory = async (): Promise<Story> => {
+    const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-  const fetchStory = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${apiUrl}/api/stories/${storyId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        if (response.status === 404) {
-          setError('not_found');
-        } else {
-          setError('generic_error');
-        }
-        setStory(null);
-      } else {
-        const data = await response.json();
-        setStory(data.data);
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('not_found');
       }
-    } catch (error) {
-      console.error('Error fetching story:', error);
-      setError('generic_error');
-      setStory(null);
-    } finally {
-      setLoading(false);
+      throw new Error('generic_error');
     }
+    const data = await response.json();
+    return data.data;
   };
 
-  useEffect(() => {
-    if (storyId) {
-      fetchStory();
-    }
-  }, [storyId]);
+  const { data, error, isLoading } = useQuery<Story, Error>({
+    queryKey: ['story', storyId],
+    queryFn: fetchStory,
+    enabled: !!storyId,
+    gcTime: 30 * 60 * 1000,
+  });
 
-  return { story, loading, error };
+  let errorString: string | null = null;
+  if (error) {
+    if (error.message === 'not_found') {
+      errorString = 'not_found';
+    } else {
+      errorString = 'generic_error';
+    }
+  }
+
+  return { story: data, loading: isLoading, error: errorString };
 };
