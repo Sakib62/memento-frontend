@@ -198,5 +198,23 @@
     "title": "404 - Page Not Found",
     "message": "Oops! The page you're looking for doesn't exist.",
     "back-home": "Go Back to Home"
+  },
+  "about": {
+    "title": "About Memento ✍️",
+    "welcomeTitle": "Welcome to Memento!",
+    "welcomeParagraph": "Memento is a modern blogging platform, designed to make sharing your stories and experiences effortless and enjoyable. Whether you want to document life’s moments, share ideas, or interact with others, Memento’s clean UI and rich features are here for you.",
+    "featuresTitle": "Key Features",
+    "featuresList": [
+      "📝 Create, edit & manage stories with a rich text editor",
+      "👤 User & Admin roles with secure, token-based authentication (JWT)",
+      "🌐 Global search and localization (English, Norwegian & Bengali)",
+      "👍 Like & Comment for interactivity",
+      "🔄 Pagination & “Load More” for seamless browsing",
+      "⚙️ User profile management & settings"
+    ],
+    "techTitle": "Tech Stack",
+    "getInvolvedTitle": "Get Involved",
+    "getInvolvedText": "Have feedback, ideas, or want to contribute? Visit the repo:",
+    "footer": "Built with ❤️ by Sakib62."
   }
 }

@@ -198,5 +198,23 @@
     "title": "404 - Siden ble ikke funnet",
     "message": "Oops! Siden du leter etter finnes ikke.",
     "back-home": "Gå tilbake til startsiden"
+  },
+  "about": {
+    "title": "Om Memento ✍️",
+    "welcomeTitle": "Velkommen til Memento!",
+    "welcomeParagraph": "Memento er en moderne bloggplattform designet for å gjøre det enkelt og hyggelig å dele dine historier og erfaringer. Enten du ønsker å dokumentere livets øyeblikk, dele ideer eller samhandle med andre, er Mementos rene brukergrensesnitt og funksjonsrike verktøy her for deg.",
+    "featuresTitle": "Nøkkelfunksjoner",
+    "featuresList": [
+      "📝 Opprett, rediger og administrer historier med en rik teksteditor",
+      "👤 Bruker- og administratorroller med sikker, token-basert autentisering (JWT)",
+      "🌐 Globalt søk og lokalisering (Engelsk, Norsk og Bengali)",
+      "👍 Lik og kommenter for interaktivitet",
+      "🔄 Paginering og “Last mer” for sømløs lesing",
+      "⚙️ Brukerprofil og innstillinger"
+    ],
+    "techTitle": "Teknologistabel",
+    "getInvolvedTitle": "Bli med",
+    "getInvolvedText": "Har du tilbakemeldinger, ideer eller ønsker å bidra? Besøk repo:",
+    "footer": "Laget med ❤️ av Sakib62."
   }
 }

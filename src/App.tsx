@@ -26,9 +26,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <AppRouter />
         <Toaster position='top-right' reverseOrder={false} />
-        {import.meta.env.VITE_NODE_ENV === 'development' && (
-          <ReactQueryDevtools initialIsOpen={false} />
-        )}
+        {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </AuthProvider>
   );
